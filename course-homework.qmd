@@ -1,0 +1,26 @@
+---
+title: "Description"
+---
+
+There will be a number of in-class assignments depending on the content and schedule of the course.
+
+Everyone needs to complete the homework tasks according to the actual situation.
+
+::: {.callout-note}
+
+**Training philosophy** : Open the "black box" based on the real-life and practical problems! A set of specific theory, an analysis case, a code script. Push the theory knowledge into the practice!
+
+:::
+
+
+**Suggested software** :
+
+- (open source) `R` programming language (download from  [CRAN](https://cran.r-project.org/))
+
+- (open source) `Python` programming language
+
+- (commercial) `Stata` (MP 17.0 or above is recommended)
+
+- (Commercial) `EViews` (10.0 + recommended)
+
+> Note: I have use R programming language for many years, welcome to join my R world [`Rworld`](https://rworld.huhuaping.com/)

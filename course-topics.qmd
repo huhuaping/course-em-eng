@@ -1,0 +1,17 @@
+---
+title: "Declare"
+date: 2024-04-10
+---
+
+Here we will introduce and discuss technical topics related to the course, including but not limited to:
+
+- Latex formula rendering (`Rmarkdown` or `Quarto` writing)
+
+- Technical knowledge of packages (`Stata`, `R`, `Python`)
+
+- Knowledge of matrix techniques
+
+- Advanced econometric theory and modern machine learning, etc
+
+- Other relevant topics
+

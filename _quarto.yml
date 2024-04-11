@@ -1,0 +1,92 @@
+project:
+  type: website
+  output-dir: _site
+  pre-render: 
+    - R/load-pkg-basic.R
+  post-render:
+    - R/copy-post-sync.R
+    
+
+knitr: true
+author: Kevin Hu(胡华平)
+execute:
+  freeze: auto
+code-fold: true
+code-summary: "Show the code"
+
+filters: 
+  - lua/newtablink.lua
+  - lua/linebreak.lua
+
+
+website:
+  title: "Econometrics III"
+  favicon: pic/logo/hu-text-removebg.png
+  navbar:
+    left:
+      - href: index.qmd
+        text: Preface
+      #- sidebar:模块
+      - href: course-module.qmd
+        text: "CLASS"
+      - href: course-homework.qmd
+        text: "Homework"
+      - href: course-exam.qmd
+        text: "Examination"
+      - href: course-topics.qmd
+        text: "Topics"
+    right:
+      - icon: stack-overflow
+        text: "主站|Kevin Hu"
+        href: https://www.huhuaping.com
+        target: _blank
+        
+  page-footer:
+    left: "© Copyright 2024 Kevin Hu. Except where otherwise noted, all text and images licensed CC-BY-NC 4.0."
+  
+  sidebar:
+    - title: "CLASS"
+      style: "docked"
+      #background: light
+      collapse-level: 2
+      contents:
+        # navigation items
+        - course-module.qmd
+        - 01-class/text-book.qmd
+        - section: "Slides"
+          contents:
+            - 01-class/chpt17-iv.qmd
+            - 01-class/chpt18-sem-why.qmd
+            - 01-class/chpt19-sem-identification.qmd
+            - 01-class/chpt20-sem-estimation.qmd
+        - 01-class/supplements-code.qmd
+
+    - title: "Homework"
+      style: "docked"
+      #background: light
+      collapse-level: 2
+      contents:
+        # navigation items
+        - course-homework.qmd
+
+    - title: "Examination"
+      style: "docked"
+      #background: light
+      collapse-level: 2
+      contents:
+        # navigation items
+        - course-exam.qmd
+
+    - title: "Topics"
+      style: "docked"
+      #background: light
+      collapse-level: 2
+      contents:
+        # navigation items
+        - course-topics.qmd
+
+format:
+  html:
+    theme: [sandstone, scss/_variables.scss]
+    css: scss/styles.css
+    toc: true

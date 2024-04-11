@@ -1,0 +1,19 @@
+
+# Welcome{#sec-preface .unnumbered}
+
+Welcome all friends who explore my website here!
+
+This site will focus on studying and reproducing the Advanced Econometric III course  and content modules for PHD students(at Northwest A&F University).
+
+Objectives of this project:
+
+- Write slides for lectures
+
+- Write class assignments
+
+- Organize relevant topics
+
+
+Kevin Hu
+
+YangLing

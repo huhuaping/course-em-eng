@@ -1,0 +1,7 @@
+resources: 
+  - slide-xaringan/mycss/**
+  - slide-xaringan/pic/**
+  - slide-xaringan/slide-eng/**
+  - slide-xaringan/slide-format/pdf/**
+  - code/**
+  - text/**

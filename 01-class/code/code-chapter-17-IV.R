@@ -1,5 +1,4 @@
-source("Rcode/set-global.R")
-source("Rcode/load-pkg.R")
+source(here::here("R","set-global.R"))
 require("wooldridge")
 
 mroz <- wooldridge::mroz %>%
@@ -16,8 +15,7 @@ n <- nrow(mroz)
 
 ### ====wage example: All variables in dataset ======
 
-vars_label<- read.delim("data/mroz-var-label.txt", header = T,sep=":") %>%
-  as_tibble()
+vars_label<- read.delim(here::here("data","mroz-var-label.txt"), header = T,sep=":") %>%as_tibble()
 vars <- names(mroz) 
 tab_vars <- vars_label
 
@@ -67,7 +65,8 @@ mroz %>%
 ### ==== Wage example: use OLS method directly====
 
 mod_origin <- formula(lwage ~ educ +exper+expersq)
-ols_origin <- lm(formula = mod_origin, data = mroz)
+ols_origin <- lm(formula = mod_origin, data = mroz
+                 )
 
 
 ## ==== ## 17.4 Two-stage least squares method  ====

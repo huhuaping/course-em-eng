@@ -1,0 +1,45 @@
+---
+title: "Text"
+subtitle: "Books and Literature"
+---
+
+### Text and Books
+
+(1) **Wooldridge, J.M. Introductory econometrics: a modern approach[M].** Seventh edition. Australia: Cengage, 2020. 
+
+> This book is easy for reading and understanding and has lots pratical examples. 
+
+- **Chapter 15:** Instrumental Variables Estimation and Two-Stage Least Squares. ([View PDF](text/wooldridge-7e-chpt15-iv.pdf))
+
+- **Chapter 16:** Simultaneous Equations Models. ([View PDF ](text/wooldridge-7e-chpt16-sem.pdf))
+
+
+(2) **Gujarati, D.N, Porter, D.C. Basic econometrics[M].** fivth edition. Boston: McGraw-Hill, 2009. 
+
+> The writing language of this textbook is very simple and easy to understand. Here is the three chapters in our class([View PDF](text/gujarati-chpt18-20.pdf)):
+
+- **Chapter 18:** Simultaneous-Equation Models.
+
+- **Chapter 19:** The Identification Problem.
+
+- **Chapter 20:** Simultaneous-Equation Methods.
+
+(3) **Hansen, B.  Econometrics[M].** Princeton: Princeton University Press, 2022.
+
+> The content of this textbook is very comprehensive and profound, but it is difficult to understand and requires a lot of statistical and mathematical knowledge.
+
+- **Chapter 12:** Instrumental Variables. [(PDF file supplied if asked.)]{.red}
+
+- **Chapter 13:** Generalized Method of Moments. [(PDF file supplied if asked.)]{.red}
+
+
+### Articles and Repilication
+
+- Angrist J.D, Krueger A.B.  Does Compulsory School Attendance Affect Schooling and Earnings?[J]. The Quarterly Journal of Economics, 1991, 106(4): 979–1014. ([View PDF](text/angrist-1991.pdf))
+
+- Card, D.E.  Using Geographic Variation in College Proximity to Estimate the Return to Schooling. Cambridge, MA :National Bureau of Economic Research, 1993.([View PDF](text/card-1993.pdf))
+
+
+- Card D.E. Estimating the Return to Schooling: Progress on Some Persistent Econometric Problems[J]. Econometrica, 2001, 69(5): 1127–1160. ([View PDF](text/card-2001.pdf))
+
+

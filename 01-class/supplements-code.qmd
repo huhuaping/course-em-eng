@@ -1,0 +1,47 @@
+---
+title: "Supplements"
+subtitle: "Programming Scripts and files"
+---
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(fontawesome)
+```
+
+<!---为了更好地理解课程内容，这里提供了每一章幻灯片对应的编程脚本文件：--->
+
+To better understand the course content, here are some accompanying programming script files for each chapter slide:
+
+### Chapter 17 supplements
+
+Chapter 17. Endogeneity and Instrumental Variables
+
+- `r fontawesome::fa('r', fill= "blue", height='17px' )` Scripts file: [code-chapter-17-IV.R](code/code-chapter-17-IV.R)
+
+
+### Chapter 18 supplements
+
+Chapter 18. Why Should We Concern SEM?
+
+- `r fontawesome::fa('r', fill= "blue", height='17px' )` Scripts file: [code-chapter-18-why.R](code/code-chapter-18-why.R)
+
+
+### Chapter 19 supplements
+
+Chapter 19. What is the Identification Problem
+
+- `r fontawesome::fa('r', fill= "blue", height='17px' )` Scripts file: [code-chapter-19-identification.R](code/code-chapter-19-identification.R)
+
+### Chapter 20 supplements
+
+Chapter 20. How to Estimate SEM?
+
+- `r fontawesome::fa('r', fill= "blue", height='17px' )` Scripts file: [code-chapter-20-how-to.R](code/code-chapter-20-how-to.R)
+
+### Other Helpers
+
+
+- `r fontawesome::fa('r', fill= "blue", height='17px' )` Scripts file: [helper-tidy-systemfit.R](code/helper-tidy-systemfit.R). Custom helper functions to tidy `systemfit` output tables.
