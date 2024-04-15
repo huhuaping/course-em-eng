@@ -5,18 +5,17 @@ subtitle: "Books and Literature"
 
 ### Text and Books
 
-(1) **Wooldridge, J.M. Introductory econometrics: a modern approach[M].** Seventh edition. Australia: Cengage, 2020. 
+(1) **Wooldridge, J.M. Introductory econometrics: a modern approach[M].** Seventh edition. Australia: Cengage, 2020. [You can download the following book chapters ([View PDF](text/wooldridge-7e15-16.pdf)).]{.red}
 
 > This book is easy for reading and understanding and has lots pratical examples. 
 
-- **Chapter 15:** Instrumental Variables Estimation and Two-Stage Least Squares. ([View PDF](text/wooldridge-7e-chpt15-iv.pdf))
+- **Chapter 15:** Instrumental Variables Estimation and Two-Stage Least Squares. 
 
-- **Chapter 16:** Simultaneous Equations Models. ([View PDF ](text/wooldridge-7e-chpt16-sem.pdf))
+- **Chapter 16:** Simultaneous Equations Models. 
 
+(2) **Gujarati, D.N, Porter, D.C. Basic econometrics[M].** fifth edition. Boston: McGraw-Hill, 2009. [You can download the following book chapters ([View PDF](text/gujarati-chpt18-20.pdf)).]{.red}
 
-(2) **Gujarati, D.N, Porter, D.C. Basic econometrics[M].** fivth edition. Boston: McGraw-Hill, 2009. 
-
-> The writing language of this textbook is very simple and easy to understand. Here is the three chapters in our class([View PDF](text/gujarati-chpt18-20.pdf)):
+> The writing language of this textbook is very simple and easy to understand. 
 
 - **Chapter 18:** Simultaneous-Equation Models.
 
@@ -24,13 +23,26 @@ subtitle: "Books and Literature"
 
 - **Chapter 20:** Simultaneous-Equation Methods.
 
-(3) **Hansen, B.  Econometrics[M].** Princeton: Princeton University Press, 2022.
+(3) **Hansen, B.  Econometrics[M].** Princeton: Princeton University Press, 2022. [You can download the following book chapters ([View PDF](text/hansen-chpt12.pdf)).]{.red}
 
 > The content of this textbook is very comprehensive and profound, but it is difficult to understand and requires a lot of statistical and mathematical knowledge.
 
-- **Chapter 12:** Instrumental Variables. [(PDF file supplied if asked.)]{.red}
+- **Chapter 12:** Instrumental Variables. 
 
-- **Chapter 13:** Generalized Method of Moments. [(PDF file supplied if asked.)]{.red}
+<!-- - **Chapter 13:** Generalized Method of Moments.  -->
+
+(4) **Hill C, Griffiths W E, Lim G C. Principles of econometrics[M]**. Fifth edition. NJ: John Wiley & Sons, 2018. [(PDF file supplied if asked.)]{.red}
+
+- **Chapter 15:** Instrumental Variables Estimation and Two-Stage Least Squares
+
+- **Chapter 16:** Simultaneous Equations Models
+
+::: {.callout-note}
+
+There is an accompany [Online Free Book(`bookdown` website)]{.red} for this text book by using `R` programming language: **Colonescu C. Principles of Econometrics with R (2016)** <https://bookdown.org/ccolonescu/RPoE4/>
+
+:::
+
 
 
 ### Articles and Repilication

@@ -1,5 +1,5 @@
 ---
-title: "Description"
+title: "Introduction"
 ---
 
 There will be a number of in-class assignments depending on the content and schedule of the course.
@@ -15,7 +15,7 @@ Everyone needs to complete the homework tasks according to the actual situation.
 
 **Suggested software** :
 
-- (open source) `R` programming language (download from  [CRAN](https://cran.r-project.org/))
+- (open source) `R` programming language
 
 - (open source) `Python` programming language
 

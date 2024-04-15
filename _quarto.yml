@@ -1,8 +1,8 @@
 project:
   type: website
   output-dir: _site
-  pre-render: 
-    - R/load-pkg-basic.R
+#  pre-render: 
+#    - R/load-pkg-basic.R
   post-render:
     - R/copy-post-sync.R
     
@@ -11,7 +11,6 @@ knitr: true
 author: Kevin Hu(胡华平)
 execute:
   freeze: auto
-code-fold: true
 code-summary: "Show the code"
 
 filters: 
@@ -68,6 +67,13 @@ website:
       contents:
         # navigation items
         - course-homework.qmd
+        - 02-homework/project-prepare.qmd
+        - section: "Reproducibility"
+          contents:
+            - 02-homework/iv-wage-mroz.qmd
+            - 02-homework/iv-wage-card.qmd
+#            - 02-homework/case-01-IV-wage-mroz.qmd
+#            - 02-homework/case-02-IV-wage-card.qmd
 
     - title: "Examination"
       style: "docked"

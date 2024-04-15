@@ -1,0 +1,15 @@
+{
+  "hash": "8d064c28bc8771ea5300c1a58c1104ab",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"IV Application (II)\"\nsubtitle: \"College proximity as IVs for education\"\n---\n\n\n## Case Description\n\n### Research Interests\n\nWith data set `wooldridge::mroz`, researchers were interest in the return (`log(Wage)`) to education (`edu`) for married women.\n\n\n### Prepare dataset\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# load necessary R  packages\n\n## basic pkgs\nlibrary(tidyverse)  # most useful\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'tibble' was built under R version 4.3.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'purrr' was built under R version 4.3.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'stringr' was built under R version 4.3.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.0     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n```\n\n\n:::\n\n```{.r .cell-code}\nlibrary(magrittr)   # pipe %>%\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'magrittr' was built under R version 4.3.3\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\n\nAttaching package: 'magrittr'\n\nThe following object is masked from 'package:purrr':\n\n    set_names\n\nThe following object is masked from 'package:tidyr':\n\n    extract\n```\n\n\n:::\n\n```{.r .cell-code}\nlibrary(knitr)      # R render engine\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: package 'knitr' was built under R version 4.3.3\n```\n\n\n:::\n\n```{.r .cell-code}\n## econometrics \nlibrary(wooldridge) # wooldridge\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

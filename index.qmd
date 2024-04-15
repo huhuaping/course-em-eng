@@ -1,5 +1,5 @@
 
-# Welcome{#sec-preface .unnumbered}
+## Welcome{#sec-preface .unnumbered}
 
 Welcome all friends who explore my website here!
 
@@ -17,3 +17,23 @@ Objectives of this project:
 Kevin Hu
 
 YangLing
+
+## Release notes
+
+### V0.1.1 Accompanied project
+
+> update on 2024-04-15.
+
+- An Accompanied course project has been created a  ("Econometrics III Accompany"), with which students in my " Advanced Econometrics" class can do some programming exercises and make class examples reproducible.
+
+- I create a project repository(<https://github.com/huhuaping/course-emiii-accompany>) and host it at <https://github.com/> publicly.
+
+- For those students in china, you can also access the synchronous repository (<https://gitee.com/kevinhhp/course-emiii-accompany>).
+
+### V0.1.0 Xaringan slide
+
+> update on 2024-02-15.
+
+- Rebuild the course webpage by using `Quarto`.
+
+- Renew the English Xaringan slides.
