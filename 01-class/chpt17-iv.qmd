@@ -1,5 +1,5 @@
 ---
-title: "Chapter 17"
+title: "Chapter 17 IV"
 subtitle: "Endogeneity and Instrumental Variables"
 ---
 

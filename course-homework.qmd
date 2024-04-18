@@ -2,6 +2,8 @@
 title: "Introduction"
 ---
 
+## Declaration
+
 There will be a number of in-class assignments depending on the content and schedule of the course.
 
 Everyone needs to complete the homework tasks according to the actual situation.
@@ -24,3 +26,22 @@ Everyone needs to complete the homework tasks according to the actual situation.
 - (Commercial) `EViews` (10.0 + recommended)
 
 > Note: I have use R programming language for many years, welcome to join my R world [`Rworld`](https://rworld.huhuaping.com/)
+
+## R Learning
+
+In R community, there are tons of free online materials, tutorials, and videos for R learning by yourself. I will list some famous and profound R learning books for the new R learners.
+
+- Wickham Hadley, **R for data science[M]**. second edition. Sebastopol, CA: Grolemund G. O’Reilly,2023. (Free online at <https://r4ds.hadley.nz/>.)
+
+- Wickham Hadley, **Advanced R[M]**. second edition. Boca Raton London New York: Chapman and Hall/CRC, 2019. (Free online at <https://adv-r.hadley.nz/>)
+
+- Crawley M. J. **The R Book[M]**. second edition. Chichester, West Sussex, UK: Wiley, 2012. 
+
+
+- Adler Joseph. **R in a Nutshell: A Desktop Quick Reference[M]**. second edition. O’Reilly Media, 2012.
+
+
+
+
+
+

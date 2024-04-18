@@ -1,5 +1,5 @@
 ---
-title: "Chapter 20"
+title: "Chapter 20 How to"
 subtitle: "How to Estimate SEM?"
 ---
 

@@ -72,6 +72,7 @@ website:
           contents:
             - 02-homework/iv-wage-mroz.qmd
             - 02-homework/iv-wage-card.qmd
+            - 02-homework/sem-wage-mroz.qmd
 #            - 02-homework/case-01-IV-wage-mroz.qmd
 #            - 02-homework/case-02-IV-wage-card.qmd
 
