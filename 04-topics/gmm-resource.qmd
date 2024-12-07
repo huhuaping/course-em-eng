@@ -1,0 +1,23 @@
+---
+title: "GMM"
+subtitle: "Resources and applications"
+---
+
+
+## Books
+
+- Hall A R.  Generalized method of moments[M]. Oxford: Oxford University Press, 2005.
+
+
+## R resources
+
+- Chausse P. momentfit: Methods of Moments[J]. 2023.
+
+
+- Chausse P. Generalized Method of Moments with R[J]. , 2023.
+
+- Alfred F. SAM. series blog on "Generalized Method of Moments (GMM) in R". <https://alfredsam.github.io/>
+
+## Course
+
+- Eric Zivot (Washington University). Economics 583: Econometric Theory I. <https://faculty.washington.edu/ezivot/econ583/econ583.htm>. homepage <https://faculty.washington.edu/ezivot/index.htm>

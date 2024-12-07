@@ -1,0 +1,109 @@
+/*标题设置 */
+
+.reveal h2, .reveal h3, .reveal h4 {
+  margin: 0 0 18px 0 !important; /* 默认是12px */
+}
+
+.reveal h3 {
+  font-size: 140% !important; /* 默认字号偏小 */
+  color: #006DAE !important;   /* 改变默认颜色 */
+  font-style: italic !important;
+}
+
+.reveal h4 {
+  font-size: 120% !important; /* 默认字号偏小 */
+  color: #000000 !important;   /* 改变默认颜色 */
+}
+
+/* 标题inverse颜色（白色） 垂直居中 */
+.reveal .inverse h2, .reveal .inverse h3, .reveal .inverse h4 {
+  margin: 0 !important;
+  color: white !important;
+  position: absolute !important;
+  top: 50% !important;
+}
+
+/* 标题文本垂直居中 */
+.reveal .center-v h2, .reveal .center-v h3, .reveal .center-v h4 {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+
+/* 设定文本居中*/
+.center-h {
+  text-align: center !important;
+  font-size: 40px !important;
+  color: #000000 !important;
+}
+
+/* 设定文本颜色*/
+.white {
+  color: white !important;
+}
+
+/* 设定footer位置大小*/
+.reveal .footer{
+  position:fixed;
+  bottom: 11px !important;
+  font-size: 12px !important;
+}
+
+/* 设定logo大小*/
+.reveal .slide-logo{
+  height: 100% !important;
+  max-height: 1rem !important;
+}
+
+.red {
+  color: red;
+}
+
+
+/* 调整字体大小 */
+
+.font-110 {
+  font-size: 110% !important;
+}
+
+.font-105 {
+  font-size: 105% !important;
+}
+
+.font-90 {
+  font-size: 90% !important;
+}
+
+.font-85 {
+  font-size: 85% !important;
+}
+
+/*DT datatable信息设置  */
+
+.dataTables_info, .dataTables_paginate{
+  font-size: 60% !important;
+}
+
+/* 图题表题字体*/
+
+.reveal .slide figure >figcaption {
+  font-size: 70% !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+  font-weight: bold !important;
+  font-style: italic !important;
+  text-align: center !important;
+}
+
+/* 环境公式，字体控制*/
+.reveal .slide p > span.math > div.MathJax_Display{
+  font-size: 80% !important;
+}
+/* 行内公式，字体控制*/
+.reveal .slide p > span.math.inline {
+  /* 字号缩小*/
+  font-size: 80% !important;
+  /* 浅灰色 */
+  background-color: #f0f0f0 !important;
+}

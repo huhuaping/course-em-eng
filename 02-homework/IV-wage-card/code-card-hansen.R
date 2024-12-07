@@ -91,10 +91,10 @@ Xname <-  c("exp", "exp2", "black", "south", "urban")
 X <-  tbl_reg[,Xname] |> as.matrix()
 
 # fit model
-card.model2IV <- ivmodel(Y=Y, D=D, Z=Z, X=X)
+liml_pp <- ivmodel(Y=Y, D=D, Z=Z, X=X)
 
 # get the result of LIML
-fit_liml_pp <- card.model2IV$LIML
+fit_liml_pp <- liml_pp$LIML
 vars_eng <- c("edu", "exp", "exp2", "black", "south", "urban", "(Intercept)")
 vars_fct <- c("(Intercept)","edu", "exp", "exp2", "black", "south", "urban")
 
@@ -312,7 +312,83 @@ t_star_resid <- pull(
   "resid_pp")
 
 ## calculate equivalent F statistics
-
 restricted_F_pp <- linearHypothesis(model = fit_control_pp, "resid_pp=0")
 F_star_resid <- restricted_F_pp$F[2]
 p_F_resid <- restricted_F_pp$`Pr(>F)`[2]
+
+# ==== chpt 12.31 over-identification test (Sargan or J test) ====
+## also see table 12.1
+## === new data with residual from 2SLS/ LIML ====
+tbl_resid <- tbl_reg %>%
+  # reduced residual: (public, private) for edu
+  mutate(resid_pp = resid(fit_tsls_pp)) %>%
+  #reduced residual: (public, private, age, age2) for (edu, exp,exp2)
+  mutate(resid_ppa = resid(fit_tsls_ppa))  %>%
+  # reduced residual: LIML (public, private) for edu
+  mutate(resid_pp_liml = resid(liml_pp)[, "LIML"])  #!!
+           
+## ====sargan test 1: (public, private) for edu====
+# set model formula
+mod_jtest <- formula(resid_pp ~ exp + exp2 + black + south + urban + public + private)
+# OLS estimate
+lm_jtest <- lm(formula = mod_jtest, data = tbl_resid)
+# restricted F-test
+constrain <- c("public = 0", "private = 0")
+ftest_pp <- linearHypothesis(lm_jtest, constrain, test = "F")
+# obtain the F statistics
+f_pp <- ftest_pp$F[[2]]
+f_p_pp <- ftest_pp$`Pr(>F)`[[2]]
+# restricted Chisq-test
+chitest_pp <- linearHypothesis(lm_jtest, constrain , test = "Chisq")
+# obtain the Chisq statistics and probability
+chi_pp <- chitest_pp$Chisq[[2]] # Sargan statistics/J statistics
+chi_p_pp <- chitest_pp$`Pr(>Chisq)`[[2]]
+chi_p_pp_true <- pchisq(chi_pp, 1, lower.tail = FALSE) # adjust freedom
+# check equivalence of chi square and F
+m <- length(constrain)
+check <- isTRUE( m*f_pp == chi_pp )
+
+## ==== sargan test 2: (public, private, age, age2) for (edu, exp,exp2)====
+# set model formula
+mod_jtest <- formula(resid_ppa ~ age + age2 + black + south + urban + public + private)
+# OLS estimate
+lm_jtest <- lm(formula = mod_jtest, data = tbl_resid)
+# restricted F-test
+constrain <- c("age = 0", "age2 = 0", "public = 0", "private = 0")
+ftest_ppa <- linearHypothesis( lm_jtest, constrain, test = "F")
+# obtain the F statistics
+f_ppa <- ftest_ppa$F[[2]]
+f_p_ppa <- ftest_ppa$`Pr(>F)`[[2]]
+# restricted Chisq-test
+chitest_ppa <- linearHypothesis(lm_jtest, constrain, test = "Chisq")
+# obtain the Chisq statistics and probability
+chi_ppa <- chitest_ppa$Chisq[[2]]  # Sargan statistics/J statistics
+chi_p_ppa <- chitest_ppa$`Pr(>Chisq)`[[2]]
+chi_p_ppa_true <- pchisq(chi_ppa, 1, lower.tail = FALSE) # adjust freedom
+
+# check equivalence of chi square and F
+m <- length(constrain)
+check <- isTRUE( m*f_ppa == chi_ppa )
+
+## ====sargan test 3: LIML (public, private) for edu====
+# set model formula
+mod_jtest <- formula(resid_pp_liml ~ exp + exp2 + black + south + urban + public + private)
+# OLS estimate
+lm_jtest <- lm(formula = mod_jtest, data = tbl_resid)
+# restricted F-test
+constrain <- c("public = 0", "private = 0")
+ftest_pp_liml <- linearHypothesis(lm_jtest, constrain, test = "F")
+# obtain the F statistics
+f_pp_liml <- ftest_pp_liml$F[[2]]
+f_p_pp_liml <- ftest_pp_liml$`Pr(>F)`[[2]]
+# restricted Chisq-test
+chitest_pp_liml <- linearHypothesis(lm_jtest, constrain , test = "Chisq")
+# obtain the Chisq statistics and probability
+chi_pp_liml <- chitest_pp_liml$Chisq[[2]] # Sargan statistics/J statistics
+chi_p_pp_liml <- chitest_pp_liml$`Pr(>Chisq)`[[2]]
+chi_p_pp_liml_true <- pchisq(chi_pp_liml, 1, lower.tail = FALSE) # adjust freedom
+
+# pchisq(chi_pp, 1)
+# check equivalence of chi square and F
+m <- length(constrain)
+check <- isTRUE( m*f_pp_liml == chi_pp_liml )

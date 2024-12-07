@@ -1,0 +1,52 @@
+date-format: long
+engine: knitr
+# fig-format: svg
+execute: 
+  echo: false
+code-fold: false
+callout-appearance: simple
+html-math-method:
+  method: mathjax
+  #url: assets/mathjax.js
+  url: 'https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js'
+  # url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  #self-contained-math: true
+# resources: 
+#   - assets/mathjax.js
+crossref:
+  # table and figure
+  fig-title: "Figure"     # (default is "Figure")
+  tbl-title: "Table"     # (default is "Table")
+  title-delim: ":"   # (default is ":")
+  fig-prefix: "Figure"   # (default is "Figure")
+  tbl-prefix: "Table"    # (default is "Table")
+  ref-hyperlink: true # (default is true)
+  sec-prefix: "section"
+  eq-prefix: "equation"
+format: 
+  revealjs:
+    menu: # h2标题为空时，隐藏使其不可见的
+      useTextContentForMissingTitles: false
+      hideMissingTitles: true
+    logo: pic/nwafu-logo-bar-h-bw-bg.png
+    slide-number: c/t
+    multiplex: false
+    scrollable: true
+    theme: 
+      - assets/monash.scss
+      # - assets/text-box.scss
+    show-slide-number: all
+    show-notes: false
+    controls: true
+    width: 1600
+    height: 900
+    margin: 0.1
+    toc: true
+    toc-title: "[*本章目录*]{.monash-blue}"
+    toc-depth: 1
+    auto-stretch: false
+    css: [assets/tachyons-addon.css, assets/custom.css, assets/mycss.css]
+    include-after-body: "assets/after-body.html"
+    chalkboard:
+      boardmarker-width: 5
+      buttons: true

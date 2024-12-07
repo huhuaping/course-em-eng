@@ -1,0 +1,126 @@
+/* 定义了一个名为text-box的Mixin，它接受六个参数：$border-color、$background-color、$width、$height、$left和$top。这些参数可以在使用Mixin时传递不同的值，以实现不同的文本框效果。后面，我们可以在.rmd文件中根据实际需要，自己定义class类.box1和.box2，分别调用了text-box Mixin，并传递了不同的参数。这样，我们可以创建不同的文本框，只需要调整参数值即可。*/
+@mixin text-box($border-color, $background-color, $width, $height, $left, $top, $font-weight,$font-color) {
+  border: 1px; /* 设置边框 */
+  border-radius: 10%; /* 设置边框为圆弧角 */
+  border-color:  $border-color;
+  background-color: $background-color;
+  position: absolute;
+  z-index: 999;
+  width: $width;
+  height: $height;
+  left: $left; /* 距离左*/
+  top: $top;  /* 距离上边*/
+  text-align: left; /* 设置文本居中显示 */
+  font-weight: $font-weight; /* 文本加粗或正常 */
+  color: $font-color; /* 文本加粗或正常 */
+}
+
+/* sequence animation: omitted variables */
+.box-A4 {
+  @include text-box(#cceffc, #cceffc, 450px, 80px, 130px, 190px, bold, #000);
+}
+
+.box-A3 {
+  @include text-box(#cceffc, #cceffc, 440px, 80px, 650px, 190px, bold, #000);
+}
+
+.box-A1 {
+  @include text-box(#ffce33, #ffce33, 400px, 70px, 760px, 455px, bold, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+/* sequence animation: measurement error */
+
+.box-B4 {
+  @include text-box(#cceffc, #cceffc, 450px, 70px, 130px, 190px, bold, #000);
+}
+
+.box-B3 {
+  @include text-box(#cceffc, #cceffc, 440px, 70px, 650px, 190px, bold, #000);
+}
+
+.box-B1 {
+  @include text-box(#ffce33, #ffce33, 400px, 80px, 680px, 390px, bold, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+/* sequence animation: correlation */
+
+.box-C4 {
+  @include text-box(#cceffc, #cceffc, 550px, 70px, 140px, 190px, normal, #000);
+}
+
+.box-C31 {
+  @include text-box(#cceffc, #cceffc, 165px, 65px, 585px, 255px, normal, #000);
+}
+
+.box-C32 {
+  @include text-box(#cceffc, #cceffc, 280px, 65px, 425px, 335px, normal, #000);
+}
+
+
+.box-C1 {
+  @include text-box(#ffce33, #ffce33, 320px, 80px, 800px, 250px, bold, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+/* sequence animation: correlation with intuition*/
+
+.box-Cs5 {
+  @include text-box(#cceffc, #cceffc, 200px, 55px, 230px, 175px, normal, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+.box-Cs4 {
+  @include text-box(#cceffc, #cceffc, 200px, 55px, 230px, 301px, normal, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+.box-Cs2 {
+  @include text-box(#cceffc, #cceffc, 200px, 55px, 230px, 515px, normal, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+
+/* sequence animation: sem*/
+
+
+.box-D4 {
+  @include text-box(#cceffc, #cceffc, 112px, 65px, 610px, 223px, normal, #000);
+}
+
+.box-D3 {
+  @include text-box(#cceffc, #cceffc, 112px, 65px, 610px, 300px, normal, #000);
+}
+
+
+.box-D1 {
+  @include text-box(#ffce33, #ffce33, 300px, 95px, 610px, 465px, bold, #000);
+  display: flex; /* 使用Flexbox布局 */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+}
+
+/* sequence animation: sem intuition */
+
+.box-Ds5 {
+  @include text-box(#cceffc, #cceffc, 70px, 50px, 138px, 174px, normal, #000);
+}
+
+.box-Ds4 {
+  @include text-box(#cceffc, #cceffc, 120px, 50px, 140px, 396px, normal, #000);
+}
+
+

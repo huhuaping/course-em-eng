@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: _site
+  render:
+    - "*.qmd"
 #  pre-render: 
 #    - R/load-pkg-basic.R
   post-render:
@@ -9,6 +11,7 @@ project:
 
 knitr: true
 author: Kevin Hu(胡华平)
+lang: en
 execute:
   freeze: auto
 code-summary: "Show the code"
@@ -58,6 +61,8 @@ website:
             - 01-class/chpt18-sem-why.qmd
             - 01-class/chpt19-sem-identification.qmd
             - 01-class/chpt20-sem-estimation.qmd
+        - section: "Lecture"
+          - lecture/lecture-17-endogeneity.qmd
         - 01-class/supplements-code.qmd
 
     - title: "Homework"
