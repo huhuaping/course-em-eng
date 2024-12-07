@@ -42,7 +42,7 @@ format:
     height: 900
     margin: 0.1
     toc: true
-    toc-title: "[*本章目录*]{.monash-blue}"
+    toc-title: "[*Table of chapter content*]{.monash-blue}"
     toc-depth: 1
     auto-stretch: false
     css: [assets/tachyons-addon.css, assets/custom.css, assets/mycss.css]

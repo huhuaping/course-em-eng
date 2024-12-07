@@ -62,7 +62,8 @@ website:
             - 01-class/chpt19-sem-identification.qmd
             - 01-class/chpt20-sem-estimation.qmd
         - section: "Lecture"
-          - lecture/lecture-17-endogeneity.qmd
+          contents:
+            - lecture/lecture-17-endogeneity.qmd
         - 01-class/supplements-code.qmd
 
     - title: "Homework"

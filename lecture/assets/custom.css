@@ -104,7 +104,7 @@ a {
 /* 设置目录页 滑动下拉内容*/
 
 #toc-title:after {
-  content: "\f175 滑动下拉";
+  content: "\f175 Scrollable";
   font-size: 1.25rem;
   position: absolute;
   bottom: -0.5rem;

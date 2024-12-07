@@ -8,7 +8,7 @@ university: "NWAFU (西北农林科技大学)"
 department: "School of Economics and Management (经济管理学院)"
 subtitle: "Chapter 17. Endogeneity and Instumental Variables"
 date: "2024-09-25"
-keep-md: true
+#keep-md: true
 format: 
   revealjs: 
     footer: "Chapter 17. Endogeneity and Instumental Variables"
@@ -85,10 +85,10 @@ knitr::opts_knit$set(root.dir = here::here("lecture/"))
 
 ```{r}
 #| results: hide
-source(here("lecture-sem-eng/code/code-chapter-17-endogeneity.R"))
+source(here("lecture/code/code-chapter-17-endogeneity.R"))
 
 # use my custom function
-source(here("lecture-sem-eng/Rscript/create-DTbutton.R"))
+source(here("lecture/Rscript/create-DTbutton.R"))
 ```
 
 
@@ -845,13 +845,13 @@ Here we show a visual demonstration on this situation:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-03.png)
 
-:::{.absolute top=285px left=795px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+:::{.absolute top=282px left=790px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:85%!important;"}
 <!-- .box-D4 -->
 (Demand
 :::
 
 
-::: {.absolute top=400px left=805px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+::: {.absolute top=398px left=795px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:85%!important;"}
 <!-- .box-D3 -->
 (Supply
 :::
@@ -865,13 +865,17 @@ Here we show a visual demonstration on this situation:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-02.png)
 
-<div class="box-D4">
+:::{.absolute top=282px left=790px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:85%!important;"}
+<!-- .box-D4 -->
 (Demand
-</div>
+:::
 
-<div class="box-D3">
+
+::: {.absolute top=398px left=795px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:85%!important;"}
+<!-- .box-D3 -->
 (Supply
-</div>
+:::
+
 
 
 ##
@@ -882,40 +886,26 @@ Here we show a visual demonstration on this situation:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-01.png)
 
-<div class="box-D4">
+:::{.absolute top=282px left=790px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:85%!important;"}
+<!-- .box-D4 -->
 (Demand
-</div>
+:::
 
-<div class="box-D3">
+
+::: {.absolute top=398px left=795px width=150px height=80px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:85%!important;"}
+<!-- .box-D3 -->
 (Supply
-</div>
+:::
 
-<div class="box-D1">
+
+<!-- <div class="box-D1"> -->
+<!-- Hidden$\neq$ Disappeared -->
+<!-- </div> -->
+
+::: {.absolute top=640px left=770px width=420px height=135px style="background-color:#ffce33; font-weight:bold; color:#000; text-align:center; z-index:999; font-size:85%!important;display: flex;align-items: center;justify-content: center;border-radius: 10%;border-color: #ffce33;border: 1px;"}
+<!-- .box-D1 -->
 Hidden$\neq$ Disappeared
-</div>
-
-##
-
-### 代码：序列动画
-
-<!---demo2 ar endo begion--->
-
-```{r}
-#| eval: false
-#| results: asis
-cat(
-paste0(
-c("### Source 4: Simultaneity (demo 2)"),
-"\n\n",
-"An intuitive demonstration is show as follows:\n",
-"\n",
-paste0("![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-0",5:1,".png)"),
-"\n\n",
-"---\n\n",
-sep = ""),
-sep = "")
-
-```
+:::
 
 
 ##
@@ -926,9 +916,10 @@ An intuitive demonstration is show as follows:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-05.png)
 
-<div class="box-Ds5">
+:::{.absolute top=210px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
+<!-- .box-Ds5 -->
 D:
-</div>
+:::
 
 
 ##
@@ -939,14 +930,16 @@ An intuitive demonstration is show as follows:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-04.png)
 
-<div class="box-Ds5">
+:::{.absolute top=210px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
+<!-- .box-Ds5 -->
 D:
-</div>
+:::
 
-<div class="box-Ds4">
+
+:::{.absolute top=540px left=105px width=110px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+<!-- .box-Ds4 -->
 S:
-</div>
-
+:::
 
 
 ##
@@ -957,13 +950,17 @@ An intuitive demonstration is show as follows:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-03.png)
 
-<div class="box-Ds5">
+:::{.absolute top=210px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
+<!-- .box-Ds5 -->
 D:
-</div>
+:::
 
-<div class="box-Ds4">
+
+:::{.absolute top=540px left=105px width=110px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+<!-- .box-Ds4 -->
 S:
-</div>
+:::
+
 
 
 ##
@@ -974,13 +971,17 @@ An intuitive demonstration is show as follows:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-02.png)
 
-<div class="box-Ds5">
+:::{.absolute top=210px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
+<!-- .box-Ds5 -->
 D:
-</div>
+:::
 
-<div class="box-Ds4">
+
+:::{.absolute top=540px left=105px width=110px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+<!-- .box-Ds4 -->
 S:
-</div>
+:::
+
 
 
 ##
@@ -991,14 +992,16 @@ An intuitive demonstration is show as follows:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-01.png)
 
-<div class="box-Ds5">
+:::{.absolute top=210px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
+<!-- .box-Ds5 -->
 D:
-</div>
+:::
 
-<div class="box-Ds4">
+
+:::{.absolute top=540px left=105px width=110px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+<!-- .box-Ds4 -->
 S:
-</div>
-
+:::
 
 # 17.2 Estimation problem with endogeneity{#problem .monash-bg-blue .mcenter}
 
