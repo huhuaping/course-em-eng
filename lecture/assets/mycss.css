@@ -60,6 +60,10 @@
   color: red;
 }
 
+.blue {
+  color: blue;
+}
+
 
 /* 调整字体大小 */
 
@@ -96,9 +100,11 @@
   text-align: center !important;
 }
 
-/* 环境公式，字体控制*/
+/* 环境公式，字体控制，缩小上下margin*/
 .reveal .slide p > span.math > div.MathJax_Display{
   font-size: 80% !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
 }
 /* 行内公式，字体控制*/
 .reveal .slide p > span.math.inline {
