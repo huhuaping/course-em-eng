@@ -1,0 +1,1962 @@
+
+# Part 2：Simultaneous-Equation Models (SEM){.monash-bg-blue .mcenter visibility="uncounted"}
+
+<!---.large[--->
+
+Chapter 17. Endogeneity and Instrumental Variables
+
+[Chapter 18. Why Should We Concern SEM ?]{.red}
+
+Chapter 19. What is the Identification Problem?
+
+Chapter 20. How to Estimate SEM ?
+
+<!---]--->
+
+
+::: {.notes}
+In the following three chapters, we will focus on simultaneous equation models.
+:::
+
+
+## Chapter 18. Why Should We Concern SEM ?{#chpt18 .monash-bg-blue .mcenter}
+
+[18.1 The Nature of Simultaneous-Equation Models](#nature)
+
+[18.2 Notes and Relative Definitions](#notation)
+
+[18.3 Is OLS Method Still applicable?](#OLS-apply)
+
+::: {.notes}
+Firstly, let us answer the question that why should we concern SEM ?
+:::
+
+
+## 18.1 The Nature of Simultaneous-Equation Models{#nature .monash-bg-blue .mcenter}
+
+::: {.notes}
+So, the most important issue we should know about is the nature of the SEM.
+:::
+
+
+### Definition and basic format of SEM
+
+- **Simultaneous Equations Models (SEM)**: A system of equations consisting of several equations with interrelated or jointly influence.
+
+
+
+- The basic and simple SEM is
+
+$$
+\begin{cases}
+\begin{align}
+Y_{1 i}=\beta_{10}+\gamma_{12} Y_{2 i}+\beta_{11} X_{1 i}+u_{i1} \\
+Y_{2 i}=\beta_{20}+\gamma_{21} Y_{1 i}+\beta_{21} X_{1 i}+u_{i2}
+\end{align}
+\end{cases}
+$$
+
+
+::: {.notes}
+Next, I will show you four SEM examples from classical economic textbooks, and another two real life SEM examples.
+:::
+
+
+### Example 1: Demand-and-Supply System
+
+**Demand-and-Supply System**:
+
+$$
+\begin{cases}
+\begin{align}
+\text { Demand function: } & {Q_{t}^{d}=\alpha_{0}+\alpha_{1} P_{t}+u_{1t}, \quad \alpha_{1}<0} \\
+{\text { Supply function: }} & {Q_{t}^{s}=\beta_{0}+\beta_{1} P_{t}+u_{2t}, \quad \beta_{1}>0} \\
+{\text {Equilibrium condition: }} & {Q_{t}^{d}=Q_{t}^{s}}
+\end{align}
+\end{cases}
+$$
+
+::: {.notes}
+This slide shows the classic demand and supply SEM.The first eq is the demand function, and the second one is the supply function, the last one is the market equilibrium identity.
+:::
+
+
+### Example 2: Keynesian Model of Income Determination
+
+**Keynesian Model of Income Determination**:
+
+$$
+\begin{cases}
+\begin{align}
+C_t &= \beta_0+\beta_1Y_t+\varepsilon_t &&\text{(consumption function)}\\
+Y_t &= C_t+I_t &&\text{(income identity)}
+\end{align}
+\end{cases}
+$$
+
+::: {.notes}
+/'keinziən/This slide shows the Keynesian Model of Income Determination, which consists of two equations.And I will show you more details later in this chapter.
+:::
+
+
+### Example 3: The IS Model
+
+Macroeconomics goods market equilibrium model, also known as **IS Model**:
+
+$$
+\begin{cases}
+\begin{align}
+\text { Consumption function: } & C_{t}=\beta_{0}+\beta_{1} Y_{d t} +u_{1t} & <\beta_{1}<1 \\
+\text { Tax function: } & T_{t}=\alpha_{0}+\alpha_{1} Y_{t} +u_{2t}& \quad 0<\alpha_{1}<1  \\
+\text { Investment function: } & I_{t}=\gamma_{0}+\gamma_{1} r_{t} +u_{3t} \\
+\text { Definition: } & \gamma_{d t}=Y_{t}-T_{t} \\
+\text { Government expenditure: } & G_{t}=\bar{G} \\
+\text { National income identity: } & Y_{t}=C_{t}+I_{t}+G_{t}
+\end{align}
+\end{cases}
+$$
+
+
+>where:
+>  $Y=$ national income;  $Y_d=$ disposable income;  $r=$ interest rate;  $\bar{G}=$ given level of government expenditure
+
+::: {.notes}
+Here, the IS system contains totally six equations.
+:::
+
+
+###  Example 4: The LM Model
+
+Macroeconomics money market equilibrium system, also known as **LM Model**:
+
+$$
+\begin{cases}
+\begin{align}
+{\text { Money demand function: }} & {M_{t}^{d}=a+b Y_{t}-c r_{t}} +u_{t} \\
+{\text { Money supply function: }} & {M_{t}^{s}=\bar{M}} \\
+{\text { Equilibrium condition: }} & {M_{t}^{d}=M_{t}^{s}}
+\end{align}
+\end{cases}
+$$
+
+>Where:
+>  $Y=$ income;  $r=$ interest rate;  $\bar{M}=$ assumed level of money supply.
+
+::: {.notes}
+Thus, the LM system contains totally 3 equations.
+:::
+
+
+###  Example 5: Klein's model I
+
+**Klein's model I**：
+
+$$
+\begin{cases}
+\begin{align}
+\text { Consumption function: }  & C_{t}=\beta_{0}+\beta_{1} P_{t}+\beta_{2}\left(W+W^{\prime}\right)_{t}+\beta_{3} P_{t-1}+u_{ t1} \\
+\text { Investment function: } & I_{t} =\beta_{4}+\beta_{5} P_{t}+\beta_{6} P_{t-1}+\beta_{7} K_{t-1}+u_{ t2} \\
+\text { Demand for labor: }
+& w_{t}= \beta_{8}+\beta_{9}\left(Y+T-W^{\prime}\right)_{t}  +\beta_{10}\left(Y+T-W^{\prime}\right)_{t-1}+\beta_{11} t+u_{ t3} \\ \text { Identity: } & Y_{t} = C_{t}+I_{t}+C_{t} \\
+\text { Identity: }  & Y_{t}=W_{t}^{\prime}+W_{t}+P_{t} \\
+\text { Identity: }  & K_{t}=K_{t-1}+I_{t}
+\end{align}
+\end{cases}
+$$
+
+>Where:
+>  $C=$ consumption expenditure;  $Y=$ income after tax;  $P=$ proﬁts;  $W=$ private wage bill;  $W^{\prime}=$ government wage bill;  $K=$ capital stock;  $T=$ taxes.
+
+::: {.notes}
+This slide shows the macroeconomic Klein's model I. And it contains three stochastic equations and three identities.
+:::
+
+
+### Example 6: Murder Rates and Size of the police Force
+
+Cities often want to determine how much additional **law enforcement** will decrease their **murder rates**.
+
+$$
+\begin{cases}
+\begin{align}
+\operatorname{murdpc} &=\alpha_{1} \operatorname{polpc}+\beta_{10}+\beta_{11} \text {incpc}+u_{1} \\
+\text { polpc } &=\alpha_{2} \operatorname{murdpc}+\beta_{20}+\text { other factors. }
+\end{align}
+\end{cases}
+$$
+
+
+> Where :
+>  $murdpc =$ murders per capita;  $polpc =$ number of police officers per capita;  $incpc =$ income per capita.
+
+::: {.notes}
+Here, we will see an microeconomic real life example.we assumed that merder rates is determinded by numbers of police officers and income per capita.Meanwhile, the number of police officers will also be affected by murder rates and other factors within city districts.
+:::
+
+
+### Example 7: Housing Expenditures and Saving
+
+For a random household in the population, we assume that annual **housing expenditures** and **saving** are jointly determined by:
+
+$$
+\begin{cases}
+\begin{align}
+\text {housing } & =\alpha_{1} \text {saving}+\beta_{10}+\beta_{11} \text {inc}+\beta_{12} e d u c+\beta_{13} \text {age}+u_{1} \\
+\text {saving} &=\alpha_{2} \text {housing }+\beta_{20}+\beta_{21} \text {inc}+\beta_{22} e d u c+\beta_{23} \text {age}+u_{2}
+\end{align}
+\end{cases}
+$$
+
+> Where:
+>  $inc =$ annual income;  $saving =$ household saving;  $educ =$ education measured in years;  $age =$ age measured in years.
+
+
+::: {.notes}
+Another real life example is the housing expenditures and saving system.as you know, housing expenditures and savings are jointly determinded by income, education, age, and the disturbances.Meanwhile, there will be reverse causality effect between housing expenditures and houshold saving.
+:::
+
+
+### Example 8: Labor market of married, Working Women
+
+Let's consider the labor market for married women already in the workforce.
+
+
+
+$$
+
+\begin{alignedat}{8}
+\text { hours } & =&\alpha_1 \log ( wage)+&\beta_{10}+&\beta_{11} { educ }+&\beta_{12} age+&\beta_{13}  { kidslt6 }  +&\beta_{14} { nwifeinc }&+u_1  &&\text{(supply)}\\
+\log ({ wage }) &=&\alpha_2 { hours }+&\beta_{20}+&\beta_{21} { educ }+&\beta_{22} { exper }  +&\beta_{23} { exper }^2& &+ u_2 && \quad \text{(demand)}\\
+\end{alignedat}
+
+$$
+
+
+- In the demand function, we write the wage offer as a function of hours and the usual productivity variables.
+
+- All variables except `hours` and `log(wage)` are assumed to be exogenous.
+
+- `educ` might be correlated with omitted `ability` in either equation. Here, we just ignore the omitted ability problem.
+
+::: {.aside}
+source: **Wooldridge, J.M. Introductory econometrics: a modern approach[M].** Seventh edition. Australia: Cengage, 2020. Example 16.5: labor Supply of married, Working Women.
+:::
+
+
+### The Nature of SEM
+
+The essence of simultaneous equation model is **endogenous variable** problem:
+
+
+- Each of these equations has its economic **causality effect**.
+
+- Some of these equations contain **endogenous variables**.
+
+- Sample data is only the end result of various variables, which lies  complex causal interaction behind them.
+
+- Estimation all of the **parameters** directly by OLS method may induce problems.
+
+::: {.notes}
+So, What are the characteristics of the simultaneous equation model?
+:::
+
+
+### Trufﬂes example: the story
+
+**Trufﬂes** are delicious food materials. They are edible fungi that grow below the ground. Consider a supply and demand model for trufﬂes:
+
+$$
+\begin{cases}
+\begin{align}
+\text { Demand: } & Q_{di}=\alpha_{1}+\alpha_{2} P_{i}+\alpha_{3} P S_{i}+\alpha_{4} D I_{i}+e_{d i} \\
+\text { Supply: } & Q_{si}=\beta_{1}+\beta_{2} P_{i}+\beta_{3} P F_{i}+e_{s i}\\
+\text { Equity: } & Q_{di}= Q_{si}
+\end{align}
+\end{cases}
+$$
+
+> where:
+-  $Q_i=$ the quantity of trufﬂes traded in a particular marketplace; -  $P_i=$ the market price of trufﬂes; -  $PS_i=$ the market price of a substitute for real trufﬂes; -  $DI_i=$ per capita monthly disposable income of local residents; -  $PF_i=$ the price of a factor of production, which in this case
+is the hourly rental price of trufﬂe-pigs used in the search process.
+
+::: {.notes}
+So, let us sum up this section with the truffles example.We will just walk through the sigle equation thought with the data set.And you should think about the difference between sigle equation model and SEM.
+:::
+
+
+### Trufﬂes example: model variables
+
+```{r}
+#| label: show1-truffles-var
+truffles_var <- tibble::tribble(
+  ~`vars`, ~`label`, ~`measure`,
+  "P", "market price of truffles", "dollar/ounce",
+  "Q", "market quantity of truffles", "ounce",
+  "PS", "market price of substitute", "dollar/ounce",
+  "DI", "disposable income", "dollar/capita, monthly",
+  "PF", "rental price of truffles-pigs", "dollar/hour"
+)
+# kable(truffles_var,caption = "model variables")
+datatable(truffles_var,
+  caption = "All variables",
+  options = list(pageLength = 6)
+)
+```
+
+
+::: {.notes}
+松露案例：变量说明案例来源：Hill, R. C., W. E. Griffiths and G. C. Lim. Principles of Econometrics 4th Edition  [M], Wiley, 2011. chpt 11。实例参考：[PoE with R](https://bookdown.org/ccolonescu/RPoE4/simultaneous-equations-models.html)
+:::
+
+
+###  Trufﬂes example: the data set
+
+```{r}
+#| label: show1-data-truffles
+
+# truffles<-read.table("data/truffles.dat",header = F)
+load("data/truffles.rda")
+names(truffles) %<>% toupper()
+# kable(truffles,caption = "松露数据（样本数n=30）")
+truffles %>%
+  add_column(id = 1:nrow(truffles), .before = "P") %>%
+  datatable(
+    caption = "Truffles data set (n = 30)",
+    options = list(pageLength = 8, dom = "tip")
+  )
+```
+
+
+### Trufﬂes example: the Scatter plot (P VS Q)
+
+```{r}
+#| label: scatter-truffles
+#| message: false
+#| warning: false
+#| fig-width: 14
+ggplot(truffles, aes(x = Q, y = P)) +
+  geom_point(color = "blue") +
+  geom_smooth(se = FALSE) +
+  labs(x = "Q", y = "P")
+```
+
+
+### Trufﬂes example: the Scatter matrix
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-width: 14
+# panel.smooth function is built in.
+# panel.cor puts correlation in upper panels, size proportional to correlation
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
+  usr <- par("usr")
+  on.exit(par(usr))
+  par(usr = c(0, 1, 0, 1))
+  r <- abs(cor(x, y))
+  txt <- format(c(r, 0.123456789), digits = digits)[1]
+  txt <- paste(prefix, txt, sep = "")
+  if (missing(cex.cor)) cex.cor <- 0.8 / strwidth(txt)
+  text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+
+# Plot #2: same as above, but add loess smoother in lower and correlation in upper
+pairs(~ P + Q + DI + PS + PF,
+  data = truffles,
+  lower.panel = panel.smooth, upper.panel = panel.cor,
+  pch = 20, main = "Truffles Scatter Matrix"
+)
+```
+
+
+### Trufﬂes example: the simple linear regression
+
+Let's start with the simplest linear regression model.
+
+Generally, we use price (P) and output (Q) data to directly conduct simple linear regression modeling:
+
+$$
+\begin{cases}
+\begin{align}
+P & = \hat{\beta}_1+\hat{\beta}_2Q +e_1 && \text{(simple P model)}\\
+Q & = \hat{\beta}_1+\hat{\beta}_2P +e_2  && \text{(simple Q model)}
+\end{align}
+\end{cases}
+$$
+
+
+```{r}
+#| label: simple-model
+mod_simple <- list(
+  mod.Q = Q ~ P,
+  mod.P = P ~ Q
+)
+```
+
+
+::: {.notes}
+从最简单线性回归模型开始。通常我们会使用价格(P)和产量(Q)数据直接做简单线性回归建模：
+:::
+
+
+### Trufﬂes example: the simple linear regression
+
+As we all know, the linear regression of two variables is asymmetrical, so there is:
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+- the simple **Price** regression is:
+
+```{r}
+#| label: simple-P
+#| results: asis
+fun_report_eq(mod_simple$mod.P, lm.dt = truffles)
+```
+
+:::
+
+
+::: {.column width="40%"}
+
+
+- the simple **Quantity** regression  is:
+
+```{r}
+#| label: simple-Q
+#| results: asis
+fun_report_eq(mod_simple$mod.Q, lm.dt = truffles)
+```
+
+:::
+
+::::
+
+::: {.notes}
+我们都知道，两个变量的线性回归是不对称的，因此有：
+:::
+
+
+### Trufﬂes example: the sample regression line (SRL)
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+```{r}
+#| label: scatter-truffles-left
+#| fig-cap: SRL of the Price model
+#| fig-width: 6
+ggplot(truffles, aes(x = Q, y = P)) +
+  geom_point(color = "blue") +
+  geom_smooth(se = FALSE, method = "lm", color = "red") +
+  labs(x = "Q", y = "P")
+```
+
+:::
+
+
+::: {.column width="40%"}
+
+
+```{r}
+#| label: scatter-truffles-right
+#| fig-cap: SRL of the Quantity model
+#| fig-width: 6
+ggplot(truffles, aes(x = P, y = Q)) +
+  geom_point(color = "blue") +
+  geom_smooth(se = FALSE, method = "lm", color = "orange") +
+  labs(x = "P", y = "Q")
+```
+
+:::
+
+::::
+
+
+::: {.notes}
+So, we can not distinguish the supply curve or the demand curve here.
+:::
+
+
+### Trufﬂes example: the multi-variables regression model
+
+Of course, we can also use more independent variables X to build the regression models:
+
+
+$$
+\begin{cases}
+\begin{align}
+P & = \hat{\beta}_1+\hat{\beta}_2Q +\hat{\beta}_3DI+\hat{\beta}_2PS +e_1 && \text{(added P model)}\\
+Q & = \hat{\beta}_1+\hat{\beta}_2P +\hat{\beta}_2PF+e_2  && \text{(added Q model)}
+\end{align}
+\end{cases}
+$$
+
+```{r}
+#| label: added-model
+mod_added <- list(
+  mod.Q = Q ~ P + PF,
+  mod.P = P ~ Q + DI + PS
+)
+```
+
+
+::: {.notes}
+Of course, we can also use more independent variables X to build the regression models.We tried hard to make these supply or demand equations more "reasonable" and "believable".
+:::
+
+
+### Trufﬂes example: the multi-variables regression model
+
+
+- the estimation result of multi-vars **Price** regression model is:
+
+```{r}
+#| label: added-P
+#| results: asis
+fun_report_eq(mod_added$mod.P, lm.dt = truffles)
+```
+
+- the estimation result of multi-vars **Quantity** regression model is:
+
+```{r}
+#| label: added-Q
+#| results: asis
+fun_report_eq(mod_added$mod.Q, lm.dt = truffles)
+```
+
+::: {.notes}
+However, we know that in the demand-supply SEM, reverse causility effect will existbetween the price  and quantity variables.So, these simple OLS estimates are unreliable with our intuition.
+:::
+
+
+## 18.2 Notations and Definitions{#notation .monash-bg-blue .mcenter}
+
+::: {.notes}
+In this section, I will give you some important definition and notations about SEM.
+:::
+
+
+### Structural SEM (1): algebraic expression A
+
+**Structural equations**: System of equations that directly characterize economic structure or behavior.
+
+The **algebraic expression** of structural SEM is：
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+
+::: {.notes}
+algebraic  /ˌældʒɪˈbreɪɪk/In fact, all examples we have seen in the former section are structural SEM.___So we donote the generalized algebraic expression of structural SEM as follows.
+:::
+
+
+### Structural SEM (1): Structural coefficients
+
+**Structural coefficients**: Parameters in structural equation that represents an economic outcome or behavioral relationship, including:
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+>- **[En]{.red}dogenous structural coefficients**:  $\gamma_{11}, \gamma_{21},\cdots, \gamma_{m1}; \cdots; \gamma_{1m}, \gamma_{2m},\cdots, \gamma_{mm}$ 
+
+>- **[Ex]{.red}ogenous structural coefficients**:  $\beta_{11}, \beta_{21},\cdots, \beta_{m1}; \cdots; \beta_{1m}, \beta_{2m},\cdots, \beta_{mm};$ 
+
+::: {.notes}
+Firstly, let's define the structural coefficients.**Structural coefficients** are Parameters in structural SEM that represents an economic outcome or behavioral relationship, including Endogenous structural coefficients (here denoted as ...) and Exogenous structural coefficients (here denoted as ...) .
+:::
+
+
+### Structural SEM (1): Structural variables
+
+- **Endogenous variables**: Variables determined by the model.
+
+- **Predetermined variables**：Variables which values are not determined by the model in the **current** time period.
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+> **Endogenous variables**:
+- Such as:  $Y_{t1};Y_{t2}; \cdots; Y_{tm}$ 
+
+:::
+
+
+::: {.column width="40%"}
+
+
+> **Predetermined variables**:
+- Such as:  $X_{..}$ 
+
+:::
+
+::::
+
+::: {.notes}
+Another important concept is the structural variable, which includes endogenouse variable and predeterminded variable.Endogenous variables are Variables determined by the model.Predetermined variables are Variables which values are not determined by the model in the current time period.We assumed the endogenous variables in this SEM includes all Y_ts, and the predeterminded vairiables include all X_ts.
+:::
+
+
+### Structural SEM (1): Predetermined variables
+
+**Predetermined variables**: Variables which values are not determined by the model in the **current** time period, including:
+
+- the **exogenous variables**
+
+- the **lagged endogenous variables**.
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+
+::: {.notes}
+You should remind that the predetermined variables  consist of both the exogenous variables and thelagged endogenous variables.
+:::
+
+
+### Structural SEM (1): Predetermined variables
+
+
+- **[Ex]{.red}ogenous variables**: The variables not determined by the model, neither in the **current period** nor in the **lagged period**.
+
+- **Lagged [en]{.red}dogenous variables**: The lag variable of the endogenous variable in the current period。
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+> **current period [ex]{.red}ogenous**:
+-  $X_{t1}, X_{t2},\cdots, X_{tk}$ .
+
+
+> **lagged period [ex]{.red}dogenous**:
+- lagged from  $X_{t1}$ :  $X_{t-1,1}; X_{t-2,1};\cdots; X_{t-(T-1),1}$  - and lagged from  $X_{tk}$ :  $X_{t-1,k}; X_{t-2,k};\cdots; X_{t-(T-1),k}$  -  $\cdots$ 
+
+:::
+
+
+::: {.column width="40%"}
+
+> **lagged [en]{.red}dogenous**:
+- lagged from  $Y_{t1}$ :  $Y_{t-1,1}; Y_{t-2,1}; \cdots, Y_{t-(T-1),1}$  - and lagged  from  $Y_{tm}$ ：  $Y_{t-1,m}; Y_{t-2,m}; \cdots;Y_{t-(T-1),m}$  -  $\cdots$ 
+:::
+
+::::
+
+::: {.notes}
+> So, you may get two types Exogenous variables, which are current period exogenous, such as all X_ts, and Lagged [en]{.red}dogenous variables, such as all X_t-s.
+:::
+
+
+### Structural SEM (1): Predetermined coefficients
+
+**Predetermined coefficients**: coefficients before predetermined variables.
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+>Such as:
+- all  $\beta_{..}$ 
+
+::: {.notes}
+Of course, we may denote coefficients before predetermined variables as **Predetermined coefficients**.
+:::
+
+
+### Structural SEM (1): algebraic expression B
+
+By simple transformation, the **algebraic expression** of SEM can also show as:
+
+
+$$
+A: \begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+.small[
+
+$$
+\Rightarrow B: \begin{cases}
+\begin{alignat}{5}
+\gamma_{11}Y_{t1} &+ \gamma_{21}Y_{t2}&+\cdots &+\gamma_{m-1,1}Y_{t,m-1} &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{t1}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &=\varepsilon_{t1} \\
+\gamma_{12}Y_{t1} &+\gamma_{22}Y_{t2} &+   \cdots&+\gamma_{m-1,2}Y_{t,m-1} &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &= \varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}&+ \cdots &+\gamma_{m-1,m}Y_{t,m-1} & +\gamma_{mm}Y_{tm}  &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &=\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+]
+
+
+::: {.notes}
+By simple transformation, we can also obtain another **algebraic expression** (B) of SEM as show in this slide.
+:::
+
+
+### Structural SEM (2): matrix expression
+
+With the Matrix language, the **matrix expression** of SEM was noted as:
+
+$$
+\begin{equation}
+\begin{bmatrix}
+Y_1 & Y_2 & \cdots & Y_m \\
+\end{bmatrix} _t
+\begin{bmatrix}
+\gamma_{11} & \gamma_{12} & \cdots & \gamma_{1m} \\
+\gamma_{21} & \gamma_{22} & \cdots & \gamma_{2m} \\
+\cdots & \cdots & \cdots  & \cdots \\
+\gamma_{m1} & \gamma_{m2} & \cdots & \gamma_{mm} \\
+\end{bmatrix} + \\
+\begin{bmatrix}
+X_1 & X_2 & \cdots & X_m \\
+\end{bmatrix} _t
+\begin{bmatrix}
+\beta_{11} & \beta_{12} & \cdots & \beta_{1m} \\
+\beta_{21} & \beta_{22} & \cdots & \beta_{2m} \\
+\cdots & \cdots & \cdots & \cdots\\
+\beta_{k1} & \beta_{k2} & \cdots & \beta_{km} \\
+\end{bmatrix} \\ =
+\begin{bmatrix}
+\varepsilon_1 & \varepsilon_2 & \cdots & \varepsilon_m \\
+\end{bmatrix} _t
+\end{equation}
+$$
+
+::: {.notes}
+Here, we arranged the matrix expression of SEM based on former algebraic expression B.
+:::
+
+
+### Structural SEM (2): matrix expression
+
+For Simplicity, we can generized the **matrix expression** of SEM :
+
+$$
+\begin{aligned}
+& \boldsymbol{y^{\prime}_t} \boldsymbol{\Gamma} &+ & \boldsymbol{x^{\prime}_t} \boldsymbol{B} &= & \boldsymbol{{\varepsilon^{\prime}_t}} \\
+&(1 \ast m)(m \ast m) & & (1 \ast k)(k \ast m) & & (1 \ast m)
+\end{aligned}
+$$
+
+
+> **where**：
+- Bold upper letter and greek means a **matrix**
+>
+- Bold lower letter and greek means a **column vector**
+
+
+
+
+::: {.notes}
+For Simplicity, we can generized the **matrix expression** of SEM as follow.> we should remind that：- the dimension of the vector and matrix is important;- and matrix compatibility  /kəmˌpætəˈbɪləti/ is needed in matrix calculation.
+:::
+
+
+### Structural SEM (2): Endogenous coefficients matrix
+
+For the **[En]{.red}dogenous parameter matrix**  $\boldsymbol{\Gamma}$ ：
+
+- To ensure that each equation has a **dependent variable**, then the matrix  $\boldsymbol{\Gamma}$  each column has at least one element of 1 - If matrix  $\boldsymbol{\Gamma}$  is upper triangular matrix, then the SEM is a **recursive** model system. - For the SEM solution to exist,  $\boldsymbol{\Gamma}$  must be **nonsingular**.
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+$$
+\begin{equation}
+\boldsymbol{\Gamma} =
+\begin{bmatrix}
+\gamma_{11} & \gamma_{12} & \cdots & \gamma_{1m} \\
+\gamma_{21} & \gamma_{22} & \cdots & \gamma_{2m} \\
+\cdots & \cdots & \cdots  & \cdots \\
+\gamma_{m1} & \gamma_{m2} & \cdots & \gamma_{mm} \\
+\end{bmatrix} \\
+\text{if }\Rightarrow
+\begin{bmatrix}
+\gamma_{11} & \gamma_{12} & \cdots & \gamma_{1m} \\
+0 & \gamma_{22} & \cdots & \gamma_{2m} \\
+\cdots & \cdots & \cdots  & \cdots \\
+0 & 0 & \cdots & \gamma_{mm} \\
+\end{bmatrix}
+\end{equation}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{aligned}
+y_{1t} &=& f_{1}\left(\mathbf{x}_{t}\right)+\varepsilon_{t1} \\
+y_{2t} &=& f_{2}\left(y_{t1}, \mathbf{x}_{t}\right)+\varepsilon_{t2} \\
+& \vdots & \vdots \\
+y_{mt} &=& f_{m}\left(y_{t1}, y_{t2}, \ldots, \mathbf{x}_{t}\right)+\varepsilon_{mt}
+\end{aligned}
+\end{cases}
+$$
+
+:::
+
+::::
+
+::: {.notes}
+Now, let's focus the **[En]{.red}dogenous parameter matrix** firstly.
+:::
+
+
+### Structural SEM (2): Exdogenous coefficients matrix
+
+The **[Ex]{.red}ogenous coefficients matrix**  $\boldsymbol{B}$ ：
+
+$$
+\begin{equation}
+\boldsymbol{B} =
+\begin{bmatrix}
+\beta_{11} & \beta_{12} & \cdots & \beta_{1m} \\
+\beta_{21} & \beta_{22} & \cdots & \beta_{2m} \\
+\cdots & \cdots & \cdots & \cdots\\
+\beta_{k1} & \beta_{k2} & \cdots & \beta_{km} \\
+\end{bmatrix}
+\end{equation}
+$$
+
+::: {.notes}
+Here is the The **[Ex]{.red}ogenous coefficients matrix**.You should pay attention that the first column if SEM contains intercepts.
+:::
+
+
+### Reduced SEM (1): algebraic expression
+
+**Reduced equations**:  The equation expresses an **endogenous variable** with all the **predetermined variables** and the **stochastic disturbances**.
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&=  & +\pi_{11}X_{t1}+\pi_{21}X_{t2} &+\cdots+\pi_{k1}X_{tk} & + v_{t1} \\
+Y_{t2}&=&+\pi_{12}X_{t1}+\pi_{22}X_{t2} &+\cdots+\pi_{k2}X_{tk} & + v_{t2}\\
+& \vdots &\vdots &&\vdots &  \\
+Y_{tm}&=&+\pi_{1m}X_{t1} +\pi_{2m}X_{t2} &+\cdots+\pi_{km}X_{tk} & + v_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+::: {.notes}
+As you see, we know well with the structural SEMs because we have learned thess models in the economic textbooks.Now, we will go ahead to  the important concept of reduced SEM.___So, a reduced equation is one that expresses an **endogenous variable** solely in terms of the **predetermined variables** and the **stochastic disturbances**.We denoted the reduced SEM as follows.
+:::
+
+
+### Reduced SEM (1):  Reduced coefficients and disturbance
+
+- **Reduced coefficients**: parameters in the reduced SEM.
+
+- **Reduced disturbance**: stochastic disturbance terms in the reduced SEM.
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&=  & +\pi_{11}X_{t1}+\pi_{21}X_{t2} &+\cdots+\pi_{k1}X_{tk} & + v_{t1} \\
+Y_{t2}&=&+\pi_{12}X_{t1}+\pi_{22}X_{t2} &+\cdots+\pi_{k2}X_{tk} & + v_{t2}\\
+& \vdots &\vdots &&\vdots &  \\
+Y_{tm}&=&+\pi_{1m}X_{t1} +\pi_{2m}X_{t2} &+\cdots+\pi_{km}X_{tk} & + v_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+> Reduced coefficients:
+-  $\pi_{11},\pi_{21},\cdots, \pi_{k1}$  -  $\pi_{1m},\pi_{2m},\cdots, \pi_{km}$ .
+
+:::
+
+
+::: {.column width="40%"}
+
+
+> Reduced disturbance:
+-  $v_{1},v_2,\cdots, v_m$ 。
+
+:::
+
+::::
+
+::: {.notes}
+Hence, we induce the concepts of Reduced coefficients and Reduced disturbance.- Reduced coefficients are parameters in the reduced SEM, such as all $\pi_{km}$s.- Reduced disturbance: stochastic disturbance terms in the reduced SEM, such as all $v_{m}$s.
+:::
+
+
+### Reduced SEM (2): matrix expression
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&=  & +\pi_{11}X_{t1}+\pi_{21}X_{t2} &+\cdots+\pi_{k1}X_{tk} & + v_{t1} \\
+Y_{t2}&=&+\pi_{12}X_{t1}+\pi_{22}X_{t2} &+\cdots+\pi_{k2}X_{tk} & + v_{t2}\\
+& \vdots &\vdots &&\vdots &  \\
+Y_{tm}&=&+\pi_{1m}X_{t1} +\pi_{2m}X_{t2} &+\cdots+\pi_{km}X_{tk} & + v_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+For this algebraic reduced SEM, we can note its matrix  form as:
+
+$$
+\begin{equation}
+\begin{bmatrix}
+Y_1 & Y_2 & \cdots & Y_m \\
+\end{bmatrix} _t = \\
+\begin{bmatrix}
+X_1 & X_2 & \cdots & X_m \\
+\end{bmatrix} _t
+\begin{bmatrix}
+\pi_{11} & \pi_{12} & \cdots & \pi_{1m} \\
+\pi_{21} & \pi_{22} & \cdots & \pi_{2m} \\
+\cdots & \cdots & \cdots  & \cdots \\
+\pi_{m1} & \pi_{m2} & \cdots & \pi_{mm} \\
+\end{bmatrix}  +
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_m \\
+\end{bmatrix} _t
+\end{equation}
+$$
+
+::: {.notes}
+Also, we can denote the matrix form of the reduced SEM as below.
+:::
+
+
+### Reduced SEM (2): matrix expression
+
+For simplicity, the matrix expression of reduced SEM can be noted further.
+
+$$
+\begin{aligned}
+& \boldsymbol{y^{\prime}_t} & =  &\boldsymbol{x^{\prime}_t} \boldsymbol{\Pi}  & + & \boldsymbol{{v^{\prime}_t}}  \\
+&(1 \ast m) & & (1 \ast k)(k \ast m) & &  (1 \ast m)
+\end{aligned}
+$$
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+- the reduced coefficients matrix is :
+
+$$
+\begin{equation}
+\boldsymbol{\Pi} =
+\begin{bmatrix}
+\pi_{11} & \pi_{12} & \cdots & \pi_{1m} \\
+\pi_{21} & \pi_{22} & \cdots & \pi_{2m} \\
+\cdots & \cdots & \cdots  & \cdots \\
+\pi_{m1} & \pi_{m2} & \cdots & \pi_{mm} \\
+\end{bmatrix}
+\end{equation}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+- the reduced disturbances vector is:
+
+$$
+\begin{equation}
+\boldsymbol{{v^{\prime}_t}}=
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_m \\
+\end{bmatrix}_t
+\end{equation}
+$$
+
+:::
+
+::::
+
+
+### Structural VS Reduced SEM: the two systems
+
+We can induce Reduced Equations from Structural Equations:
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&= & &+\gamma_{21}Y_{t2}+&\cdots  &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{1t}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &+\varepsilon_{t1} \\
+Y_{t2}&=&\gamma_{12}Y_{t1} &+  & \cdots &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &+\varepsilon_{t2}\\
+& \vdots &\vdots &&\vdots &&\vdots  \\
+Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\beta_{2m}X_{t2} &+\cdots+\beta_{km}X_{tk} &+\varepsilon_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+
+$$
+\Rightarrow\begin{cases}
+\begin{alignat}{5}
+Y_{t1}&=  & +\pi_{11}X_{t1}+\pi_{21}X_{t2} &+\cdots+\pi_{k1}X_{tk} & + v_{t1} \\
+Y_{t2}&=&+\pi_{12}X_{t1}+\pi_{22}X_{t2} &+\cdots+\pi_{k2}X_{tk} & + v_{t2}\\
+& \vdots &\vdots &&\vdots &  \\
+Y_{tm}&=&+\pi_{1m}X_{t1} +\pi_{2m}X_{t2} &+\cdots+\pi_{km}X_{tk} & + v_{tm}
+\end{alignat}
+\end{cases}
+$$
+
+::: {.notes}
+Untill now, we have two notation systems. one is the structural SEM, and the other is the reduced SEM.So, Why we need these two notation systems ?And what is the relationship between these two notation systems ?A short answer is that we can deduce the structural parameters with the reduced coefficients.
+:::
+
+
+### Structural VS Reduced SEM:  coefficients
+
+The Structural SEM :
+
+$$
+\begin{aligned}
+\boldsymbol{y^{\prime}_t} \boldsymbol{\Gamma} +  \boldsymbol{x^{\prime}_t} \boldsymbol{B} =  \boldsymbol{{\varepsilon^{\prime}_t}}
+\end{aligned}
+$$
+
+The Reduced SEM:
+
+$$
+\begin{aligned}
+\boldsymbol{y^{\prime}_t}  =  \boldsymbol{x^{\prime}_t} \boldsymbol{\Pi}   +  \boldsymbol{{v^{\prime}_t}}
+\end{aligned}
+$$
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+- where:
+
+$$
+\begin{align}
+\boldsymbol{\Pi} &= - \boldsymbol{B} \boldsymbol{\Gamma^{-1}}\\
+\boldsymbol{{v^{\prime}_t}} &= \boldsymbol{{\varepsilon^{\prime}_t}} \boldsymbol{\Gamma}^{-1}
+\end{align}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+- and:
+
+$$
+\begin{equation}
+\boldsymbol{\Gamma} =
+\begin{bmatrix}
+\gamma_{11} & \gamma_{12} & \cdots & \gamma_{1m} \\
+\gamma_{21} & \gamma_{22} & \cdots & \gamma_{2m} \\
+\cdots & \cdots & \cdots  & \cdots \\
+\gamma_{m1} & \gamma_{m2} & \cdots & \gamma_{mm} \\
+\end{bmatrix}
+\end{equation}
+$$
+
+:::
+
+::::
+
+::: {.notes}
+This slide shows the relationship between the structural SEM and the reduced SEM.And the reduced coefficients equals negetive B times the inverse matrix of structural pars.___$$
+\begin{aligned}& \boldsymbol{y^{\prime}_t} & =  &-\boldsymbol{x^{\prime}_t} \boldsymbol{B} \boldsymbol{\Gamma^{-1}} & + & \boldsymbol{{\varepsilon^{\prime}_t}} \boldsymbol{\Gamma}^{-1}  \\&(1 \ast m) & & (1 \ast k)(k \ast m)(m \ast m) & &  (1 \ast m)(m \ast m)\end{aligned}
+$$
+:::
+
+
+### Structural VS Reduced SEM: Moments
+
+Now we concern the first and second moments of the disturbance:
+
+- first , let us assumed the moments of  **structural disturbances** satisfy:
+
+$$
+\begin{align}
+\mathbf{E[\varepsilon_t | x_t]} &= \mathbf{0} \\
+\mathbf{E[\varepsilon_t \varepsilon^{\prime}_t |x_t]} &= \mathbf{\Sigma} \\
+E\left[\boldsymbol{\varepsilon}_{t} \boldsymbol{\varepsilon}_{s}^{\prime} | \mathbf{x}_{t}, \mathbf{x}_{s}\right] &=\mathbf{0}, \quad \forall t, s
+\end{align}
+$$
+
+- then, we can prove that the **reduced disturbances** satify:
+
+$$
+\begin{align}
+E\left[\mathbf{v}_{t} | \mathbf{x}_{t}\right] &=\left(\mathbf{\Gamma}^{-1}\right)^{\prime} \mathbf{0}=\mathbf{0} \\ E\left[\mathbf{v}_{t} \mathbf{v}_{t}^{\prime} | \mathbf{x}_{t}\right] &=\left(\mathbf{\Gamma}^{-1}\right)^{\prime} \mathbf{\Sigma} \mathbf{\Gamma}^{-1}=\mathbf{\Omega} \\
+\text{where: }\mathbf{\Sigma} &=\mathbf{\Gamma}^{\prime} \mathbf{\Omega} \mathbf{\Gamma}
+\end{align}
+$$
+
+::: {.notes}
+This slide shows the first and second moments of the disturbance on both structural and reduced SEM.First , let us assumed the moments of structural disturbances satisfy following moment conditions. which means that the structural disturbances are drawn from an M-variate distribution with zero conditional expectation and zero covariance.Then, we can prove that the reduced disturbances will also be zero conditional expectation and its variance-covariance matrix equals omega.Finaly, we know the relationship between these two variance-covariance matrix.We denote the relationship as Sigma equals transpose Gamma times Omega times Gamma.
+:::
+
+
+### Structural VS Reduced SEM: useful expression*
+
+In a sample of data, each joint observation will be one row in a data matrix ( with  $T$  observations):
+
+$$
+\begin{align}
+\left[\begin{array}{lll}{\mathbf{Y}} & {\mathbf{X}} & {\mathbf{E}}\end{array}\right]=\left[\begin{array}{ccc}{\mathbf{y}_{1}^{\prime}} & {\mathbf{x}_{1}^{\prime}} & {\boldsymbol{\varepsilon}_{1}^{\prime}} \\ {\mathbf{y}_{2}^{\prime}} & {\mathbf{x}_{2}^{\prime}} & {\boldsymbol{\varepsilon}_{2}^{\prime}} \\ {\vdots} & {} \\ {\mathbf{y}_{T}^{\prime}} & {\mathbf{x}_{T}^{\prime}} & {\boldsymbol{\varepsilon}_{T}^{\prime}}\end{array}\right]
+\end{align}
+$$
+
+then the structural SEM is:
+
+$$
+\begin{align}
+\mathbf{Y} \mathbf{\Gamma}+\mathbf{X} \mathbf{B}=\mathbf{E}
+\end{align}
+$$
+
+the first and second moment of structural disturbances is:
+
+$$
+\begin{align}
+E[\mathbf{E} | \mathbf{X}] &=\mathbf{0} \\
+E\left[(1 / T) \mathbf{E}^{\prime} \mathbf{E} | \mathbf{X}\right] &=\mathbf{\Sigma}
+\end{align}
+$$
+
+::: {.notes}
+The next two slides will show us some useful relationships under sample data set.I will not discuss them here, and you should try to learn this content by yourself.
+:::
+
+
+### Structural VS Reduced SEM: useful expression*
+
+
+Assume that:
+
+$$
+\begin{align}
+(1 / T) \mathbf{X}^{\prime} \mathbf{X} & \rightarrow \mathbf{Q}  \text{ ( a  finite positive definite matrix)} \\
+(1 / T) \mathbf{X}^{\prime} \mathbf{E} & \rightarrow \mathbf{0}
+\end{align}
+$$
+
+then the reduced SEM can be noted as:
+
+$$
+\begin{align}
+\mathbf{Y} & =\mathbf{X} \boldsymbol{\Pi}+\mathbf{V} && \leftarrow  \mathbf{V}=\mathbf{E} \mathbf{\Gamma}^{-1}
+\end{align}
+$$
+
+And we may have following useful results：
+
+$$
+\begin{align}
+\frac{1}{T}
+\begin{bmatrix}
+{\mathbf{Y}^{\prime}} \\
+{\mathbf{X}^{\prime}} \\
+{\mathbf{V}^{\prime}}
+\end{bmatrix}
+\begin{bmatrix}
+{\mathbf{Y}} & {\mathbf{X}} & {\mathbf{V}}
+\end{bmatrix}
+\quad \rightarrow  \quad
+\begin{bmatrix}
+{\mathbf{I}^{\prime} \mathbf{Q} \mathbf{I}+\mathbf{\Omega}} & {\mathbf{I} \mathbf{I}^{\prime} \mathbf{Q}} & {\mathbf{\Omega}} \\
+{\mathbf{Q} \mathbf{I}} & {\mathbf{Q}} & {\mathbf{0}^{\prime}} \\ {\mathbf{\Omega}} & {\mathbf{0}} & {\mathbf{\Omega}}
+\end{bmatrix}
+\end{align}
+$$
+::: {.notes}
+The next two slides will show us some useful relationships under sample data set.I will not discuss them here, and you should try to learn this content by yourself.
+:::
+
+
+### Case 1: Keynesian income model (structural SEM)
+
+The Keynesian model of income determination (structural SEM):
+
+$$
+\begin{cases}
+\begin{align}
+C_t &= \beta_0+\beta_1Y_t+\varepsilon_t &&\text{(consumption function)}\\
+Y_t &= C_t+I_t &&\text{(income equity)}
+\end{align}
+\end{cases}
+$$
+
+So the structural SEM contains:
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+2 **endogenous variables**:
+-  $c_t;Y_t$ 
+
+:::
+
+
+::: {.column width="40%"}
+
+
+1 **predetermined variables**:
+
+- 1 **exogenous variables**:  $I_t$ 
+
+- 0 **lagged endogenous variable**.
+
+:::
+
+::::
+
+> **Exercise**: can you get the reduced SEM from this structural SEM ?
+
+::: {.notes}
+Now, I will show two cases to illustrate the relationship between the structural SEM and the reduced SEM.___Here is the Keynesian model of income determination, and you know this is the structural SEM.So, can you deduce the reduced SEM from this structural SEM ?
+:::
+
+
+### Case 1: Keynesian income model (reduced SEM)
+
+We can get the reduced SEM from the former structural SEM and denoted (the right):
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{align}
+Y_t &=\frac{\beta_0}{1-\beta_1}+\frac{1}{1-\beta_1}I_t+\frac{\varepsilon_t}{1-\beta_1} \\
+C_t &=\frac{\beta_0}{1-\beta_1}+\frac{\beta_1}{1-\beta_1}I_t+\frac{\varepsilon_t}{1-\beta_1}
+\end{align}
+\end{cases}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{align}
+Y_t &= \pi_{11}+\pi_{21}I_t+v_{t1} \\
+C_t &= \pi_{12}+\pi_{22}I_t+v_{t2}
+\end{align}
+\end{cases}
+$$
+:::
+
+::::
+
+
+where:
+
+$$
+\begin{cases}
+\begin{alignat}{5}
+&& \pi_{11}  = \frac{\beta_0}{1-\beta_1}; \quad
+&& \pi_{21}  = \frac{\beta_0}{1-\beta_1}; \quad
+&& v_{t1}  = \frac{\varepsilon_t}{1-\beta_1};\\
+&& \pi_{12}  = \frac{1}{1-\beta_1} ; \quad
+&& \pi_{22}  = \frac{\beta_1}{1-\beta_1} ; \quad
+&& v_{t2}  = \frac{\varepsilon_t}{1-\beta_1};
+\end{alignat}
+\end{cases}
+$$
+
+>there are 2 **structural coefficients**  $\beta_0;\beta_1$  totally ； and 4 **reduced coefficients**  $\pi_{11},\pi_{21};\pi_{12},\pi_{22}$  (There are actually three only !)
+
+::: {.notes}
+Surely, We can get the reduced SEM from the former structural SEM with some simple algebraic calculation.Also, you can obtain the relationship between the structural parameters and the reduced coefficients.This is easy because the structural SEM contains only two equations and few structural parameters.
+:::
+
+
+### Case 2: Macroeconomic Model (structural SEM)
+
+Consider the **Small Macroeconomic Model** (Structural SEM):
+
+$$
+\begin{cases}
+\begin{aligned}
+\text { consumption: }  c_{t} &=\alpha_{0}+\alpha_{1} y_{t}+\alpha_{2} c_{t-1}+\varepsilon_{t, c} \\
+\text { investment: }  i_{t} &=\beta_{0}+\beta_{1} r_{t}+\beta_{2}\left(y_{t}-y_{t-1}\right)+\varepsilon_{t, j} \\
+\text { demand: }  y_{t} &=c_{t}+i_{t}+g_{t}
+\end{aligned}
+\end{cases}
+$$
+
+where:  $c_t =$  consumption;  $y_t =$  output;  $i_t =$  investment;  $r_t =$  rate;  $g_t =$  government expenditure.
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+3 **endogenous variables**:  $c_t;i_t;Y_t$ 
+
+4 **predetermined variables**:
+
+- 2 **exogenous variables**:  $r_t;g_t$ . - 2 **lagged endogenous variables**:  $y_{t-1};c_{t-1}$ 
+
+:::
+
+
+::: {.column width="40%"}
+
+
+totally 6 **strutural coefficients**:  $\alpha_0,\alpha_1,\alpha_2;\beta_0,\beta_1,\beta_2;$ 
+
+:::
+
+::::
+
+::: {.notes}
+So, let's go ahead to more complex structural SEM with three equations.
+:::
+
+
+### Case 2: Macroeconomic Model（reduced SEM）
+
+We can get the reduced SEM from the former structural SEM: (HOW TO??)
+
+$$
+\begin{cases}
+\begin{align}
+c_{t}  = &  [{\alpha_{0}}{\left(1-\beta_{2}\right)}+\beta_{0} \alpha_{1}+\alpha_{1} \beta_{1}  r_{t}+\alpha_{1} g_{t}+\alpha_{2}\left(1-\beta_{2}\right) c_{t-1}-\alpha_{1} \beta_{2} y_{t-1} \\
++&\left(1-\beta_{2}\right) \varepsilon_{t, c}+\alpha_{1} \varepsilon_{t, j}] /{\Lambda} \\
+i_{t}  = & [\alpha_{0} \beta_{2}+\beta_{0}\left(1-\alpha_{1}\right)+\beta_{1}\left(1-\alpha_{1}\right) r_{t}+\beta_{2} g_{t}+\alpha_{2} \beta_{2} c_{t-1}-\beta_{2}\left(1-\alpha_{1}\right) y_{t-1} \\
++&\beta_{2} \varepsilon_{t, c}+\left(1-\alpha_{1}\right) \varepsilon_{t, j}]/{\Lambda} \\
+y_{t} = & [\alpha_{0}+\beta_{0}+\beta_{1} r_{t}+g_{t}+\alpha_{2} c_{t-1}-\beta_{2} y_{t-1}
++\varepsilon_{t, c}+\varepsilon_{t, j}] /{\Lambda}
+\end{align}
+\end{cases}
+$$
+
+where:  $\Lambda = 1- \alpha_1 -\beta_2$ 。For simplicity, denote the **reduced SEM** as:
+
+$$
+\begin{cases}
+\begin{aligned}
+c_{t} & =  \pi_{11} +\pi_{21}r_t +\pi_{31}g_t +\pi_{41}c_{t-1} +\pi_{51}y_{t-1} +v_{t1} \\
+i_{t} & =  \pi_{12} +\pi_{22}r_t +\pi_{32}g_t +\pi_{42}c_{t-1} +\pi_{52}y_{t-1} +v_{t2} \\
+i_{t} & =  \pi_{13} +\pi_{23}r_t +\pi_{33}g_t +\pi_{43}c_{t-1} +\pi_{53}y_{t-1} +v_{t3}
+\end{aligned}
+\end{cases}
+$$
+
+> So we have 15 **reduced coefficients** totally!
+
+::: {.notes}
+With a little long time calculation, you can obtain the reduced SEM and also the relationship between the structural parameters and the reduced coefficients.Anyway, the calculation becomes complex and tedious for most of us.
+:::
+
+
+### Case 2: Macroeconomic Model (thinking)
+
+**Thinking**：
+
+- What are the purposes of structural SEM and reduced SEM respectively?
+
+- Note the consumption function (in structural SEM): the rate  $i_t$  does not impact the consumption  $c_t$ !
+
+- It will be obvious from the reduced SEM that  $\frac{\Delta c_t}{\Delta r_t} = \frac{\alpha_1 \beta_1}{\Lambda}$ 
+
+
+
+- Note the consumption function (in structural SEM): What are the reasons for the impact of income  $y_t$  on consumption  $c_t$ ?
+
+- It's also easy to get the answer by transformation:  $\frac{\Delta c_t}{ \Delta y_t} = \frac{\Delta c_t / \Delta r_t}{\Delta y_t / \Delta r_t} = \frac{\alpha_1 \beta_1 / \Lambda}{ \beta_1 / \Lambda} = \alpha_1$ 
+
+::: {.notes}
+So, we shoul rethink that What is the use of structural SEM and reduced SEM respectively?Can we relieve the works by using alternative approaches?
+:::
+
+
+### Case 2: Macroeconomic Model (the relationship)
+
+According to the relationship between Structural SEM and Reduced SEM:
+
+$$
+\begin{aligned}
+\boldsymbol{y^{\prime}_t}  =  &-\boldsymbol{x^{\prime}_t} \boldsymbol{\Pi}   +  \boldsymbol{{v^{\prime}_t}}
+=  -\boldsymbol{x^{\prime}_t} \boldsymbol{B} \boldsymbol{\Gamma^{-1}}  +  \boldsymbol{{\varepsilon^{\prime}_t}} \boldsymbol{\Gamma}^{-1}
+\end{aligned}
+$$
+
+Then, the following matrixes can be easily obtained:
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+$$
+\begin{align}
+\mathbf{y}^{\prime} & =
+\begin{bmatrix}
+c & i & y
+\end{bmatrix}\\
+\boldsymbol{x}^{\prime} & =
+\begin{bmatrix}
+1 & r & g & c_{-1} & y_{-1}
+\end{bmatrix}
+\end{align}
+$$
+
+$$
+\begin{align}
+\mathbf{B}=
+\begin{bmatrix}
+{-\alpha_{0}} & {-\beta_{0}} & {0} \\
+{0} & {-\beta_{1}} & {0} \\
+{0} & {0} & {-1} \\ {-\alpha_{2}} & {0} & {0} \\
+{0} & {\beta_{2}} & {0}
+\end{bmatrix}
+\end{align}
+$$
+
+:::
+
+
+
+::: {.column width="40%"}
+
+
+$$
+\begin{align}
+\Gamma &=
+\begin{bmatrix}
+{1} & {0} & {-1} \\
+{0} & {1} & {-1} \\
+{-\alpha_{1}} & {-\beta_{2}} & {1}
+\end{bmatrix} \\
+\mathbf{\Gamma}^{-1} &=\frac{1}{\Lambda}
+\begin{bmatrix}
+{1-\beta_{2}} & {\beta_{2}} & {1} \\
+{\alpha_{1}} & {1-\alpha_{1}} & {1} \\
+{\alpha_{1}} & {\beta_{2}} & {1}
+\end{bmatrix}
+\end{align}
+$$
+
+
+:::
+
+::::
+
+::: {.notes}
+Here, we will obtain the reduced coefficients with matrix algebraic calculation.And you should first know the relationship between Structural SEM and Reduced SEM.Then, we write down the following vectors and matrixes. Y`, X`,Gamma, B, and inverse Gamma.Note that the first element of the vector X' is constant one for the intercept in our equations.I think the difficulty in this calculation is the inverse of matrix Gamma.
+:::
+
+
+### Case 2: Macroeconomic Model (calculations)
+
+We can get the same answers: (It's so easy!)
+
+$$
+\begin{align}
+\boldsymbol{\Pi=-B\Gamma^{-1}}=\frac{1}{\Lambda}
+\begin{bmatrix}
+{\alpha_{0}\left(1-\beta_{2}\right)+\beta_{0} \alpha_{1}} & {\alpha_{0} \beta_{2}+\beta_{0}\left(1-\alpha_{1}\right)} &  {\alpha_{0}+\beta_{0}}   \\
+{\alpha_{1} \beta_{1}} & {\beta_{1}\left(1-\alpha_{1}\right)} &  \beta_1  \\
+{\alpha_{1}} & {\beta_{2}} & 1 \\
+{\alpha_{2}\left(1-\beta_{2}\right)}& {\alpha_{2} \beta_{2}} & \alpha_2\\
+{-\beta_{2} \alpha_{1}} & {-\beta_{2}\left(1-\alpha_{1}\right)} &-\beta_2
+\end{bmatrix}
+\end{align}
+$$
+
+
+
+$$
+\begin{align}
+\mathbf{\Pi}^{\prime}=\frac{1}{\Lambda}
+\begin{bmatrix}
+\alpha_{0}\left(1-\beta_{2}\right)+\beta_{0} \alpha_{1} & \alpha_{1} \beta_{1} & \alpha_{1} & \alpha_{2}\left(1-\beta_{2}\right) & -\beta_{2} \alpha_{1} \\
+\alpha_{0} \beta_{2}+\beta_{0}\left(1-\alpha_{1}\right) & \beta_{1}\left(1-\alpha_{1}\right) & \beta_{2} & \alpha_{2} \beta_{2} & -\beta_{2}\left(1-\alpha_{1}\right) \\
+\alpha_{0}+\beta_{0} & \beta_{1} & 1 & \alpha_{2} & -\beta_{2}
+\end{bmatrix}
+\end{align}
+$$
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+- Where:
+
+$$
+\Lambda = 1- \alpha_1 -\beta_2
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+- Remeber that:
+
+$$
+\begin{align}
+\mathbf{x}^{\prime}  =
+\begin{bmatrix} 1 & r & g & c_{-1} & y_{-1}
+\end{bmatrix}
+\end{align}
+$$
+:::
+
+::::
+
+::: {.notes}
+Now, we know that the reduced coefficients matrix equal to negtive B times inverse Gamma.with the matrix agebraic caculation, we finally get the result here.And you can compare the transpose Pi with the former result.___So, Matrix calculation is a sharp knife, handy and sharp!You should practice by yourself at least once.
+:::
+
+
+### Supplement: inverse matrix solution and procedure*
+
+.notes[
+Use the elementary row operation (Gauss-Jordan) to find the inverse matrix:
+
+1. Construct **augmented matrix**
+
+2. Transform the augmented matrix for many times until the goal is achieved.
+
+]
+
+.notes[
+
+Use cofactor, algebraic cofactor and adjoint matrix to get the inverse matrix:
+
+1. Calculate **cofactor matrix** and **algebraic cofactor matrix**;
+
+2. Calculate **adjoint matrix**: it is the **transpose** of the cofactor matrix;
+
+3. Calculate the **determinant** of original matrix : each element of **top row** in the original matrix is multiplied by its corresponding **top row** element in the "cofactor matrix";
+
+4. Calculated the inverse matrix: **1/ determinant**  $\times$  **adjoint matrix**
+]
+
+::: {.notes}
+This slide gives you the solution and procedure to obtain the inverse matrix.And please try to practice by yourself.A.用初等行运算（高斯－若尔当）来求逆矩阵：1. 构造**增广矩阵**2. 对增广矩阵进行多次变换，直至达到目标。<br>B.用余子式、代数余子式和伴随矩阵来求逆矩阵1. 计算**余子式矩阵**和**代数余子式矩阵**2. 计算**伴随矩阵**：就是代数余子式矩阵的**转置**3. 计算原矩阵**行列式**：原矩阵**顶行**的每个元素乘以其对应"代数余子式矩阵"**顶行**元素。4. 计算得出逆矩阵：**1/行列式** X **伴随矩阵**
+:::
+
+
+## 18.3 Is the OLS Method Still applicable ?{#OLS-apply .monash-bg-blue .mcenter}
+
+::: {.notes}
+In this section, we will discuss the problems with the SEM by using OLS method directly.
+:::
+
+
+### Endogenous variable problem
+
+Consider Keynes's model of income determination, We will be able to show that  $Y_t$  and  $u_t$  will be correlated, thus violating the CLRM **A2** assumption.
+
+
+$$
+\begin{cases}
+\begin{align}
+C_t &= \beta_0+\beta_1Y_t+u_t   &(0<\beta_1<1)  &&\text{( consumption function)}\\
+Y_t &= C_t+I_t  & &&\text{(Income Identity)}
+\end{align}
+\end{cases}
+$$
+
+By transforming the above structural equation, we obtained:
+
+$$
+\begin{align}
+Y_t &= \beta_0+\beta_1Y_t+ I_t +u_t   \\
+Y_t &= \frac{\beta_0}{1-\beta_1}+\frac{1}{1-\beta_1}I_t+\frac{1}{1-\beta_1}u_t   && \text{(eq1: Reduced equation)}\\
+E(Y_t)&=\frac{\beta_0}{1-\beta_1}+\frac{1}{1-\beta_1}I_t && \text{(eq2: Take the expectation for both sides)}
+\end{align}
+$$
+
+::: {.notes}
+Take Keynes's model of income determination. We will be able to show that  $Y_t$  and  $u_t$  will be correlated, thus violating the CLRM assumption.Here, we transform the structural SEM and get the reduced equation for the endogenous variable Y_t.
+:::
+
+
+### Endogenous variable problem
+
+Further more:
+
+$$
+\begin{align}
+Y_t - E(Y_t)& = \frac{u_t}{1-\beta_1} && \text{(eq 1 - eq 2)}\\
+u_t-E(u_t) &= u_t && \text{(eq 3: Expectation is equal to 0)} \\
+cov(Y_t,u_t) &= E([Y_t-E(Y_t)][u_t-E(u_t)])  && \text{(eq 4: Covariance definition)}\\
+&=\frac{E(u^2_t)}{1-\beta_1} && \text{(eq 5: Variance definition)}\\
+&=\frac{\sigma^2}{1-\beta_1}\neq 0 && \text{(eq 6: The variance is not 0)}
+\end{align}
+$$
+
+- Therefore, the consumption equation of the Keynesian model will not satisfy the CLRM A2 assumption.
+
+- Thus, OLS method cannot be used to obtain **Best linear unbiased estimator** (BLUE) for consumption equation.
+
+
+
+::: {.notes}
+Here, I give you the hints to obtain the covariance of Y_t and u_t.And we can prove that the demand equation of the Keynesian model will not satisfy the assumption that  $Y_t$  is not related to  $u_t$  in the CLRM hypothesis.Thus, OLS method cannot be used to obtain **Best linear unbiased estimator** (BLUE) for demand equation.
+:::
+
+
+### The OLS estimator of the coefficient is biased
+
+Furthermore, the OLS estimator is biased to its true  $\beta_1$ , which means  $E(\hat{\beta}_1) \neq \beta_1$ . The proof show as below.
+
+$$
+\begin{cases}
+\begin{align}
+C_t &= \beta_0+\beta_1Y_t+u_t   &(0<\beta_1<1)  &&\text{( consumption function)}\\
+Y_t &= C_t+I_t  & &&\text{(Income Identity)}
+\end{align}
+\end{cases}
+$$
+
+$$
+\begin{align}
+\hat{\beta}_1
+= \frac{\sum{c_ty_t}}{\sum{y^2_t}}
+= \frac{\sum{C_ty_t}}{\sum{y^2_t}}
+= \frac{\sum{\left [ (\beta_0+\beta_1Y_t+u_t)y_t \right ]}}{\sum{y^2_t}}
+= \beta_1 + \frac{\sum{u_ty_t}}{\sum{y^2_t}}
+&& \text{(eq 1)}
+\end{align}
+$$
+
+Take the expectation of both sides in eq 1, so:
+
+$$
+\begin{align}
+E(\hat{\beta}_1) &= \beta_1 + E \left ( \frac{\sum{u_ty_t}}{\sum{y^2_t}} \right )
+\end{align}
+$$
+
+> Question: is the expactation  $E\left (\frac {\sum {u_ty_t}} {\sum {y^2_t}} \right)$   equal to zero?
+
+::: {.notes}
+It will be further demonstrated that the OLS method is biased to estimate  $\beta_1$ , whicn means  $E(\hat{\beta}_1) \neq \beta_1$ .___- The following question is that if the expactation  $E\left (\frac {\sum {u_ty_t}} {\sum {y^2_t}} \right)$  is equal to zero?- We can prove that it will not be equal to 0 with the following two slides from proof appendix 1 to appendix 2.I will not try to discuss the details for these provement here, so you should do this after our lessons.
+:::
+
+
+### Supplement: Proof 1/2
+
+$$
+\begin{align}
+\frac{\sum{c_ty_t}}{\sum{y^2_t}}
+&= \frac{\sum{(C_t-\bar{C})(Y_t - \bar{Y})}}{\sum{y^2_t}}
+= \frac{\sum{(C_t-\bar{C})y_t}}{\sum{y^2_t}} \\
+& =\frac{\sum{C_ty_t}-\sum{\bar{C}y_t}}{\sum{y^2_t}}
+=\frac{\sum{C_ty_t}-\sum{\bar{C}(Y_t- \bar{Y})}}{\sum{y^2_t}} \\
+& = \frac{\sum{C_ty_t}-\bar{C}\sum{Y_t}- \sum{\bar{C}\bar{Y}}}{\sum{y^2_t}}
+= \frac{\sum{C_ty_t}-\bar{C}\sum{Y_t}- n{\bar{C}\bar{Y}}}{\sum{y^2_t}}
+= \frac{\sum{C_ty_t}}{\sum{y^2_t}}
+\end{align}
+$$
+
+$$
+\begin{align}
+\hat{\beta_1} & = \frac{\sum\left(\beta_{0}+\beta_{1} Y_{t}+u_{t}\right) y_{t}}{\sum y_{t}^{2}}
+= \frac{\sum{\beta_{0}y_t} +\sum{\beta_1Y_ty_t}+\sum{u_{t}y_t} }{\sum y_{t}^{2}} \\
+& = \frac{\beta_1\sum{(y_t+\bar{Y})y_t}+\sum{u_{t}y_t} }{\sum y_{t}^{2}}
+=\beta_{1}+\frac{\sum y_{t} u_{t}}{\sum y_{t}^{2}}
+\end{align}
+$$
+
+$$
+\begin{align}
+\Leftarrow &\sum{y_t} =0  ; &&  \frac{\sum{Y_ty_t}}{y^2_t} = 1
+\end{align}
+$$
+
+
+### Supplement: Proof 2/2
+
+Conduct the limit to probability:
+
+$$
+\begin{align}
+\operatorname{plim}\left(\hat{\beta}_{1}\right) &=\operatorname{plim}\left(\beta_{1}\right)+\operatorname{plim}\left(\frac{\sum y_{t} u_{t}}{\sum y_{t}^{2}}\right) \\
+&=\operatorname{plim}\left(\beta_{1}\right)+\operatorname{plim}\left(\frac{\sum y_{t} u_{t} / n}{\sum y_{t}^{2} / n}\right) =\beta_{1}+\frac{\operatorname{plim}\left(\sum y_{t} u_{t} / n\right)}{\operatorname{plim}\left(\sum y_{t}^{2} / n\right)}
+\end{align}
+$$
+
+And we've shown that:
+
+$$
+\begin{align}
+cov(Y_t,u_t) &= E([Y_t-E(Y_t)][u_t-E(u_t)])  =\frac{E(u^2_t)}{1-\beta_1}
+=\frac{\sigma^2}{1-\beta_1}\neq 0
+\end{align}
+$$
+
+Therefore we finaly prove:  $E \left ( \frac{\sum{u_ty_t}}{\sum{y^2_t}} \right ) \neq 0$ 
+
+
+### Simulation: artificially population
+
+Here, we construct an artificially controlled population for our Keynes's SEM model.
+
+$$
+\begin{cases}
+\begin{align}
+C_t &= \beta_0+\beta_1Y_t+u_t   &(0<\beta_1<1)  &&\text{(consumption function)}\\
+Y_t &= C_t+I_t  & &&\text{(Income Identity)}
+\end{align}
+\end{cases}
+$$
+
+$$
+\begin{cases}
+\begin{align}
+C_t &= 2+ 0.8Y_t+u_t   &(0<\beta_1<1)  &&\text{(consumption function)}\\
+Y_t &= C_t+I_t  & &&\text{(Income Identity)}
+\end{align}
+\end{cases}
+$$
+
+The artificially controlled population is set to:
+
+- $\beta_0=2, \beta_1=0.8, I_t \leftarrow \text{given values}$
+- $E(u_t)=0, var(u_t)=\sigma^2=0.04$
+- $E(u_tu_{t+j})=0,j \neq 0$
+- $cov(u_t,I_t)=0$
+
+::: {.notes}
+I will give you a numerical simulation to illustrate the problems with SEM by using OLS method directly.Here, we construct an artificially (/ˌɑːtɪˈfɪʃəli/) controlled population for our Keynes's SEM model.As you see, we control the population by setting following parameters and relationships.
+:::
+
+
+### Simulation: the data sets
+
+The simulation data under given conditions are:
+
+```{r}
+#| warning: false
+#| message: false
+monte <- as_tibble(read_table(here("data/table-18.1.txt")))
+
+monte <- monte %>%
+  select(-u) %>%
+  mutate(u = C - 2 - 0.8 * Y)
+
+cov_yu <- monte %>%
+  mutate(yu = (Y - mean(Y)) * (u - mean(u))) %>%
+  summarise(sum(yu)) %>%
+  unlist()
+ss_y <- monte %>%
+  mutate(Y_sqr = (Y - mean(Y))^2) %>%
+  summarise(sum(Y_sqr)) %>%
+  unlist()
+
+datatable(monte,
+  options = list(pageLength = 8, dom = "tip", digits = 4),
+  caption = ""
+) %>%
+  formatRound(columns = c(1, 2, 4), digits = 4)
+```
+
+
+### Simulation: manual calculation
+
+According to the above formula, the regression coefficient can be calculated as follows:
+
+Easy to calculate:  $\sum{u_ty_t}$ 
+=`r formatC(cov_yu,digits=4,format="f")`
+
+And:  $\sum{y^2_t}$ 
+=`r formatC(ss_y,digits=4,format="f")`
+
+And:  $\frac{\sum{u_ty_t}}{\sum{y^2_t}}$ 
+=`r formatC(cov_yu/ss_y,digits=4,format="f")`
+
+Hence：  $\hat{\beta}_1 = \beta_1 + \frac{\sum{u_ty_t}}{\sum{y^2_t}}$ 
+=0.8+`r formatC(cov_yu/ss_y,digits=4,format="f")`= `r formatC(0.8+cov_yu/ss_y,digits=4,format="f")`
+
+This also means that  $\hat{\beta_1}$  is different from  $\beta_1=0.8$ , and the differnce is `r formatC(cov_yu/ss_y,digits=4,format="f")`.
+
+::: {.notes}
+According to the former provment procedure, we can manually calculate the OLS coefficient of beta_1.Finally, the OLS estimator of beta_1 equals 0.8207, and not equal to its true value 0.8 we have set before.So, the OLS estimator is biased with our simulation data set.
+:::
+
+
+### Simulation: scatter plots
+
+```{r}
+#| label: scatter-YC
+#| fig-width: 14
+ggplot(monte, aes(x = Y, y = C)) +
+  geom_point(color = "red") +
+  geom_smooth(se = FALSE, method = "lm", alpha = 0.6, color = "grey") +
+  labs(
+    x = "Y", y = "C"
+    # ,subtitle = "散点图"
+  )
+```
+
+::: {.notes}
+Here, we draw the scatter of Y and C.
+:::
+
+
+### Simulation: regression report 1
+
+Next, we used the simulated data for R analysis to obtain the original OLS report.
+
+```{r}
+#| label: monte-mod
+#| comment: ''
+mod_monte <- list(mod.C = C ~ Y)
+# fun_report_eq(mod_monte$mod.C,lm.dt = monte)
+out_monte <- lm(mod_monte$mod.C, data = monte)
+summary(out_monte)
+```
+
+
+### Simulation: regression report 2
+
+The tidy report of OLS estimation shows below.
+
+$$
+\begin{alignedat}{999}
+&\widehat{C}=&&+1.49&&+0.82Y\\
+&\text{(t)}&&(4.2188)&&(57.2090)\\
+&\text{(se)}&&(0.3541)&&(0.0143)\\
+&\text{(fitness)}&& n=20;&& R^2=0.9945;&& \bar{R^2}=0.9942\\
+& && F^{\ast}=3272.87;&& p=0.0000\\
+\end{alignedat}
+$$
+
+::: {.notes}
+for sum, The results of direct use of OLS regression also show bias.
+:::
+
+
+### Simulation: sample regression line (SRL)
+
+
+
+```{r}
+#| label: scatter-YC-fit
+#| fig-height: 6.5
+#| fig-cap: The SRL
+ggplot(monte, aes(x = Y, y = C)) +
+  geom_point(color = "red") +
+  geom_smooth(se = FALSE, method = "lm", alpha = 0.6, color = "grey") +
+  geom_text(aes(x = 28, y = 25, label = "slope:0.8207")) +
+  labs(x = "Y", y = "C")
+```
+
+::: {.notes}
+And the OLS slope is 0.8207.
+:::
+
+
+### Conclusions and points
+
+So let's summarize this chapter.
+
+- Compared with the single-equation model, the SEM involves more than one dependent or endogenous variable. So there must be as many equations as  endogenous variables.
+
+- SEM always show that the endogenous variables are correlated with stochastic terms in other equations.
+
+
+- Classical OLS may not be appropriate because the estimators are inconsistent.
+
+
+::: {.notes}
+In the next chapter, we will learn the identification of SEM.See you in my next class. Goodbye.
+:::
+
+
+### reference
+
+- [SimultaneousEq.pdf](https://web.sgh.waw.pl/~mrubas/AdvEcon/pdf/T3_SimultaneousEq.pdf)
+
+
+# End Of This Chapter{.monash-bg-blue .mcenter background-image="pic/thank-you-gif-funny-little-yellow.gif"}
+
+::: {.aside}
+**huhuaping** 2021
+:::

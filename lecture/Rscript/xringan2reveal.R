@@ -75,7 +75,7 @@ detect_seq <- function(txt, ptn_prefix, ptn_suffix){
 #' @import xfun
 #' 
 #' @examples
-#' file_rmd <- here("slide-reveal/lecture-20-sem-estimation.Rmd")
+#' file_rmd <- here("lecture/lecture-18-sem-why.Rmd")
 #' xaringan2reveal(rmd = file_rmd)
 
 xaringan2reveal <- function(rmd){
@@ -184,10 +184,14 @@ xaringan2reveal <- function(rmd){
     # 或者参看rwordld网站关于长程群组序号标定的内容。
     mutate(
       index_grouped = as.integer(factor((FALSE^!symbol_hand) *rleid(symbol_hand)))) %>%
+    # 行内公式符号前后留空格
+    mutate(
+      text = ifelse(symbol_hand, str_replace(text, "(\\$[^\\$]+\\$)", " \\1 "), text)
+    ) %>%
     group_by(index_grouped) %>%
     # 合并目标群组的文本内容
     mutate(
-      text_new = ifelse(index_grouped >1, str_c(text, collapse = ""), text),
+      text_new = ifelse(index_grouped >1, str_c(text, collapse = " "), text),
       index_keep = ifelse(index_grouped >1, min(row), row)
     ) %>%
     ungroup() %>%
@@ -400,50 +404,55 @@ xaringan2reveal <- function(rmd){
   tar_end <- "^\\]$"
   tbl_detect <- detect_seq(txt = text_input, ptn_prefix = tar_star, ptn_suffix = tar_end)
   
-  stop( length(tbl_detect) <1, "No `.footnote[]` detected!") 
   
-  ## 替换.footnote属性====
-  ## reveal的注释文本块样式`::: {.aside} your-text :::`  
-  tbl_text <- tbl_text %>%
-    mutate(row = 1:nrow(.)) %>%
-    left_join(., tbl_detect, by="row") %>%
-    #mutate(grp_id = ifelse(is.na(range_id), 0, rle_id)) %>%
-    mutate(symbol_hand = ifelse(!is.na(range_id), TRUE, FALSE)) %>%
-    # 长程群组序号标定
-    # 依次对TRUE指示按顺次分组编号
-    # library(data.table), 参看：https://stackoverflow.com/questions/61936592/r-tidyverse-create-groups-based-on-index-column
-    # 或者参看rworld网站关于长程群组序号标定的内容。
-    mutate(
-      grp_id = rleid(symbol_hand),
-      index_grouped = as.integer(as.factor(ifelse(symbol_hand, grp_id, 0)))) %>%
-    # .footnote:，替换为reveal样式
-    mutate(text_new = ifelse(
-      symbol_hand & str_detect(text, "^\\.footnote\\["),
-      paste0(c("::: {.aside}", ""),collapse="\n"), NA
+  if ( length(tbl_detect) <1) {
+    cat( "No `.footnote[]` detected!")  # 无目标区域
+  } else {                              # 存在目标区域
+    cat( "footnote detected!")
+    ## 替换.footnote属性====
+    ## reveal的注释文本块样式`::: {.aside} your-text :::`  
+    tbl_text <- tbl_text %>%
+      mutate(row = 1:nrow(.)) %>%
+      left_join(., tbl_detect, by="row") %>%
+      #mutate(grp_id = ifelse(is.na(range_id), 0, rle_id)) %>%
+      mutate(symbol_hand = ifelse(!is.na(range_id), TRUE, FALSE)) %>%
+      # 长程群组序号标定
+      # 依次对TRUE指示按顺次分组编号
+      # library(data.table), 参看：https://stackoverflow.com/questions/61936592/r-tidyverse-create-groups-based-on-index-column
+      # 或者参看rworld网站关于长程群组序号标定的内容。
+      mutate(
+        grp_id = rleid(symbol_hand),
+        index_grouped = as.integer(as.factor(ifelse(symbol_hand, grp_id, 0)))) %>%
+      # .footnote:，替换为reveal样式
+      mutate(text_new = ifelse(
+        symbol_hand & str_detect(text, "^\\.footnote\\["),
+        paste0(c("::: {.aside}", ""),collapse="\n"), NA
+      )
+      ) %>%
+      mutate(text_new = ifelse(
+        symbol_hand & str_detect(text, "^\\]"),
+        paste0(c("",":::"), collapse="\n"), text_new
+      )
+      ) %>%
+      mutate(text_new = ifelse(is.na(text_new), text, text_new) ) %>%
+      # 完全整合标题内容与属性
+      group_by(grp_id) %>%
+      mutate(
+        text = ifelse(symbol_hand, paste0(text_new, collapse = ""), text_new),
+        index_grouped = ifelse(symbol_hand, max(row), row)
+      ) %>%
+      ungroup() %>%
+      select(index_grouped, text) %>%
+      unique() %>%
+      filter(!is.na(text)) %>%
+      mutate(row = 1:nrow(.))  %>%
+      select(row, text) 
+    cat(
+      ("step success: footnote convert from `.footnote[]` to `:::{.aside}:::`!"),
+      collapse = "\n"
     )
-    ) %>%
-    mutate(text_new = ifelse(
-      symbol_hand & str_detect(text, "^\\]"),
-      paste0(c("",":::"), collapse="\n"), text_new
-    )
-    ) %>%
-    mutate(text_new = ifelse(is.na(text_new), text, text_new) ) %>%
-    # 完全整合标题内容与属性
-    group_by(grp_id) %>%
-    mutate(
-      text = ifelse(symbol_hand, paste0(text_new, collapse = ""), text_new),
-      index_grouped = ifelse(symbol_hand, max(row), row)
-    ) %>%
-    ungroup() %>%
-    select(index_grouped, text) %>%
-    unique() %>%
-    filter(!is.na(text)) %>%
-    mutate(row = 1:nrow(.))  %>%
-    select(row, text) 
-  cat(
-    ("step success: footnote convert from `.footnote[]` to `:::{.aside}:::`!"),
-    collapse = "\n"
-  )
+  }
+  
   
   # 递增点击动画符`--`====
   ## 可能存在一个递增点击和多个递增点击
@@ -476,66 +485,71 @@ xaringan2reveal <- function(rmd){
     }
   }
   
-  ## 获得目标分组以及行序号====
-  k <- 1
-  index_range <- NULL
-  for (k in 1:length(set_start)){
-    index_range[[k]] <- seq(set_start[k],set_end[k])
+  ## 可能整个slide中没有递增点击动画====
+  if (length(set_start) <1) {
+    cat( "No `--` detected!", collapse = "\n")  # 无目标区域
+  } else {                              # 存在目标区域
+    cat( "incremental detected!", collapse = "\n")
+    ## 获得目标分组以及行序号====
+    k <- 1
+    index_range <- NULL
+    for (k in 1:length(set_start)){
+      index_range[[k]] <- seq(set_start[k],set_end[k])
+    }
+    
+    tbl_index <- tibble(
+      range_id = 1:length(set_start), 
+      row = index_range
+    ) %>%
+      unnest(row) %>%
+      group_by(range_id) %>%
+      mutate(
+        row_min =min(row),
+        row_max = max(row)
+      ) %>%
+      ungroup() %>%
+      filter(!(row==row_min | row ==row_max)) %>%
+      select(range_id, row)
+    
+    ## 替换递增点击动画符样式====
+    tbl_text <- tbl_text %>%
+      mutate(row = 1:nrow(.)) %>%
+      left_join(., tbl_index, by="row") %>%
+      #mutate(grp_id = ifelse(is.na(range_id), 0, rle_id)) %>%
+      mutate(symbol_hand = ifelse(!is.na(range_id), TRUE, FALSE)) %>%
+      # 长程群组序号标定
+      # 依次对TRUE指示按顺次分组编号
+      # library(data.table), 参看：https://stackoverflow.com/questions/61936592/r-tidyverse-create-groups-based-on-index-column
+      # 或者参看rworld网站关于长程群组序号标定的内容。
+      mutate(
+        grp_id = rleid(symbol_hand),
+        index_grouped = as.integer(as.factor(ifelse(symbol_hand, grp_id, 0)))
+      ) %>%
+      # .footnote:，替换为reveal样式
+      group_by(grp_id) %>%
+      mutate(text_new = ifelse(
+        symbol_hand,
+        paste0(
+          c("::: {.incremental}", 
+            paste0(text),
+            ":::",
+            ""
+          ),
+          collapse="\n"), 
+        text)
+      ) %>%
+      mutate(order_grouped = ifelse(symbol_hand, max(row), row)) %>%
+      ungroup() %>%
+      select(order_grouped, text_new) %>%
+      unique() %>%
+      filter(!is.na(text_new)) %>%
+      rename_all(., ~c("row", "text")) %>%
+      mutate(row = 1:nrow(.)) 
+    cat(
+      ("step success: incremental list convert from `--` to `:::{.incremental}:::`!"),
+      collapse = "\n"
+    )
   }
-  
-  tbl_index <- tibble(
-    range_id = 1:length(set_start), 
-    row = index_range
-  ) %>%
-    unnest(row) %>%
-    group_by(range_id) %>%
-    mutate(
-      row_min =min(row),
-      row_max = max(row)
-    ) %>%
-    ungroup() %>%
-    filter(!(row==row_min | row ==row_max)) %>%
-    select(range_id, row)
-  
-  ## 替换递增点击动画符样式====
-  
-  tbl_text <- tbl_text %>%
-    mutate(row = 1:nrow(.)) %>%
-    left_join(., tbl_index, by="row") %>%
-    #mutate(grp_id = ifelse(is.na(range_id), 0, rle_id)) %>%
-    mutate(symbol_hand = ifelse(!is.na(range_id), TRUE, FALSE)) %>%
-    # 长程群组序号标定
-    # 依次对TRUE指示按顺次分组编号
-    # library(data.table), 参看：https://stackoverflow.com/questions/61936592/r-tidyverse-create-groups-based-on-index-column
-    # 或者参看rworld网站关于长程群组序号标定的内容。
-    mutate(
-      grp_id = rleid(symbol_hand),
-      index_grouped = as.integer(as.factor(ifelse(symbol_hand, grp_id, 0)))
-    ) %>%
-    # .footnote:，替换为reveal样式
-    group_by(grp_id) %>%
-    mutate(text_new = ifelse(
-      symbol_hand,
-      paste0(
-        c("::: {.incremental}", 
-          paste0(text),
-          ":::",
-          ""
-        ),
-        collapse="\n"), 
-      text)
-    ) %>%
-    mutate(order_grouped = ifelse(symbol_hand, max(row), row)) %>%
-    ungroup() %>%
-    select(order_grouped, text_new) %>%
-    unique() %>%
-    filter(!is.na(text_new)) %>%
-    rename_all(., ~c("row", "text")) %>%
-    mutate(row = 1:nrow(.)) 
-  cat(
-    ("step success: incremental list convert from `--` to `:::{.incremental}:::`!"),
-    collapse = "\n"
-  )
   
   # css布局样式====
   

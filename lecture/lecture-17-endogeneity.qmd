@@ -133,27 +133,33 @@ As you see this part contains four chapters.Firstly, we will go through Chapter 
 :::
 
 
-# 17.1 Definition and sources of endogeneity{#definition .monash-bg-blue .mcenter}
+# 17.1 Definition and sources of endogeneity  {#definition .monash-bg-blue .mcenter}
+
 
 ::: {.notes}
 In this section we will talk about the definition of endogeneity and its main sources.The story begins with the stochastic regressors.
 :::
 
 
-## Review
 
-<!--find relative picture from web and insert picture for course review -->
+## Review {.mcenter}
+
+![CLRM Assumptions and Random Experiments](pic/review-CLRM.png){fig-align="center" width="70%"}
+
+::: {.notes}
+这张图展示了经典线性回归模型(CLRM)的关键假设和随机试验的概念。左侧列出了CLRM的五个基本假设,右侧说明了随机试验的特点。这有助于学生回顾之前学习的重要概念。
+:::
 
 
 ##
 
 ### The CLRM assumptions
 
-Let's revise the classic linear regression model   assumptions(CLRM):
+Let's revise the classic linear regression model assumptions (CLRM):
 
-- **A1**: The true model is$\boldsymbol{y= X \beta+\epsilon}$.
+- **A1**: The true model is $\boldsymbol{y= X \beta+\epsilon}$.
 
-- **A2**: $\forall i, E(\epsilon_i|X) = 0$ (conditional zero mean)  more about this later.
+- **A2**: $\forall i, E(\epsilon_i|X) = 0$ (conditional zero mean) more about this later.
 
 - **A3**: $Var(\epsilon|X) = E(\epsilon \epsilon^{\prime}|X) = \sigma^2I$ (identical conditional variance ).
 
@@ -227,7 +233,7 @@ $$
 
 **Exogenous regressors**: If independent variables $X_i$ is **perfectly random** (randomly assigned) as mentioned above , then they are called **exogenous regressor**. More precisely, they can be defined as:
 
-::: {.callout-note}
+::: {.callout-note} 
 
 **Strictly Exogeneity**：
 
@@ -246,6 +252,8 @@ $$
 ## Endogeneity
 
 <!-- some pictures -->
+
+![](pic/fx-endogeneity3.png){fig-align="center" width="70%"}
 
 ##
 
@@ -310,6 +318,15 @@ So, let us go through all of these four situations quickly.
 ## Source 1: Omitted variables
 
 <!-- some pictures -->
+
+![](pic/fx-endogeneity-source-omit.png){fig-align="center" height="60%"}
+
+::: {.notes}
+生图提示词：
+
+I am a university teacher. I want to generate a picture on the concept of endogeneity on my econometrics class to my students. the picture should be: Simple line drawing style, transparent background. On the left side draw a diploma icon (education variable), right side a money bag (wage). Draw solid arrow from diploma to money bag labeled 'Estimated effect'. Above them draw a brain icon (ability variable) sending dashed arrows to both diploma and money bag, with red cross over the brain. Add warning sign at bottom with text 'Omitted Variable Causes Endogeneity'. All elements in black lines, minimalist academic diagram style.
+
+:::
 
 ##
 
@@ -459,6 +476,8 @@ Omitted$\neq$ Disappeared
 
 <!-- some pictures -->
 
+test show
+
 ##
 
 ### The assumed true model & mis-specified model
@@ -480,7 +499,8 @@ Wage_i=\alpha_{1}+\alpha_{2} Edu_i+\alpha_{3} IQ_i+v_i \quad \text{(the mis-spec
 \end {align}
 $$
 
-::: {.callout-note}
+
+:::{.callout-note}
 
 - It should exist stuffs ($Abl\_other_i$) which the model does not include (due to the measurement error). So the measurement errors ($Abl\_other_i$) will go to the disturbance term$v_i$ in the mis-specified model.
 
@@ -488,11 +508,14 @@ $$
 
 :::
 
-::: {.notes}
+
+:::{.notes}
 In practice, the observation value of a regressor is not accurate, in most time is only the "approximation".So there is **measurement error** in the regressor in our model.
 :::
 
-## 
+<!---some split--->
+
+##
 
 ### Measurement errors (demo 1/4)
 
@@ -1027,18 +1050,21 @@ An intuitive demonstration is show as follows:
 
 ![](pic/chpt11-endogeneity-sem-sequence/chpt11-sem-sequence-part-01.png)
 
-:::{.absolute top=145px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
+::: {.absolute top=145px left=40px width=105px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;border-radius:5%;"}
 <!-- .box-Ds5 -->
 D:
 :::
 
 
-:::{.absolute top=480px left=105px width=110px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
+::: {.absolute top=480px left=105px width=110px height=75px style="background-color:#cceffc; font-weight:bold; color:#000; text-align:left; z-index:999;font-size:80%!important;"}
 <!-- .box-Ds4 -->
 S:
 :::
 
-# 17.2 Estimation problem with endogeneity{#problem .monash-bg-blue .mcenter}
+
+# 17.2 Estimation problem with endogeneity {#problem .monash-bg-blue .mcenter}
+
+
 
 ::: {.notes}
 The question is what will happen on OLS estimators with model contains endogenous regressors.So, let us illustrate these estimation problems in detail in this section.we will discuss along two different situations.
@@ -1674,7 +1700,7 @@ $$
 Then,$Z$ is a valid instrument for$Educ_i$. We showed earlier that the IV estimator of$\beta_{1}$ is consistent.
 
 ::: {.notes}
-And the instrumental variable $Z$ should satisfies both relevance condition and exogenous condition as we have mentioned before.So, what are these appropriate instruments for education?
+And the instrumental variable $Z$ should satisfies both relevance condition and exogeneity condition as we have mentioned before.So, what are these appropriate instruments for education?
 :::
 
 ##
@@ -1804,7 +1830,7 @@ Because the model identification is the most important thing before applying the
 - **Stage 2**: Regress$Y_{i}$ on constant,$\left(\hat{X}_{1 i}, \ldots, \hat{X}_{k i}\right)$ and $\left(W_{1 i}, \ldots, W_{r i}\right)$ usingOLS to obtain$\left(\hat{\beta}_{0}^{IV}, \hat{\beta}_{1}^{IV}, \ldots, \hat{\beta}_{k+r}^{IV}\right)$
 
 ::: {.notes}
-So, in case with “exactly identification” and “over-identification”, we can go ahead with the **Two-Stage Least Squares** as a “whole” solution for IV estimation.
+So, in case with "exactly identification" and "over-identification", we can go ahead with the **Two-Stage Least Squares** as a "whole" solution for IV estimation.
 :::
 
 ##
@@ -3002,7 +3028,7 @@ $$
 > - $hushrs$: work hours of husband, 1975
 - $mtr$: federal marriage tax rate on woman
 - $kidslt6$: have kids < 6 years (dummy variable)
-- $nwifeinc$: wife’s net income
+- $nwifeinc$: wife's net income
 
 
 There are:
@@ -3416,7 +3442,7 @@ lwage = {\beta}_1 +{\beta}_2{educ} + {\beta}_3exper +{\beta}_4expersq + {\epsilo
 $$
 
 
-If we add husband’s education(`huseduc`) to the IV list, then we will have totally three IVs  (`fatheduc`, `motheduc` and `huseduc`) for `educ`.
+If we add husband's education(`huseduc`) to the IV list, then we will have totally three IVs  (`fatheduc`, `motheduc` and `huseduc`) for `educ`.
 
 -  Use these three IVs to obtain TSLS results. Compare the TSLS results when using two IVs(`fatheduc` and `motheduc`) which we have got.
 
@@ -3440,7 +3466,7 @@ In this section, we focus mainly on regressor endogeneity issues.
 
 ### The concepts
 
-It is the researcher’s responsibility to specify which variables are endogenous and which are exogenous. So, how can we test the regressor endogeneity?
+It is the researcher's responsibility to specify which variables are endogenous and which are exogenous. So, how can we test the regressor endogeneity?
 
 Since OLS is in general more efficient than IV (recall that if Gauss-Markov assumptions hold OLS is BLUE), we don't want to use IV when we don't need to get the consistent estimators.
 
@@ -3740,7 +3766,7 @@ With data set `Card1995.dta`, researchers were interest in the return (`log(Wage
 
 In a inﬂuential paper David Card (1995) suggested if a potential student lives close to a college this reduces the cost of attendance and thereby raises the likelihood that the student will attend college.
 
-However, college proximity does not directly affect a student’s skills or abilities so should not have a direct effect on his or her market wage.
+However, college proximity does not directly affect a student's skills or abilities so should not have a direct effect on his or her market wage.
 
 ##
 
@@ -4007,17 +4033,11 @@ for each cohort separately, by 2SLS using the **quarter of birth** as an instrum
 
 
 
-
-
-
-
-
 ## End Of This Chapter{.center-h background-color="aliceblue"  background-image="pic/thank-you-gif-funny-little-yellow.gif" background-size="600px"  background-position="center" background-opacity="0.8" style="font-size:75px !important"}
 
 
 
 ::: {.notes}
-
 
 So we finished all content of chapter 17.
 
@@ -4030,4 +4050,3 @@ if you have questions, please let me know. you can leave messages by QQ or email
 Thanks. Goodbye!
 
 :::
-
