@@ -58,12 +58,15 @@ p_scatter_pq <- ggplot(truffles, aes(x = Q, y = P)) +
 #   pch = 20, main = "Truffles Scatter Matrix"
 # )
 
-library(GGally)
-p_scatter_matrix <- ggpairs(truffles, 
+## no x or y ticker labels, no text "Corr" in upper panels
+p_scatter_matrix <- GGally::ggpairs(truffles,
   columns = c("P", "Q", "DI", "PS", "PF"),
   title = "Truffles Scatter Matrix",
   lower = list(continuous = "smooth"),
-  upper = list(continuous = "cor")
+  upper = list(continuous = "cor"),
+  axisLabels = "none"#,
+  # no text "Corr:" before the coefficient in upper panels
+  #upper = list(continuous = "cor", params = list(prefix = ""))
 )
 
 ## simple-model ====
@@ -108,44 +111,37 @@ mod_added <- list(
 
 ### artificially population ====
 
-monte<- as_tibble(read_table(here("data/table-18.1.txt")))
+monte <- as_tibble(read_table(here("data/table-18.1.txt")))
 
-monte<- monte %>%
+monte <- monte %>%
   select(-u) %>%
-  mutate(u=C-2-0.8*Y)
+  mutate(u = C - 2 - 0.8 * Y)
 
-cov_yu <- monte %>% 
-  mutate(yu=(Y-mean(Y))*(u-mean(u))) %>%
-  summarise(sum(yu)) %>% 
-  unlist() 
-ss_y <- monte %>% 
-  mutate(Y_sqr=(Y-mean(Y))^2) %>% 
-  summarise(sum(Y_sqr)) %>% 
+cov_yu <- monte %>%
+  mutate(yu = (Y - mean(Y)) * (u - mean(u))) %>%
+  summarise(sum(yu)) %>%
+  unlist()
+ss_y <- monte %>%
+  mutate(Y_sqr = (Y - mean(Y))^2) %>%
+  summarise(sum(Y_sqr)) %>%
   unlist()
 
 ## scatter plots====
 
-p_scatter <- ggplot(monte,aes(x=Y,y=C))+
-  geom_point(color="red") +
-  geom_smooth(se=FALSE,method = "lm",alpha=0.6,color="grey")+
-  labs(x="Y",y="C"
-       #,subtitle = "scatter"
-  ) 
+pp_scatter_monte <- ggplot(monte, aes(x = Y, y = C)) +
+  geom_point(color = "red")
 
 ## regression report====
 
-
-mod_monte <-list(mod.C = C~Y)
-#fun_report_eq(mod_monte$mod.C,lm.dt = monte)
-out_monte <-lm(mod_monte$mod.C,data = monte)
-summary(out_monte)
+mod_monte <- list(mod.C = C ~ Y)
+# fun_report_eq(mod_monte$mod.C,lm.dt = monte)
+out_monte <- lm(mod_monte$mod.C, data = monte)
+#summary(out_monte)
 
 ## sample regression line (SRL)====
 
-
-
-p_srl <- ggplot(monte,aes(x=Y,y=C))+
-  geom_point(color="red") +
-  geom_smooth(se=FALSE,method = "lm",alpha=0.6,color="grey")+
-  geom_text(aes(x=28, y=25, label= "slope:0.8207") ) +
-  labs(x="Y",y="C") 
+p_srl_monte <- ggplot(monte, aes(x = Y, y = C)) +
+  geom_point(color = "red") +
+  geom_smooth(se = FALSE, method = "lm", alpha = 0.6, color = "grey") +
+  geom_text(aes(x = 28, y = 25, label = "slope:0.8207")) +
+  labs(x = "Y", y = "C")

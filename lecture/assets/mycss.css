@@ -38,9 +38,18 @@
   color: #000000 !important;
 }
 
+
 /* 设定文本颜色*/
 .white {
   color: white !important;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
 }
 
 /* 设定footer位置大小*/
@@ -56,16 +65,12 @@
   max-height: 1rem !important;
 }
 
-.red {
-  color: red;
-}
-
-.blue {
-  color: blue;
-}
-
 
 /* 调整字体大小 */
+
+.font-115 {
+  font-size: 115% !important;
+}
 
 .font-110 {
   font-size: 110% !important;
@@ -73,6 +78,10 @@
 
 .font-105 {
   font-size: 105% !important;
+}
+
+.font-95 {
+  font-size: 95% !important;
 }
 
 .font-90 {
@@ -104,8 +113,18 @@
 .reveal .slide p > span.math > div.MathJax_Display{
   font-size: 80% !important;
   margin-top: 0.25rem !important;
+  margin-left: 0rem !important;
   margin-bottom: 0.25rem !important;
+  text-align: center !important;
+  padding-left: 0rem !important;
 }
+
+.math-left {
+  text-align: left !important;
+  display: block;
+  margin-left: 1em; /* 1em is usually a good starting point */
+}
+
 /* 行内公式，字体控制*/
 .reveal .slide p > span.math.inline {
   /* 字号缩小*/

@@ -75,7 +75,7 @@ detect_seq <- function(txt, ptn_prefix, ptn_suffix){
 #' @import xfun
 #' 
 #' @examples
-#' file_rmd <- here("lecture/lecture-18-sem-why.Rmd")
+#' file_rmd <- here::here("lecture/lecture-19-sem-identification.Rmd")
 #' xaringan2reveal(rmd = file_rmd)
 
 xaringan2reveal <- function(rmd){

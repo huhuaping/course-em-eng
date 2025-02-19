@@ -49,7 +49,7 @@ options(
     )
 )
 # use my custom function
-source(here("lecture/Rscript/create-DTbutton.R"))
+source(here::here("lecture/Rscript/create-DTbutton.R"))
 
 # global options for ggplot2
 theme_set(theme_bw(base_size = 18))
@@ -86,7 +86,7 @@ knitr::opts_knit$set(root.dir = here::here("lecture/"))
 
 ```{r}
 #| results: hide
-source(here("lecture/code/code-chapter-18-why.R"))
+source(here::here("lecture/code/code-chapter-18-why.R"))
 ```
 
 
@@ -110,7 +110,7 @@ In the following three chapters, we will focus on simultaneous equation models.
 :::
 
 
-## Chapter 18. Why Should We Concern SEM ?{#chpt18 .monash-bg-blue .mcenter}
+# Chapter 18. Why Should We Concern SEM ?{#chpt18 .monash-bg-blue .mcenter}
 
 [18.1 The Nature of Simultaneous-Equation Models](#nature)
 
@@ -151,8 +151,13 @@ $$
 Next, I will show you four SEM examples from classical economic textbooks, and another two real life SEM examples.
 :::
 
+## Macroeconomics SEM Examples
 
-## Example 1: Demand-and-Supply System
+<!-- insert some images here -->
+
+##
+
+### Demand-and-Supply System
 
 **Demand-and-Supply System**:
 
@@ -170,8 +175,9 @@ $$
 This slide shows the classic demand and supply SEM.The first eq is the demand function, and the second one is the supply function, the last one is the market equilibrium identity.
 :::
 
+##
 
-## Example 2: Keynesian Model of Income Determination
+### Keynesian Model of Income Determination
 
 **Keynesian Model of Income Determination**:
 
@@ -189,7 +195,9 @@ $$
 :::
 
 
-## Example 3: The IS Model
+##
+
+### The IS Model
 
 Macroeconomics goods market equilibrium model, also known as **IS Model**:
 
@@ -214,8 +222,9 @@ $$
 Here, the IS system contains totally six equations.
 :::
 
+##
 
-##  Example 4: The LM Model
+###  The LM Model
 
 Macroeconomics money market equilibrium system, also known as **LM Model**:
 
@@ -236,8 +245,9 @@ $$
 Thus, the LM system contains totally 3 equations.
 :::
 
+##
 
-##  Example 5: Klein's model I
+###  Klein's model I
 
 **Klein's model I**：
 
@@ -261,8 +271,13 @@ $$
 This slide shows the macroeconomic Klein's model I. And it contains three stochastic equations and three identities.
 :::
 
+## Microeconomic SEM Examples
 
-## Example 6: Murder Rates and Size of the police Force
+<!-- insert some images here -->
+
+##
+
+### Murder Rates and Size of the police Force
 
 Cities often want to determine how much additional **law enforcement** will decrease their **murder rates**.
 
@@ -283,8 +298,9 @@ $$
 Here, we will see an microeconomic real life example.we assumed that merder rates is determinded by numbers of police officers and income per capita.Meanwhile, the number of police officers will also be affected by murder rates and other factors within city districts.
 :::
 
+##
 
-## Example 7: Housing Expenditures and Saving
+### Housing Expenditures and Saving
 
 For a random household in the population, we assume that annual **housing expenditures** and **saving** are jointly determined by:
 
@@ -305,20 +321,18 @@ $$
 Another real life example is the housing expenditures and saving system.as you know, housing expenditures and savings are jointly determinded by income, education, age, and the disturbances.Meanwhile, there will be reverse causality effect between housing expenditures and houshold saving.
 :::
 
+##
 
-## Example 8: Labor market of married, Working Women
+### Labor market of married, Working Women
 
 Let's consider the labor market for married women already in the workforce.
 
 
-
 $$
-
 \begin{alignedat}{8}
-\text { hours } & =&\alpha_1 \log ( wage)+&\beta_{10}+&\beta_{11} { educ }+&\beta_{12} age+&\beta_{13}  { kidslt6 }  +&\beta_{14} { nwifeinc }&+u_1  &&\text{(supply)}\\
-\log ({ wage }) &=&\alpha_2 { hours }+&\beta_{20}+&\beta_{21} { educ }+&\beta_{22} { exper }  +&\beta_{23} { exper }^2& &+ u_2 && \quad \text{(demand)}\\
+\text { hours } & =\alpha_1 \log ( wage)+\beta_{10}+\beta_{11} { educ }+\beta_{12} age \\&+\beta_{13}  { kidslt6 }  +\beta_{14} { nwifeinc }+u_1  &\text{(supply)}\\
+\log ({ wage }) &=\alpha_2 { hours }+\beta_{20}+\beta_{21} { educ }+\beta_{22} { exper }  \\&+\beta_{23} { exper }^2+ u_2  & \text{(demand)}\\
 \end{alignedat}
-
 $$
 
 
@@ -328,7 +342,7 @@ $$
 
 - `educ` might be correlated with omitted `ability` in either equation. Here, we just ignore the omitted ability problem.
 
-::: {.aside}
+::: {.notes}
 source: **Wooldridge, J.M. Introductory econometrics: a modern approach[M].** Seventh edition. Australia: Cengage, 2020. Example 16.5: labor Supply of married, Working Women.
 :::
 
@@ -351,7 +365,7 @@ So, What are the characteristics of the simultaneous equation model?
 :::
 
 
-## Trufﬂes example
+## Truffles example
 
 <!-- some images here -->
 
@@ -420,7 +434,7 @@ truffles %>%
 ### The Scatter plot (P VS Q)
 
 ```{r}
-#| label: scatter-truffles
+#| label: fig-scatter-truffles
 #| message: false
 #| warning: false
 #| fig-width: 14
@@ -435,6 +449,7 @@ p_scatter_pq
 ```{r}
 #| message: false
 #| warning: false
+#| label: fig-scatter-matrix
 #| fig-width: 14
 
 p_scatter_matrix
@@ -526,7 +541,7 @@ qx.out <- xmerit::qx.est(
 
 
 ```{r}
-#| label: scatter-truffles-left
+#| label: fig-scatter-truffles-left
 #| fig-cap: SRL of the Price model
 #| fig-width: 6
 p_srl_q2p
@@ -539,7 +554,7 @@ p_srl_q2p
 
 
 ```{r}
-#| label: scatter-truffles-right
+#| label: fig-scatter-truffles-right
 #| fig-cap: SRL of the Quantity model
 #| fig-width: 6
 
@@ -557,7 +572,7 @@ So, we can not distinguish the supply curve or the demand curve here.
 
 ##
 
-### The multi-variables regression model
+### The multi-variables regression model (1/2)
 
 Of course, we can also use more independent variables X to build the regression models:
 
@@ -579,10 +594,13 @@ Of course, we can also use more independent variables X to build the regression 
 
 ##
 
-### The multi-variables regression model
+### The multi-variables regression model (2/2)
 
+:::: {.columns}
 
-- the estimation result of multi-vars **Price** regression model is:
+::: {.column width="45%"}
+
+- Result of multi-vars **Price** regression model is:
 
 ```{r}
 #| label: added-P
@@ -596,7 +614,15 @@ qx.out <- xmerit::qx.est(
 )
 ```
 
-- the estimation result of multi-vars **Quantity** regression model is:
+:::
+
+::: {.column width="10%"}
+
+:::
+
+::: {.column width="45%"}
+
+- Result of multi-vars **Quantity** regression model:
 
 ```{r}
 #| label: added-Q
@@ -609,6 +635,10 @@ qx.out <- xmerit::qx.est(
   inf = c("fit", "Ftest")
 )
 ```
+
+:::
+
+::::
 
 ::: {.notes}
 However, we know that in the demand-supply SEM, reverse causility effect will existbetween the price  and quantity variables.So, these simple OLS estimates are unreliable with our intuition.
@@ -697,16 +727,20 @@ $$
 
 ::: {.column width="40%"}
 
-> **Endogenous variables**:
+**Endogenous variables**:
+
 - Such as:  $Y_{t1};Y_{t2}; \cdots; Y_{tm}$ 
 
 :::
 
+::: {.column width="10%"}
+
+:::
 
 ::: {.column width="40%"}
 
+**Predetermined variables**:
 
-> **Predetermined variables**:
 - Such as:  $X_{..}$ 
 
 :::
@@ -716,7 +750,6 @@ $$
 ::: {.notes}
 Another important concept is the structural variable, which includes endogenouse variable and predeterminded variable.Endogenous variables are Variables determined by the model.Predetermined variables are Variables which values are not determined by the model in the current time period.We assumed the endogenous variables in this SEM includes all Y_ts, and the predeterminded vairiables include all X_ts.
 :::
-
 
 ##
 
@@ -797,8 +830,9 @@ Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\b
 \end{cases}
 $$
 
->Such as:
-- all  $\beta_{..}$ 
+
+> Such as:  $\beta_{11}, \beta_{21},\cdots, \beta_{12}; \cdots; \beta_{k2}, \beta_{1m},\cdots, \beta_{km}$
+
 
 ::: {.notes}
 Of course, we may denote coefficients before predetermined variables as **Predetermined coefficients**.
@@ -810,6 +844,7 @@ Of course, we may denote coefficients before predetermined variables as **Predet
 
 By simple transformation, the **algebraic expression** of SEM can also show as:
 
+::: {.font-95}
 
 $$
 A: \begin{cases}
@@ -822,10 +857,12 @@ Y_{tm}&=&\gamma_{1m}Y_{t1}&+\gamma_{2m}Y_{t2}+& \cdots  & &+\beta_{1m}X_{t1} +\b
 \end{cases}
 $$
 
-.small[
+:::
+
+::: {.font-90}
 
 $$
-\Rightarrow B: \begin{cases}
+B: \begin{cases}
 \begin{alignat}{5}
 \gamma_{11}Y_{t1} &+ \gamma_{21}Y_{t2}&+\cdots &+\gamma_{m-1,1}Y_{t,m-1} &+\gamma_{m1}Y_{tm} & +\beta_{11}X_{t1}+\beta_{21}X_{t2} &+\cdots+\beta_{k1}X_{tk} &=\varepsilon_{t1} \\
 \gamma_{12}Y_{t1} &+\gamma_{22}Y_{t2} &+   \cdots&+\gamma_{m-1,2}Y_{t,m-1} &+\gamma_{m2}Y_{tm}&+\beta_{12}X_{t1}+\beta_{22}X_{t2} &+\cdots+\beta_{k2}X_{tk} &= \varepsilon_{t2}\\
@@ -835,7 +872,7 @@ $$
 \end{cases}
 $$
 
-]
+:::
 
 
 ::: {.notes}
@@ -891,13 +928,14 @@ $$
 \end{aligned}
 $$
 
+::: {.callout-note}
+**where**：
 
-> **where**：
 - Bold upper letter and greek means a **matrix**
->
+
 - Bold lower letter and greek means a **column vector**
 
-
+:::
 
 
 ::: {.notes}
@@ -908,15 +946,11 @@ For Simplicity, we can generized the **matrix expression** of SEM as follow.> we
 
 ### Endogenous coefficients matrix
 
-For the **[En]{.red}dogenous parameter matrix**  $\boldsymbol{\Gamma}$ ：
-
-- To ensure that each equation has a **dependent variable**, then the matrix  $\boldsymbol{\Gamma}$  each column has at least one element of 1 - If matrix  $\boldsymbol{\Gamma}$  is upper triangular matrix, then the SEM is a **recursive** model system. - For the SEM solution to exist,  $\boldsymbol{\Gamma}$  must be **nonsingular**.
-
+For the **[En]{.red}dogenous parameter matrix**  $\boldsymbol{\Gamma}$ , To ensure that each equation has a **dependent variable**, then the matrix  $\boldsymbol{\Gamma}$  each column has at least one element of 1
 
 :::: {.columns}
 
 ::: {.column width="40%"}
-
 
 $$
 \begin{equation}
@@ -939,9 +973,11 @@ $$
 
 :::
 
+::: {.column width="10%"}
+
+:::
 
 ::: {.column width="40%"}
-
 
 $$
 \begin{cases}
@@ -958,6 +994,14 @@ $$
 
 ::::
 
+
+::: {.callout-note}
+
+- If matrix  $\boldsymbol{\Gamma}$  is upper triangular matrix, then the SEM is a **recursive** model system.
+
+- For the SEM solution to exist,  $\boldsymbol{\Gamma}$  must be **nonsingular**.
+:::
+
 ::: {.notes}
 Now, let's focus the **[En]{.red}dogenous parameter matrix** firstly.
 :::
@@ -966,7 +1010,7 @@ Now, let's focus the **[En]{.red}dogenous parameter matrix** firstly.
 
 ### Exdogenous coefficients matrix
 
-The **[Ex]{.red}ogenous coefficients matrix**  $\boldsymbol{B}$ ：
+The **[Ex]{.red}ogenous coefficients matrix** $\boldsymbol{B}$ ：
 
 $$
 \begin{equation}
@@ -1033,7 +1077,6 @@ $$
 
 ::: {.column width="40%"}
 
-
 > Reduced coefficients:
 -  $\pi_{11},\pi_{21},\cdots, \pi_{k1}$  -  $\pi_{1m},\pi_{2m},\cdots, \pi_{km}$ .
 
@@ -1041,7 +1084,6 @@ $$
 
 
 ::: {.column width="40%"}
-
 
 > Reduced disturbance:
 -  $v_{1},v_2,\cdots, v_m$ 。
@@ -1113,7 +1155,6 @@ $$
 
 ::: {.column width="40%"}
 
-
 - the reduced coefficients matrix is :
 
 $$
@@ -1130,9 +1171,12 @@ $$
 
 :::
 
+::: {.column width="15%"}
+
+:::
+
 
 ::: {.column width="40%"}
-
 
 - the reduced disturbances vector is:
 
@@ -1206,9 +1250,8 @@ $$
 \end{aligned}
 $$
 
-:::: {.columns}
 
-::: {.column width="40%"}
+::: {.callout-note}
 
 
 - where:
@@ -1219,11 +1262,6 @@ $$
 \boldsymbol{{v^{\prime}_t}} &= \boldsymbol{{\varepsilon^{\prime}_t}} \boldsymbol{\Gamma}^{-1}
 \end{align}
 $$
-
-:::
-
-
-::: {.column width="40%"}
 
 
 - and:
@@ -1242,7 +1280,6 @@ $$
 
 :::
 
-::::
 
 ::: {.notes}
 This slide shows the relationship between the structural SEM and the reduced SEM.And the reduced coefficients equals negetive B times the inverse matrix of structural pars.
@@ -1357,6 +1394,7 @@ $$
 \end{bmatrix}
 \end{align}
 $$
+
 ::: {.notes}
 The next two slides will show us some useful relationships under sample data set.I will not discuss them here, and you should try to learn this content by yourself.
 :::
@@ -1409,7 +1447,7 @@ So the structural SEM contains:
 > **Exercise**: can you get the reduced SEM from this structural SEM ?
 
 ::: {.notes}
-Now, I will show two cases to illustrate the relationship between the structural SEM and the reduced SEM.___Here is the Keynesian model of income determination, and you know this is the structural SEM.So, can you deduce the reduced SEM from this structural SEM ?
+Now, I will show two cases to illustrate the relationship between the structural SEM and the reduced SEM. Here is the Keynesian model of income determination, and you know this is the structural SEM.So, can you deduce the reduced SEM from this structural SEM ?
 :::
 
 ##
@@ -1421,7 +1459,6 @@ We can get the reduced SEM from the former structural SEM and denoted (the right
 :::: {.columns}
 
 ::: {.column width="40%"}
-
 
 $$
 \begin{cases}
@@ -1436,7 +1473,6 @@ $$
 
 
 ::: {.column width="40%"}
-
 
 $$
 \begin{cases}
@@ -1498,7 +1534,6 @@ where:  $c_t =$  consumption;  $y_t =$  output;  $i_t =$  investment;  $r_t =$  
 
 ::: {.column width="40%"}
 
-
 3 **endogenous variables**:  $c_t;i_t;Y_t$ 
 
 4 **predetermined variables**:
@@ -1509,7 +1544,6 @@ where:  $c_t =$  consumption;  $y_t =$  output;  $i_t =$  investment;  $r_t =$  
 
 
 ::: {.column width="40%"}
-
 
 totally 6 **strutural coefficients**:  $\alpha_0,\alpha_1,\alpha_2;\beta_0,\beta_1,\beta_2;$ 
 
@@ -1571,7 +1605,6 @@ With a little long time calculation, you can obtain the reduced SEM and also the
 - It will be obvious from the reduced SEM that  $\frac{\Delta c_t}{\Delta r_t} = \frac{\alpha_1 \beta_1}{\Lambda}$ 
 
 
-
 - Note the consumption function (in structural SEM): What are the reasons for the impact of income  $y_t$  on consumption  $c_t$ ?
 
 - It's also easy to get the answer by transformation:  $\frac{\Delta c_t}{ \Delta y_t} = \frac{\Delta c_t / \Delta r_t}{\Delta y_t / \Delta r_t} = \frac{\alpha_1 \beta_1 / \Lambda}{ \beta_1 / \Lambda} = \alpha_1$ 
@@ -1598,7 +1631,6 @@ Then, the following matrixes can be easily obtained:
 :::: {.columns}
 
 ::: {.column width="40%"}
-
 
 $$
 \begin{align}
@@ -1628,9 +1660,7 @@ $$
 :::
 
 
-
 ::: {.column width="40%"}
-
 
 $$
 \begin{align}
@@ -1648,7 +1678,6 @@ $$
 \end{bmatrix}
 \end{align}
 $$
-
 
 :::
 
@@ -1725,18 +1754,19 @@ Now, we know that the reduced coefficients matrix equal to negtive B times inver
 
 ## Supplement
 
+<!-- insert image here -->
+
+##
+
 ### Inverse matrix solution and procedure*
 
-.notes[
+
 Use the elementary row operation (Gauss-Jordan) to find the inverse matrix:
 
 1. Construct **augmented matrix**
 
 2. Transform the augmented matrix for many times until the goal is achieved.
 
-]
-
-.notes[
 
 Use cofactor, algebraic cofactor and adjoint matrix to get the inverse matrix:
 
@@ -1747,7 +1777,8 @@ Use cofactor, algebraic cofactor and adjoint matrix to get the inverse matrix:
 3. Calculate the **determinant** of original matrix : each element of **top row** in the original matrix is multiplied by its corresponding **top row** element in the "cofactor matrix";
 
 4. Calculated the inverse matrix: **1/ determinant**  $\times$  **adjoint matrix**
-]
+
+
 
 ::: {.notes}
 This slide gives you the solution and procedure to obtain the inverse matrix.And please try to practice by yourself.A.用初等行运算（高斯－若尔当）来求逆矩阵：1. 构造**增广矩阵**2. 对增广矩阵进行多次变换，直至达到目标。<br>B.用余子式、代数余子式和伴随矩阵来求逆矩阵1. 计算**余子式矩阵**和**代数余子式矩阵**2. 计算**伴随矩阵**：就是代数余子式矩阵的**转置**3. 计算原矩阵**行列式**：原矩阵**顶行**的每个元素乘以其对应"代数余子式矩阵"**顶行**元素。4. 计算得出逆矩阵：**1/行列式** X **伴随矩阵**
@@ -1807,7 +1838,6 @@ $$
 - Therefore, the consumption equation of the Keynesian model will not satisfy the CLRM A2 assumption.
 
 - Thus, OLS method cannot be used to obtain **Best linear unbiased estimator** (BLUE) for consumption equation.
-
 
 
 ::: {.notes}
@@ -1964,20 +1994,6 @@ The simulation data under given conditions are:
 ```{r}
 #| warning: false
 #| message: false
-monte <- as_tibble(read_table(here("data/table-18.1.txt")))
-
-monte <- monte %>%
-  select(-u) %>%
-  mutate(u = C - 2 - 0.8 * Y)
-
-cov_yu <- monte %>%
-  mutate(yu = (Y - mean(Y)) * (u - mean(u))) %>%
-  summarise(sum(yu)) %>%
-  unlist()
-ss_y <- monte %>%
-  mutate(Y_sqr = (Y - mean(Y))^2) %>%
-  summarise(sum(Y_sqr)) %>%
-  unlist()
 
 datatable(monte,
   options = list(pageLength = 8, dom = "tip", digits = 4),
@@ -2017,15 +2033,11 @@ According to the former provment procedure, we can manually calculate the OLS co
 ### Scatter plots
 
 ```{r}
-#| label: scatter-YC
-#| fig-width: 14
-ggplot(monte, aes(x = Y, y = C)) +
-  geom_point(color = "red") +
-  geom_smooth(se = FALSE, method = "lm", alpha = 0.6, color = "grey") +
-  labs(
-    x = "Y", y = "C"
-    # ,subtitle = "散点图"
-  )
+#| label: fig-scatter-YC
+#| fig-cap: "The scatter of Y and C"
+
+pp_scatter_monte
+
 ```
 
 ::: {.notes}
@@ -2042,9 +2054,7 @@ Next, we used the simulated data for R analysis to obtain the original OLS repor
 ```{r}
 #| label: monte-mod
 #| comment: ''
-mod_monte <- list(mod.C = C ~ Y)
-# fun_report_eq(mod_monte$mod.C,lm.dt = monte)
-out_monte <- lm(mod_monte$mod.C, data = monte)
+
 summary(out_monte)
 ```
 
@@ -2054,6 +2064,16 @@ summary(out_monte)
 ### Regression report 2
 
 The tidy report of OLS estimation shows below.
+
+```{r}
+#| label: monte-mod-tidy
+#| results: asis
+
+qx.out <- xmerit::qx.est(
+  lm.mod = mod_monte$mod.C, lm.dt = monte,
+  inf = c("fit", "Ftest")
+  )
+```
 
 $$
 \begin{alignedat}{999}
@@ -2077,14 +2097,12 @@ for sum, The results of direct use of OLS regression also show bias.
 
 
 ```{r}
-#| label: scatter-YC-fit
+#| label: fig-scatter-YC-fit
 #| fig-height: 6.5
 #| fig-cap: The SRL
-ggplot(monte, aes(x = Y, y = C)) +
-  geom_point(color = "red") +
-  geom_smooth(se = FALSE, method = "lm", alpha = 0.6, color = "grey") +
-  geom_text(aes(x = 28, y = 25, label = "slope:0.8207")) +
-  labs(x = "Y", y = "C")
+
+p_srl_monte
+
 ```
 
 ::: {.notes}
@@ -2111,12 +2129,11 @@ In the next chapter, we will learn the identification of SEM.See you in my next 
 :::
 
 
-## reference
+## Reference
 
 
 - [SimultaneousEq.pdf](https://web.sgh.waw.pl/~mrubas/AdvEcon/pdf/T3_SimultaneousEq.pdf)
 
 
-# End Of This Chapter{.center-h background-color="aliceblue"  background-image="pic/thank-you-gif-funny-little-yellow.gif" background-size="600px"  background-position="center" background-opacity="0.8" style="font-size:75px !important"}
-
+## End Of This Chapter{.center-h background-color="aliceblue"  background-image="pic/thank-you-gif-funny-little-yellow.gif" background-size="600px"  background-position="center" background-opacity="0.8" style="font-size:75px !important"}
 

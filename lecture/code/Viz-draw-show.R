@@ -1,5 +1,5 @@
 #install.packages("Hmisc")
-
+library(Hmisc)
 # curve1 and curve2 should be data.frames with an x and y column
 # For instance, as_data_frame(Hmisc::bezier(c(1, 8, 9), c(1, 5, 9)))
 curve_intersect <- function(curve1, curve2) {

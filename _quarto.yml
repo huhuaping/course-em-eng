@@ -63,7 +63,10 @@ website:
             - 01-class/chpt20-sem-estimation.qmd
         - section: "Lecture"
           contents:
-            - lecture/lecture-17-endogeneity.qmd
+            - href: lecture/lecture-17-endogeneity.qmd
+              text: "Lecture 17: Endogeneity"
+            - href: lecture/lecture-18-sem-why.qmd
+              text: "Lecture 18: Why SEM"
         - 01-class/supplements-code.qmd
 
     - title: "Homework"

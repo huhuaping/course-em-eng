@@ -1,7 +1,23 @@
+# R packages====
+library(here)
+library(magrittr)
+library(tidyverse)
+library(xmerit)
+library(scales)
 
-## ==== 19.3 Endogeneity test (Test of Simultaneity)====
+# 19.1 Identification Problem====
 
-### ==== Example: First OLS estimation on price equation====
+## example ====
+
+### Scatter plots ====
+## draw Hmisc::bezier graph and save objects
+source(here::here("lecture/code/Viz-draw-show.R"))
+
+# 19.3 Endogeneity test (Test of Simultaneity)====
+
+## Example ====
+
+### First OLS estimation on price equation====
 
 load(here::here("data/truffles.rda"))
 names(truffles)  %<>% toupper()
@@ -16,13 +32,13 @@ truffles_Hausman <- truffles %>%
   mutate(hat.Pi=round(P.red$fitted.values, digits = 4),
          hat.vi=round(P.red$residuals, digits = 4))
 
-### ==== Example: Second OLS estimation on Hausman equation====
+### Second OLS estimation on Hausman equation====
 
 out_Hausman<-lm(Hausman_models$mod.Q.Hausman,
                 data =truffles_Hausman)
 summary(out_Hausman)
 
-### ==== Example: Second OLS estimation on Pindyck equation====
+### Second OLS estimation on Pindyck equation====
 
 out_Pindyck <- lm(Hausman_models$mod.Q.Pindyck,
                 data =truffles_Hausman)
