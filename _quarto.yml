@@ -67,6 +67,8 @@ website:
               text: "Lecture 17: Endogeneity"
             - href: lecture/lecture-18-sem-why.qmd
               text: "Lecture 18: Why SEM"
+            - href: lecture/lecture-19-sem-identification.qmd
+              text: "Lecture 19: Identification"
         - 01-class/supplements-code.qmd
 
     - title: "Homework"

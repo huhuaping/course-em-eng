@@ -117,3 +117,13 @@ a {
 details {
     margin-bottom: 1em;
 }
+
+/* 控制代码输出框的高度 以及文本字号大小*/
+
+.reveal pre code {
+  font-size: 1.25em!important; /* 默认是0.55em*/
+  max-height: 700px!important;
+}
+
+
+

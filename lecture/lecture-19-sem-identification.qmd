@@ -39,14 +39,14 @@ options(
   # 控制include_graphics，使其直接使用相对路径
   knitr.graphics.rel_path = FALSE,
   DT.options = list(
-    dom ="tip" ,  
+    dom = "tip",
     pageLength = 6,
     rownames = FALSE, # 不显示行标签
     columnDefs = list(
       list(className = "dt-center", targets = "_all"), # align center
-      list(visible=FALSE,targets=0) # hide index column
-      )
+      list(visible = FALSE, targets = 0) # hide index column
     )
+  )
 )
 # use my custom function
 source(here::here("lecture/Rscript/create-DTbutton.R"))
@@ -109,6 +109,7 @@ Chapter 20. How to Estimate SEM ?
 # Chapter 19. What is the Identification Problem ?{#chpt19 .monash-bg-blue .mcenter}
 
 
+::: {.font-110}
 
 [19.1 Identification Problem](#deninition)
 
@@ -117,6 +118,8 @@ Chapter 20. How to Estimate SEM ?
 [19.3 Endogeneity Test](#test-endogeneity)
 
 [19.4 Exogeneity Test](#test-exogeneity)
+
+:::
 
 
 
@@ -154,6 +157,12 @@ The most important thing we should concern is the solution of the SEM.And this i
 
 <!-- insert image here -->
 
+```{r}
+## the viz draw code is in the code-chapter-19-identification.R
+# source(here("lecture/code/Viz-draw-show.R"))
+```
+
+
 ##
 
 ### The structural SEM
@@ -181,7 +190,7 @@ Here, we will give an origin SEM for simple supply and demand system.
 
 ```{r}
 #| label: fig-plot1-scatter
-#| fig-cap: Scatter of Q and P
+#| fig-cap: "Scatter of Q and P"
 suppressWarnings(print(plot1))
 ```
 
@@ -189,13 +198,14 @@ suppressWarnings(print(plot1))
 This figure gives a few scatterpoints relating Q to P
 :::
 
+
 ##
 
 ### Equilibrium point of supply and demand
 
 ```{r}
 #| label: fig-plot2-inter
-#| fig-cap: Each scatter represents the intersection of a demand curve and a supply curve.
+#| fig-cap: "Each scatter represents the intersection of a demand curve and a supply curve."
 
 suppressWarnings(print(plot2))
 ```
@@ -209,11 +219,13 @@ Each scatterpoint represents the intersection of a demand and a supply curve, as
 ### Underidentification
 
 ```{r}
-#| label: fig-plot3-both
+#| label: plot3-both
 suppressWarnings(print(plot3))
 ```
 
+
 We can't be sure which of the entire family of supply and demand curves is responsible for this point. thus the supply and demand equation are both **underidentification**.
+
 
 ::: {.notes}
 Now consider a single point, such as that shown in this Figure.There is no way we can be sure which demand-and-supply curve of a whole family of curves shown in that panel generated that point.___Clearly, some additional information about the nature of the demand-and-supply curves isneeded.
@@ -224,7 +236,7 @@ Now consider a single point, such as that shown in this Figure.There is no way w
 ### The supply curve can be identified
 
 ```{r}
-#| label: fig-plot4-demand
+#| label: plot4-demand
 
 suppressWarnings(print(plot4))
 ```
@@ -241,7 +253,7 @@ etc.(/ˌet ˈsetərə; ˌɪt ˈsetərə/)
 ### The demand curve can be identified
 
 ```{r}
-#| label: fig-plot5-supply
+#| label: plot5-supply
 suppressWarnings(print(plot5))
 ```
 
@@ -283,11 +295,14 @@ Q_t &= \pi_{12} +v_{t2}
 \end{cases}
 $$
 
-> Obviously, the structural SEM is **underidentification**! (Why?)
+::: {.callout-note}
+Obviously, the structural SEM is **underidentification**! (Why?)
+
 - number of structural parameters? 2
+
 - number of reduced parameters? 0
 
-
+:::
 
 ::: {.notes}
 So, Let's give more details about the identification problem of SEM.Firstly, we will analyse the situation of under identification.___The reason we could not identify the demand function or the supply equation was that the same variables P and Q are present in both equations and there is no additional information.And this problem was explained in our graph demostration as what we have mentioned before.
@@ -321,7 +336,7 @@ $$
 ::: {.column width="40%"}
 
 
->And denoted as:
+And denoted as:
 
 $$
 \begin{align}
@@ -331,11 +346,15 @@ $$
 
 :::
 
+::: {.column width="15%"}
+
+:::
+
 
 ::: {.column width="40%"}
 
 
->Where:
+Where:
 
 $$
 \begin{cases}
@@ -351,7 +370,9 @@ $$
 
 ::::
 
+
 - This **hybrid equation** is indistinguishable from any of the structural equations!
+
 - So the original structural SEM is **underidentification**!
 
 ::: {.notes}
@@ -412,32 +433,27 @@ But suppose we consider the following demand-and-supply model, where  $I =$ inco
 
 ### Part equation just-identified
 
-:::: {.columns}
+:::: {.callout-note}
 
-::: {.column width="40%"}
+[**Question**]{.red}：
 
-
-**Question**：
 Can the aforementioned structural equation be identified?
 
 - number of reduced parameters?
 - number of structural parameters?
 
-:::
-
-
-
-
-::: {.column width="40%"}
-
-
 **Answer**：
 
-- Only 4 reduced parameters:  $\pi_{11},\pi_{21},\pi_{12},\pi_{22}$  - But 5 structural parameters:  $\alpha_0,\alpha_1,\alpha_2,\beta_0,\beta_1$ 
+::: {.fragment}
+
+- Only 4 reduced parameters:  $\pi_{11},\pi_{21},\pi_{12},\pi_{22}$
+
+- But 5 structural parameters:  $\alpha_0,\alpha_1,\alpha_2,\beta_0,\beta_1$ 
 
 :::
 
 ::::
+
 
 Therefore, it is impossible to completely solve all 5 structural parameters.
 
@@ -475,8 +491,11 @@ Q_t &= \beta_0+\beta_1P_t+ \beta_2P_{t-1}+u_{t2}  &(\beta_1>0,\beta_2>0) &&\text
 \end{cases}
 $$
 
+::: {callout-note}
 
-> where the demand function remains as before but the supply function includes an additional explanatory variable, price lagged one period.
+where the demand function remains as before but the supply function includes an additional explanatory variable, price lagged one period.
+
+:::
 
 ::: {.notes}
 The supply function postulates that the quantity of a commodity supplied depends on its current and previous period’s price.Note that  $P_{t−1}$  is a predetermined variable because its value is known at time t.
@@ -499,6 +518,8 @@ $$
 
 And obtain the relationship between the structural coefficients and the reduced coefficients.
 
+::: {.font-90}
+
 $$
 \begin{cases}
 \begin{alignedat}{3}
@@ -514,7 +535,12 @@ $$
 \end{cases}
 $$
 
-> So, can we calculate the unique structural coefficients by using the numerical reduced coefficients?
+:::
+
+
+::: {.callout-tip}
+So, can we calculate the unique structural coefficients by using the numerical reduced coefficients?
+:::
 
 ::: {.notes}
 as what we have done before, let's count the parameters for structural SEM and reduced SEM  firstly.
@@ -525,34 +551,31 @@ as what we have done before, let's count the parameters for structural SEM and r
 
 ### All equations just-identified
 
-:::: {.columns}
-
-::: {.column width="40%"}
+:::: {.callout-note}
 
 
-**Question**：
+[**Question**]{.red}：
+
 Can the aforementioned structural equation be identified?
 
 - number of reduced parameters?
+
 - number of structural parameters?
-
-:::
-
-
-
-
-::: {.column width="40%"}
 
 
 **Answer**：
 
-- there are 6 reduced parameters:  $\pi_{11},\pi_{21},\pi_{31};\pi_{12},\pi_{22},\pi_{32}$  - and 6 structural parameters:  $\alpha_0,\alpha_1,\alpha_2;\beta_0,\beta_1,\beta_2$ 
+::: {.fragment}
+
+- there are 6 reduced parameters:  $\pi_{11},\pi_{21},\pi_{31};\pi_{12},\pi_{22},\pi_{32}$
+
+- and 6 structural parameters:  $\alpha_0,\alpha_1,\alpha_2;\beta_0,\beta_1,\beta_2$ 
 
 :::
 
 ::::
 
-> Therefore, the parameters of both the SEM equations can be identiﬁed, and the system as a whole can be  identiﬁed exactly.
+Therefore, the parameters of both the SEM equations can be identiﬁed, and the system as a whole can be  identiﬁed exactly.
 
 
 
@@ -580,11 +603,11 @@ Q_t &= \beta_0+\beta_1P_t+\beta_2P_{t-1}+u_{t2}   &(\beta_1,\beta_2>0) &&\text{(
 \end{cases}
 $$
 
-> Where the supply function remains as before but the demand function includes two additional explanatory variables, **income**(  $I_{t}$ ) and **wealth**(  $R_t$ ).
+Where the supply function remains as before but the demand function includes two additional explanatory variables, **income**(  $I_{t}$ ) and **wealth**(  $R_t$ ).
 
 <br>
 
-> **Questions**：Can you transform the structural SEM to get the reduced SEM?
+> [**Questions**]{.red}：Can you transform the structural SEM to get the reduced SEM?
 
 ::: {.notes}
 For most goods and services, like wealth and income, are expected to have a positive effect on consumption.Note  **income**(  $I_{t}$ ) and **wealth**(  $R_t$ ) are supposed to be exogenous variables.
@@ -609,7 +632,7 @@ $$
 
 :::: {.columns}
 
-::: {.column width="40%"}
+::: {.column width="40%" .font-95}
 
 
 $$
@@ -626,8 +649,12 @@ $$
 
 :::
 
+::: {.column width="10%"}
 
-::: {.column width="40%"}
+:::
+
+
+::: {.column width="40%" .font-95}
 
 
 $$
@@ -651,34 +678,28 @@ $$
 
 ### Multiple solutions
 
-:::: {.columns}
+:::: {.callout-note}
 
-::: {.column width="40%"}
-
-
-**Questions**:
+[**Questions**]{.red}：
 
 Can the Structural SEM be identified?
+
 - number of reduced parameters?
+
 - number of structural parameters?
-
-:::
-
-
-
-
-::: {.column width="40%"}
-
 
 **Answer**:
 
-- 8 **Reduced parameters** :  $\pi_{11},\pi_{12},\pi_{13},\pi_{14},\pi_{21},\pi_{22},\pi_{23},\pi_{24}$  - Only 7 **structural Parameters** :  $\alpha_0,\alpha_1,\alpha_2,\alpha_3,\beta_0,\beta_1,\beta_2$ 
+::: {.fragment}
+
+- 8 **Reduced parameters** :  $\pi_{11},\pi_{12},\pi_{13},\pi_{14},\pi_{21},\pi_{22},\pi_{23},\pi_{24}$
+
+- Only 7 **structural Parameters** :  $\alpha_0,\alpha_1,\alpha_2,\alpha_3,\beta_0,\beta_1,\beta_2$ 
 
 :::
 
 ::::
 
-<br>
 
 Therefore, the number of equations is more than the number of unknown coefficients, so the unique estimation value of all 7 structural coefficients cannot be obtained.
 
@@ -722,35 +743,32 @@ upper case Mlower case mSo it should  be different for upper case and lower case
 
 A necessary (but not sufﬁcient) condition of identification, known as the **order condition**, may be stated in two different but equivalent ways.
 
-**Order rules 1**：
+::: {.callout-tip title="Order rules 1" .font-115}
 
-> In a model of M simultaneous equations, in order for an equation to be identiﬁed, it must exclude at least  $M − 1$  variables (endogenous as well as predetermined) appearing in the SEM.
->
+In a model of M simultaneous equations, in order for an equation to be identiﬁed, it must exclude at least  $M − 1$  variables (endogenous as well as predetermined) appearing in the SEM.
+
 - If it excludes exactly  $M − 1$  variables, the equation is **just identiﬁed**. Which means  $M+K-(k+m) = (M-1)$ .
->
+
 - If it excludes more than  $M − 1$  variables, it is **overidentiﬁed**. Which means  $M+K-(k+m) > (M-1)$ 
-
-
-::: {.notes}
 
 :::
 
+##
 
-### The order rules: solution 2
+### Solution 2
 
 And here is another equivalent order rule.
 
-**Order rules 2**：
+::: {.callout-tip title="Order rules 2" .font-115}
 
-> In a model of M simultaneous equations, in order for an equation to be identiﬁed, the number of predetermined variables(  $k$ ) excluded from the equation must not be less than the number of endogenous variables(  $m$ ) included in that equation less 1, that is,
->
+In a model of M simultaneous equations, in order for an equation to be identiﬁed, the number of predetermined variables( $k$ ) excluded from the equation must not be less than the number of endogenous variables(  $m$ ) included in that equation less 1, that is,
+
 - If $K − k = m − 1$, the equation is **just identiﬁed**.
->
+
 - but if $K − k > m − 1$, it is **overidentiﬁed**.
 
-::: {.notes}
-
 :::
+
 
 ## Case demo
 
@@ -770,14 +788,17 @@ Q_t &= \beta_0+\beta_1P_t+u_{t2}  &(\beta_1>0) &&\text{(supply function)}\\
 \end{align}
 \end{cases}
 $$
+<br>
 
-Conclusion from **Order Rule 1** :
+::: {.callout-tip title="Conclusion from **Order Rule 1**" .font-115}
 
 - All numbers of variables in the structural SEM is  $(M+K)=2+0=2$ , and  $(M-1)=2-1=1$ .
 
 - For the first equation, because number of all variables is  $(m + k) = 2 + 0 = 2$ , so  $(M + K) - (m + k) = 2-2 = 0$ . We see  $(M + K) - (m + k) < (M - 1)=1$ . So the first equation (the demand equation) is **Underidentification**.
 
 - For the second equation, because  $(m + k) = 2 + 0 = 2$ , so $(M + K) - (m + k) = 2-2 = 0$. We see  $(M + K) - (m + k) < (M - 1)=1$ . So the second equation (the supply equation) is also **Underidentification**
+
+:::
 
 ::: {.notes}
 For simplicity, order rule 1 means that numbers of excluded variables in the particular equation is less than the numbers of all endogenous variables minus 1 in the SEM, and this means the particular equation is under-identification.
@@ -797,14 +818,18 @@ Q_t &= \beta_0+\beta_1P_t+u_{t2}  &(\beta_1>0) &&\text{(supply function)}\\
 \end{align}
 \end{cases}
 $$
+<br>
 
-Conclusion from **Order Rule 2** :
+::: {.callout-tip title="Conclusion from **Order Rule 2**" .font-115}
 
 - The number of predetermined variables in the structural SEM is  $K=1$ .
 
 - For the **first** equation: the number of predetermined variables is  $k=0$ , and  $(K -k)=0$ ; The number of endogenous variables is $m=2$, and  $(m-1)=1$ ; We see  $(K-k) < (m - 1)$ . So the first equation (the demand equation) is **Underidentification**.
 
 - For the **second** equation: the number of predetermined variables is  $k=0$ , and  $(K -k)=0$ ; The number of endogenous variables is  $m=2$ , and  $(m-1)=1$ ; We see  $(K-k) < (m - 1)$ . So the second equation (the supply equation) is also **Underidentification**.
+
+:::
+
 
 ::: {.notes}
 For simplicity, order rule 2 imply that numbers of excluded predetermined variables in the particular equation is less than the numbers of its include endogenous variables minus 1, which means the particular equation is under-identification.
@@ -825,15 +850,16 @@ Q_t &= \beta_0+\beta_1P_t+u_{t2}  &(\beta_1>0) &&\text{(supply function)}
 \end{cases}
 $$
 
-Conclusion from **Order Rule 1** :
+<br>
+
+::: {.callout-tip title="Conclusion from **Order Rule 1**" .font-115}
+
 
 - In the structural SEM: The number of all variables is  $(M+K)=2+1=3$ , and  $(M-1)=2-1=1$ .
 
 - The first eq: the number of all variables is  $(m + k) = 2 + 1 = 3$ , so  $(M + K) - (m + k) = 3-3 = 0$ . We see  $(M + K) - (m + k) < (M-1)=1$ . Thus the first equation is **Underidentification**.
 
 - The second eq: the number of all variables is  $(m + k) = 2 + 0 = 2$ , so  $(M + K) - (m + k) = 3-2= 1$ . We see  $(M +K) - (m + k) = (M - 1)=1$ . Thus the second equation is **Just identification**.
-
-::: {.notes}
 
 :::
 
@@ -853,7 +879,10 @@ Q_t &= \beta_0+\beta_1P_t+u_{t2}  &(\beta_1>0) &&\text{(supply function)}
 \end{cases}
 $$
 
-Conclusion from **Order Rule 2** :
+<br>
+
+::: {.callout-tip title="Conclusion from **Order Rule 2**" .font-115}
+
 
 - The number of  predetermined variables in the structural SEM is  $K=2$ 
 
@@ -861,8 +890,6 @@ Conclusion from **Order Rule 2** :
 
 - For the second equation: the number of  predetermined variables is  $k=0$ , and  $(K -k)=1$ ; The number of endogenous variables is  $m=2$ , and  $(m-1)=1$ ; Obviously  $(K - k) = (m - 1)=1$ . So the second equation (supply equation) is **Just identification**.
 
-::: {.notes}
-
 :::
 
 ##
@@ -881,7 +908,9 @@ Q_t &= \beta_0+\beta_1P_t+\beta_2P_{t-1}+u_{t2}   &(\beta_1,\beta_2>0) &&\text{(
 \end{cases}
 $$
 
-Conclusion from **Order Rule 1** :
+<br>
+
+::: {.callout-tip title="Conclusion from **Order Rule 1**" .font-115}
 
 - In this structural SEM: the number of all variables is  $(M+K)=2+3=5$ , and  $(M-1)=2-1=1$ 
 
@@ -889,8 +918,6 @@ Conclusion from **Order Rule 1** :
 
 - The second equation: the number of all variables is  $(m + k) = 2 + 1 = 3$ , so  that  $(M + K) - (m + k) = 5-3 = 2$ . We see  $(M + K) - (m + k) > (M - 1)=1$ . Thus, the second equation is **Overidentification**
 
-::: {.notes}
-
 :::
 
 
@@ -911,15 +938,15 @@ Q_t &= \beta_0+\beta_1P_t+\beta_2P_{t-1}+u_{t2}   &(\beta_1,\beta_2>0) &&\text{(
 $$
 
 
-Conclusion from **Order Rule 2** :
+<br>
+
+::: {.callout-tip title="Conclusion from **Order Rule 2**" .font-115}
 
 - In the structural SEM: The number of predetermined variables  $K=3$ .
 
 - The first equation: the number of predetermined variables  $k=2$ , and  $(K -k)=1$ ; The number of endogenous variables is  $m=2$ , and  $(m-1)=1$ ; We see  $(K - k) = (m - 1)=1$ . So the first equation  is the **Just Identification**.
 
 - The second equation: the number of predetermined variables is  $k=1$ , and  $(K -k)=2$ ; The number of endogenous variables is  $m=2$ , and  $(m-1)=1$ ; We see  $(K - K) > (m - 1)=1$ . So the second equation  is **overidentification**.
-
-::: {.notes}
 
 :::
 
@@ -929,7 +956,9 @@ Conclusion from **Order Rule 2** :
 
 - Firstly, the order rule is a **necessary** but not **sufficient** condition  for Identificatoin problems. Thus even if order conditions are satisfied, the equation will be unidentifiable.
 
-> See the following example:
+
+::: {.callout-note title="Example" .font-115}
+
 
 $$
 \begin{cases}
@@ -941,11 +970,13 @@ Q &= \beta_0+\beta_1P_t+u_{t2}  &(\beta_1>0) &&\text{(supply function)}
 $$
 
 
-> According to the rules of order conditions, we can judge that the second equation (the supply equation) is **Just Identification**.
+- According to the rules of order conditions, we can judge that the second equation (the supply equation) is **Just Identification**.
 
->But in fact, we also need to make sure that the coefficient of income variable  $I_t$  in the first equation should satisfy  $\alpha_2 \neq 0$ .
+- In fact, we also need to make sure that the coefficient of income variable  $I_t$  in the first equation should satisfy  $\alpha_2 \neq 0$ .
 
->But notice that the zero restrictions criterion is based on a priori or theoretical expectations that certain variables do not appear in a given equation.
+- But notice that the zero restrictions criterion is based on a priori or theoretical expectations that certain variables do not appear in a given equation.
+
+:::
 
 ::: {.notes}
 So, let's sum up the discussion about the rules of order condition.
@@ -960,16 +991,17 @@ So, let's sum up the discussion about the rules of order condition.
 - Finally, it's only suitable for the simple SEM situatons to use the Rule of Order Condition.
 
 ::: {.notes}
--  The practical rule of thumb that every equation have at least one variable in it that does not appear in any other equation will guarantee this outcome.::: {.notes}
-::: {.notes}
+-  The practical rule of thumb that every equation have at least one variable in it that does not appear in any other equation will guarantee this outcome.
+
 $$
-\begin{align}$$
-\begin{align}(M+K)-(m+k) &> M-1 \\(M+K)-(m+k) &> M-1 \\K-k &> m-1K-k &> m-1\end{align}
-$$\end{align}
+\begin{align}(M+K)-(m+k) &> M-1 \\
+(M+K)-(m+k) &> M-1 \\
+K-k & > m-1
+\end{align}
 $$
-:::
 
 :::
+
 
 ## The Rank Rules
 
@@ -977,18 +1009,24 @@ $$
 
 ##
 
-### Main procedure
+### Rank Rules and the Main procedure
 
-**The Rank Rules**：
+::: {.callout-note title="The Rank Rules" .font-115}
 
-> In a model containing M equations in M endogenous variables, an equation is identiﬁed if and only if at least one non-zero determinant of order  $(M − 1)\times(M − 1)$  can be constructed from the coefﬁcients of the variables (both endogenous and predetermined) excluded from that particular equation but included in the other equations of the model.
+In a model containing M equations in M endogenous variables, an equation is identiﬁed if and only if at least one non-zero determinant of order  $(M − 1)\times(M − 1)$  can be constructed from the coefﬁcients of the variables (both endogenous and predetermined) excluded from that particular equation but included in the other equations of the model.
+
+:::
 
 Here are the **Main proceeding steps**:
 
->1. Transform the structural SEM and write down the **algebraic formula 2**.
+1. Transform the structural SEM and write down the **algebraic formula 2**.
+
 2. Write the corresponding table of **equation coefficients**.
+
 3. Find all **columns** that are not included in the equation.
+
 4. Construct any  $(M - 1) \ast (M - 1)$  matrix among these columns.
+
 5. Judge and draw a conclusion: if any matrix with a determinant of 0 can be found, the equation is **underidentification**.
 
 ::: {.notes}
@@ -1116,7 +1154,9 @@ $$
 
 ::::
 
-That means the rank of the matrix  $rank(A)=\mathbf{\rho}(A)<3$ . Therefore, the first equationdoes does not satisfy the **rank condition**, and it is **underidentification**.
+That means the rank of the matrix  $rank(A)=\mathbf{\rho}(A)<3$ . 
+
+Therefore, [the first equation]{.red} does not satisfy the **rank condition**, and it is **underidentification**.
 
 ::: {.notes}
 Try to find 1 target matrix; Calculate its determinant.In this slide, we will conduct the step 4 and 5:In step 4. we can construct a matrix with  demension  $3 \ast 3$  among these columns.in step 5. we can calculte the determinant of this matrix which equals to zero. And we also know the column rank of this matrix equals 3.Therefore, the first equationdoes does not satisfy the **rank condition**, and it is **underidentification**.
@@ -1124,22 +1164,31 @@ Try to find 1 target matrix; Calculate its determinant.In this slide, we will co
 
 ##
 
-### Conclusion of rank rules
+### Summary of rank rules (1/2)
 
 In summary, the steps of the rank condition rules are as follows:
 
-- Write down the **structural SEM** in the **algebra form 2**;
-- Put the **coefficients** in tabular form;
-- Strike out the coefﬁcients of the row in which the equation under consideration;
-- Strike out the columns of the non-zero coefficients in the equation considered
-- The remaining coefficients will form a **coefficient matrix**
-- Construct arbitrary matrix with  $(M - 1)*(M - 1)$  and calculate the determinant.
+1. Write down the **structural SEM** in the **algebra form 2**;
 
->- If there is at least one square matrix  $(M - 1)*(M - 1)$ , with which determinant is not equal to zero (namely, the rank of the square matrix is  $m-1$ ), it will indicates that the equation under consideration is  **Just Identification**.
+2. Put the **coefficients** in tabular form;
 
->- If determinants of all possible square matrices  $(M - 1) * (M - 1)$ are all equal to zero, which means the rank of all these square matrix is less than  $M-1$ , the equation considered is **Underidentification**.
+3. Strike out the coefﬁcients of the row in which the equation under consideration;
 
+4. Strike out the columns of the non-zero coefficients in the equation considered;
 
+5. The remaining coefficients will form a **coefficient matrix**;
+
+6. Construct arbitrary matrix with  $(M - 1)*(M - 1)$  and calculate the determinant.
+
+##
+
+### Summary of rank rules (2/2)
+
+So, the **conclusion** of the rank rules is as follows:
+
+- If there is at least one square matrix  $(M - 1)*(M - 1)$ , with which determinant is not equal to zero (namely, the rank of the square matrix is  $m-1$ ), it will indicates that the equation under consideration is  **Just Identification**.
+
+- If determinants of all possible square matrices  $(M - 1) * (M - 1)$ are all equal to zero, which means the rank of all these square matrix is less than  $M-1$ , the equation considered is **Underidentification**.
 
 
 ::: {.notes}
@@ -1149,7 +1198,7 @@ In summary, the steps of the rank condition rules are as follows:
 
 ##
 
-### Compare of the order and rank rules (1/2)
+### Rank rule Resluts for all equations
 
 $$
 \begin{matrix}
@@ -1163,27 +1212,17 @@ eq   & Y_1 & Y_2 & Y_3 & Y_4 &   1& X_1 & X_2 & X_3 \\
 \end{matrix}
 $$
 
->**Answer**：
-
-:::: {.columns}
-
-::: {.column width="40%"}
+::: {.callout-tip title="Rank rules results:" .font-115}
 
 - Equation 1: **underidentification**
 
-- Equation 2: ? .gray[**underidentification**]
+- Equation 2: ? [**underidentification**]{.fragment}
+
+- Equation 3: ? [**underidentification**]{.fragment}
+
+- Equation 4: ? [**identified**]{.fragment}
 
 :::
-
-
-::: {.column width="40%"}
-
-- Equation 3: ? .gray[**underidentification**]
-
-- Equation 4: ? .gray[**identified**]
-:::
-
-::::
 
 
 ::: {.notes}
@@ -1192,7 +1231,7 @@ Untill now, we have know the first equation of this SEM is under-identification 
 
 ##
 
-### Compare of the order and rank rules (2/2)
+### Order rule Resluts for all equations
 
 $$
 \begin{cases}
@@ -1207,40 +1246,48 @@ $$
 
 With order rules 2, you should obtain following conclusion for all 4 equation:
 
-
+<br>
 
 ```{r}
 #| label: order-creteria
-m_k<-tibble::tribble(
-~eq, ~m, ~k,
-1,   3,  2,
-2,   2,  3,
-3,   2,  3,
-4,   3,  2
+m_k <- tibble::tribble(
+  ~eq, ~m, ~k,
+  1,   3,  2,
+  2,   2,  3,
+  3,   2,  3,
+  4,   3,  2
 )
 
-M_K<-m_k %>%
-mutate(M=4,K=4,
-`K-k`=K-k,`m-1`=m-1,
-`(K-k)-(m-1)`=`K-k`-`m-1`,
-`result`=if_else(`(K-k)-(m-1)`>0,"overidentification", #"过度识别",
-if_else(`(K-k)-(m-1)`==0,"just identification",#"恰好识别",
-"underidentification"))) %>%
-select(-`(K-k)-(m-1)`)
+M_K <- m_k %>%
+  mutate(
+    M = 4, K = 4,
+    `K-k` = K - k, `m-1` = m - 1,
+    `(K-k)-(m-1)` = `K-k` - `m-1`,
+    `result` = if_else(`(K-k)-(m-1)` > 0, "overidentification", # "过度识别",
+      if_else(`(K-k)-(m-1)` == 0, "just identification", # "恰好识别",
+        "underidentification"
+      )
+    )
+  ) %>%
+  select(-`(K-k)-(m-1)`)
 
-#kable(M_K,caption = "阶条件规则下的判断结果")
+# kable(M_K,caption = "阶条件规则下的判断结果")
 
 datatable(M_K,
-options = list(pageLength =6))
-
+  options = list(
+    pageLength = 6,
+    dom = "t"
+    )
+)
 ```
 
 ::: {.notes}
 So far we know that the order rules is a necessary but not sufficient condition for identification, while the rank rules is necessary and sufficient conditon for identification.So you may ask whether the results from the order rules will be the same with results from the rank rules?___This table gives the result from the order rules 2.It shows that all equations are just-identification which is differnt with the results from the rank rules.
 :::
 
+##
 
-## Summary on identification rules
+### Summary on identification rules
 
 The following is a comprehensive summary of the identification rules:
 
@@ -1257,9 +1304,8 @@ As the preceding discussion shows, the rank condition tells us whether the equat
 :::
 
 
-# 19.3 Endogeneity test (Test of Simultaneity)*{#test-endogeneity .monash-bg-blue .mcenter}
+# 19.3 Endogeneity test (Test of Simultaneity) $^{\ast}$ {#test-endogeneity .monash-bg-blue .mcenter}
 
-.footnote[Because we have learn these techniques in chapter 17, so we will jump to the chapter 20.]
 
 ::: {.notes}
 The next two section discuss endogeneity test and exogeneity test with SEM.Because we have learn these techniques in chapter 17, so we will jump to the chapter 20.
@@ -1274,7 +1320,7 @@ The next two section discuss endogeneity test and exogeneity test with SEM.Becau
 
 ### Concepts and definitions
 
-Simultaneity testing is essentially testing whether a (endogenous) regressor is related to the error term (  $u_t$ ).
+Simultaneity testing is essentially testing whether a (endogenous) regressor is related to the error term ( $u_t$ ).
 
 - if relevant, there is a problem of simultaneity, so we need to find other estimation method different from OLS;
 
@@ -1388,9 +1434,15 @@ The steps of Hausman test include:
 
 - step 2：conduct the second OSL estimation  $Q_t = \beta_0+\beta_1 \hat{P_t} + \beta_1\hat{v}_{t1} +u_{t2}$ , and apply t test for  $\hat{v}_{1t}$ ,then judge according former rules.
 
->Note:
->To esitimat more efficiently, Pindyck and Rubinfeld suggest the second OSL estimation shoild be:  $Q_t = \beta_0+\beta_1 P_t + \beta_1\hat{v}_{t1} +u_{t2}$ 
+::: {.callout-tip title="Pindyck and Rubinfeld' suggestion" .font-115}
 
+To esitimat more efficiently, Pindyck and Rubinfeld suggest the second OSL estimation shoild be:  
+
+$$
+Q_t = \beta_0+\beta_1 P_t + \beta_1\hat{v}_{t1} +u_{t2}
+$$ 
+
+:::
 
 
 ## Example
@@ -1500,8 +1552,6 @@ The raw R report for the OLS estimation of **reduced price equation** :
 summary(P.red)
 ```
 
-
-
 ##
 
 ### First OLS estimation on price equation (1/2)
@@ -1518,9 +1568,11 @@ $$
 \end{alignedat}
 $$
 
->**Questions**:
+::: {.callout-note title="Questions" .font-115}
 
->Please explain the regression results??
+Please explain the regression results ?
+
+:::
 
 
 ##
@@ -1529,13 +1581,17 @@ $$
 
 After OLS estimating of the **reduced price equation**, we can obtain  $\hat{P_i},\hat{v}_{i1}$ :
 
-```{r}
-#| label: data-Hausman-step1
-datatable(truffles_Hausman,
-options = list(pageLength =6, dom = 'tip'),
-caption = "Estimate the price equation and get hat.Pi and hat.v1i")
-```
+<br>
 
+```{r}
+#| label: tbl-data-Hausman-step1
+#| tbl-cap: "Estimate the price equation and get hat.Pi and hat.v1i"
+datatable(
+  truffles_Hausman,
+  rownames = TRUE,
+  options = list(pageLength = 6, dom = "tip")
+)
+```
 
 
 ##
@@ -1551,12 +1607,19 @@ Q_t &= \beta_0+\beta_1 {P_t} + \beta_1\hat{v}_{t1} +u_{t2} & &&\text{(Pindyck eq
 \end{align}
 $$
 
-> Note: you can use one of these two test model:
->- Hausman equation for Hausman test
-- Pindyck equation for Pindyck test
+<br>
 
-Let us do the Hausman test firstly, and then the Pindyck test.
+::: {.callout-note title="Hausman and Pindyck test models" .font-115}
 
+You can use any of these two test models:
+
+1. Hausman equation for Hausman test
+
+2. Pindyck equation for Pindyck test
+
+SO, Let us do the Hausman test firstly, and then the Pindyck test.
+
+:::
 
 ##
 
@@ -1589,12 +1652,12 @@ $$
 \end{alignedat}
 $$
 
-- Conclusions of Hausman simultaneity test:
+Conclusions of Hausman simultaneity test:
 
-- the coefficient of  $\hat{v}_{1i}$  is 0.34，  $t^{\ast}=2.9901>t{(\alpha/2,n-3)}=$  `r qt(p=0.01,df=27,lower.tail=FALSE)`。(given  $\alpha=0.01$ 
+- The coefficient of  $\hat{v}_{1i}$  is 0.34，  $t^{\ast}=2.9901>t{(\alpha/2,n-3)}=$  `r qt(p=0.01,df=27,lower.tail=FALSE)`。(given  $\alpha=0.01$ 
 )
 
-- Hence, the t test on coefficient of  $\hat{v}_{i1}$  is **significantly**(given  $\alpha=0.01$ ). Thus we should **reject**  $H_0$ , and accept  $H_1$ . Finally conclude that there is **no exist** of simultaneity problem。
+- Hence, the t test on coefficient of  $\hat{v}_{i1}$  is **significantly** (given  $\alpha=0.01$ ). Thus we should **reject**  $H_0$ , and accept  $H_1$ . Finally conclude that there is **no exist** of simultaneity problem。
 
 
 ##
@@ -1606,7 +1669,7 @@ The raw R report for the **Pindyck test equation** show as following:
 ```{r}
 #| label: Pindyck-raw
 summary(out_Pindyck)
-#systemfit::hausman.systemfit
+# systemfit::hausman.systemfit
 ```
 
 
@@ -1631,16 +1694,21 @@ $$
 \end{alignedat}
 $$
 
-- Conclusions of Pindyck simultaneity test:
+Conclusions of Pindyck simultaneity test:
 
 - The coefficient of  $\hat{v}_{i1}$  is 0.23, and  $t^{\ast}=1.9529>t{(\alpha/2,n-3)}=$  `r qt(p=0.05,df=27,lower.tail=FALSE)`. (given  $\alpha=0.1$ )
 
-- Hence, the t test on coefficient of  $\hat{v}_{i1}$  is **significantly**(given  $\alpha=0.01$ ). Thus we should **reject**  $H_0$ , and accept  $H_1$ . Finally conclude that there is **no exist** of simultaneity problem。
+- Hence, the t test on coefficient of  $\hat{v}_{i1}$  is **significantly** (given  $\alpha=0.01$ ). Thus we should **reject**  $H_0$ , and accept  $H_1$ . Finally conclude that there is **no exist** of simultaneity problem。
 
 
-# 19.4 Exogeneity test*{#test-exogeneity .monash-bg-blue .mcenter}
+# 19.4 Exogeneity test $^{\ast}$ {#test-exogeneity .monash-bg-blue .mcenter}
 
-.footnote[Because we have learn these techniques in chapter 17, so we will jump to the chapter 20.]
+::: {.notes}
+
+Because we have learn these techniques in chapter 17, so we will jump to the chapter 20.
+
+:::
+
 
 
 ## Exogeneity test
@@ -1653,45 +1721,71 @@ $$
 
 ellipsis ...
 
+# 19.5 class summary {#class-summary .monash-bg-blue .mcenter}
+
+
 ##
 
-### Key points and conclusions (1/2)
+### Key points and conclusions (1/3)
 
-- The problem of identiﬁcation precedes the problem of estimation.
+1. The problem of identiﬁcation precedes the problem of estimation.
 
-- The identiﬁcation problem asks whether one can obtain unique numerical estimates of the structural coefﬁcients from the estimated reduced-form coefﬁcients.
+2. The identiﬁcation problem asks whether one can obtain unique numerical estimates of the structural coefﬁcients from the estimated reduced-form coefﬁcients.
 
-- If this can be done, an equation in a system of simultaneous equations is identiﬁed. If this cannot be done, that equation is un- or under-identiﬁed.
+3. If this can be done, an equation in a system of simultaneous equations is identiﬁed. If this cannot be done, that equation is un- or under-identiﬁed.
 
-- An identiﬁed equation can be just identiﬁed or overidentiﬁed. In the former case, unique values of structural coefﬁcients can be obtained; in the latter, there may be more than one value for one or more structural parameters.
-
-- The identiﬁcation problem arises because the same set of data may be compatible with different sets of structural coefﬁcients, that is, different models. Thus, in the regression of price on quantity only, it is difﬁcult to tell whether one is estimating the supply function or the demand function, because price and quantity enter both equations.
+4. An identiﬁed equation can be just identiﬁed or overidentiﬁed. In the former case, unique values of structural coefﬁcients can be obtained; in the latter, there may be more than one value for one or more structural parameters.
 
 ::: {.notes}
-- 识别问题的考虑应先于估计问题。- 识别问题是问我们能否从约简系数估计值求出结构系的唯一数值估计值。- 如果能做到，就说联立方程组中的某个方程是可识别的；如果做不到，该方程就是不可识别或识別不足的。4. 一个可识别的方程可以是恰好识别的或过度识别的。在前一种情形中，可以得到的唯一值；而在后一种情形中，可以得到不止一个估计值。5. 识別问题之所以出现，是因为同样的数据集适合于不同的的模型.
+1. 识别问题的考虑应先于估计问题。
+
+2. 识别问题是问我们能否从约简系数估计值求出结构系的唯一数值估计值。
+
+3. 如果能做到，就说联立方程组中的某个方程是可识别的；如果做不到，该方程就是不可识别或识別不足的。
+
+4. 一个可识别的方程可以是恰好识别的或过度识别的。在前一种情形中，可以得到的唯一值；而在后一种情形中，可以得到不止一个估计值。
+
 :::
 
+##
+
+### Key points and conclusions (2/3)
+
+5. The identiﬁcation problem arises because the same set of data may be compatible with different sets of structural coefﬁcients, that is, different models. Thus, in the regression of price on quantity only, it is difﬁcult to tell whether one is estimating the supply function or the demand function, because price and quantity enter both equations.
+
+6. To assess the identiﬁability of a structural SEM, one may apply the technique of reduced-form SEM.
+
+7. Although the order condition is easy to apply, it provides only a necessary condition for identiﬁcation. On the other hand, the rank
+condition is both a necessary and sufﬁcient condition for identiﬁcation.
+
+::: {.notes}
+
+5. 识別问题之所以出现，是因为同样的数据集适合于不同的的模型.
+
+6. 要判断一个结构方程的可识别性，我们可以应用约简型方程的技术，把一个内生变量表达为前定变量的函数。
+
+7. 这种耗时的程序由于**阶条件**或**秩条件**的利用而得以避免。阶条件虽然易用应用，但它仅是可识别性的**必要而非充分**条件；秩条件则是可识别性的**充分必要**条件。
+
+:::
 
 ##
 
-### Key points and conclusions (2/2)
+### Key points and conclusions (2/3)
 
-- To assess the identiﬁability of a structural SEM, one may apply the technique of reduced-form SEM.
+8. In the presence of **simultaneity**, OLS is generally not applicable But if one wants to use it nonetheless, it is imperative to test for simul-taneity explicitly. The Hausman speciﬁcation test can be used for this purpose.
 
-- Although the order condition is easy to apply, it provides only a necessary condition for identiﬁcation. On the other hand, the rank
-condition is both a necessary and sufﬁcient condition for identiﬁcation.
+9. Although in practice deciding whether a variable is endogenous or exogenous is a matter of **judgment**, one can use the Hausman speciﬁcation test to determine whether a variable or group of variables is endogenous or exogenous.
 
-- In the presence of **simultaneity**, OLS is generally not applicable But if one wants to use it nonetheless, it is imperative to test for simul-taneity explicitly. The Hausman speciﬁcation test can be used for this purpose.
-
-- Although in practice deciding whether a variable is endogenous or exogenous is a matter of **judgment**, one can use the Hausman speciﬁcation test to determine whether a variable or group of variables is endogenous or exogenous.
-
-- Although they are in the same family, the concepts of **causality** and **exogeneity** are different and one may not necessarily imply the other. In practice it is better to keep those concepts separate.
+10. Although they are in the same family, the concepts of **causality** and **exogeneity** are different and one may not necessarily imply the other. In practice it is better to keep those concepts separate.
 
 ::: {.notes}
-6. 要判断一个结构方程的可识别性，我们可以应用约简型方程的技术，把一个内生变量表达为前定变量的函数。7. 这种耗时的程序由于**阶条件**或**秩条件**的利用而得以避免。阶条件虽然易用应用，但它仅是可识别性的**必要而非充分**条件；秩条件则是可识别性的**充分必要**条件。8. 当出现联立性问题时，OLS一般而言是不适用的。但如果我们仍想用它，则必须明确地进行联立性检验，为此，可利用豪斯曼内生性检验方法。9. 虽然在实践中一个变量是内生或外生的，是凭判断而决定的，但我们可以用豪斯曼设定检验判定一个或一组变量是内生的还是外生的。10. 因果关系和外生性虽属于同一类问题，但它们的概念却是不同的。其中一个概念并不蕴含另一个概念。在实践中，仍然是把这两个概念区分开来为好。
+
+8. 当出现联立性问题时，OLS一般而言是不适用的。但如果我们仍想用它，则必须明确地进行联立性检验，为此，可利用豪斯曼内生性检验方法。
+
+9. 虽然在实践中一个变量是内生或外生的，是凭判断而决定的，但我们可以用豪斯曼设定检验判定一个或一组变量是内生的还是外生的。
+
+10. 因果关系和外生性虽属于同一类问题，但它们的概念却是不同的。其中一个概念并不蕴含另一个概念。在实践中，仍然是把这两个概念区分开来为好。
 :::
 
 
 ## End Of This Chapter{.center-h background-color="aliceblue"  background-image="pic/thank-you-gif-funny-little-yellow.gif" background-size="600px"  background-position="center" background-opacity="0.8" style="font-size:75px !important"}
-
-
