@@ -1,0 +1,2258 @@
+---
+pagetitle: "Advanced Econometrics III"
+unitcode: "(Econometrics III)"
+unitname: "Advanced Econometrics III"
+author: "Hu Huaping (胡华平)"
+email: "huhuaping01 at hotmail.com"
+university: "NWAFU (西北农林科技大学)"
+department: "School of Economics and Management (经济管理学院)"
+subtitle: "Chapter 20. How to Estimate SEM ?"
+date: "2024-09-25"
+#keep-md: true
+format: 
+  revealjs: 
+    footer: "Chapter 20. How to Estimate SEM ?"
+---
+
+## 环境准备{visibility="hidden"}
+
+```{r}
+#| include: false
+library(tidyverse)
+library(scales)
+current_file <- knitr::current_input()
+basename <- gsub(".[Rq]md$", "", current_file)
+
+knitr::opts_chunk$set(
+  fig.path = sprintf("images/%s/", basename),
+  fig.width = 10,
+  fig.height = 6,
+  fig.align = "center",
+  fig.retina = 2,
+  cache = TRUE,
+  cache.path = sprintf("cache/%s/", basename)
+)
+
+
+# global options for DT
+options(
+  # 控制include_graphics，使其直接使用相对路径
+  knitr.graphics.rel_path = FALSE,
+  DT.options = list(
+    dom = "tip",
+    pageLength = 6,
+    rownames = FALSE, # 不显示行标签
+    columnDefs = list(
+      list(className = "dt-center", targets = "_all"), # align center
+      list(visible = FALSE, targets = 0) # hide index column
+    )
+  )
+)
+# use my custom function
+source(here::here("lecture/Rscript/create-DTbutton.R"))
+
+# global options for ggplot2
+theme_set(theme_bw(base_size = 18))
+```
+
+```{r}
+#| include: false
+library("here")
+library(scales)
+source(here("R/load-pkg.R"))
+source(here("lecture/Rscript/set-global.R"))
+knitr::opts_knit$set(root.dir = here::here("lecture/"))
+```
+
+# 标题页 {visibility="hidden"}
+
+## <br>`r rmarkdown::metadata$unitname`{background-image="pic/slide-front-page.jpg" #etc5523-title .center-h style="font-size:65px" visibility="uncounted"}
+
+### **`r rmarkdown::metadata$unitcode`**{.monash-black .center-h style="font-family:'sans-serif'; font-size:65px !important"}
+
+
+### `r rmarkdown::metadata$subtitle`{.monash-blue .center-h style="font-size:70px !important"}
+
+<br>
+
+#### `r rmarkdown::metadata$author` {.center-h .monash-black}
+
+#### `r rmarkdown::metadata$email` {.center-h .monash-black style="font-family:'sans-serif';"}
+
+#### `r rmarkdown::metadata$department` {.center-h .monash-black}
+
+
+#### `r rmarkdown::metadata$date` {.center-h .monash-black}
+
+```{r}
+#| results: hide
+source(here::here("lecture/code/code-chapter-20-estimation.R"))
+```
+
+
+
+# Part 2：Simultaneous Equation Models (SEM){.monash-bg-blue .mcenter visibility="uncounted"}
+
+::: {.font-110}
+
+Chapter 17. Endogeneity and Instrumental Variables
+
+Chapter 18. Why Should We Concern SEM ?
+
+Chapter 19. What is the Identification Problem ?
+
+[Chapter 20. How to Estimate SEM ?]{.red}
+
+:::
+
+
+
+# Chapter 20. How to Estimate SEM ?{#chpt20 .monash-bg-blue .mcenter}
+
+[20.1 Approaches to Estimation](#approaches)
+
+[20.2 General least squares (OLS)](#LS)
+
+[20.3 Indirect least squares (ILS)](#ILS)
+
+[20.4 Two-stage least square method (2SLS)](#TSLS)
+
+[20.5 Truffle case](#truffle)
+
+[20.6 Cod case](#cod)
+
+
+
+
+# 20.1 Approaches to Estimation{#approaches .monash-bg-blue .mcenter}
+
+
+## Estimation Approaches
+
+<!-- insert image here -->
+
+##
+
+### Approaches options
+
+```{r}
+#| label: tools
+#| warning: false
+#| message: false
+#install.packages("systemfit")
+#install.packages("broom") #for `glance(`) and `tidy()`
+#install.packages("PoEdata") #for PoE4 dataset
+require("systemfit")
+require("broom") #for `glance(`) and `tidy()`
+#library(PoEdata) #for PoE4 dataset
+#require(devtools)
+#install_git("https://github.com/ccolonescu/PoEdata")
+```
+
+In order to estimate the structural SEM, two approaches can be adopted:
+
+- **Single equation method**, also known as **limited information methods**.
+
+> estimate each equation in SEM one by one, considering only the constraints in that equation
+
+- **System method** , also known as **full information method**
+
+>estimate all the equations in the model simultaneously, taking into account all the constraints in the SEM
+
+::: {.notes}
+为了估计结构方程，可采取两种方法：- 单方程法，又称有限息法(limited information methods) 。- 我们逐个估计(联立)方程组中的每一个方程，仅考虑对该方程的约束(如对某些变量的排除)而不考虑对其他方程的约束- 方程组法(或系统法)，又称完全信息法 (full information methods)- 我们同时估计模型中的全部方程，适当考虑了因某些变量被排除而对方程组造成的全部约束
+:::
+
+##
+
+### Instrumental variables
+
+Instrumental variables are often used to estimate simultaneous equation problems, mainly including three IV techniques for **System method** :
+
+- **Three-stage least squares** (**3SLS**)：Applicable in a few cases
+
+- **Generalized  moment method**( **GMM**)：It is commonly used for dynamic model problems
+
+- **Full information maximum likelihood**( **FIML**)：It has much theoretical value and it brings no advantage over 3SLS, but is much more complicated to compute.
+
+::: {.notes}
+工具变量往往被用于估计联立方程问题，主要又包括三类方法：
+:::
+
+
+##
+
+### single or simultaneously method
+
+Consider the following SEM:
+
+$$
+\begin{cases}
+\begin{alignedat}{9}
+&  Y_{t1} &-\gamma_{21}Y_{t2}&-\gamma_{31}Y_{t3} & &-\beta_{01}&-\beta_{11}X_{t1} &  & &= &u_{t1} \\
+& & Y_{t2} &-\gamma_{32} Y_{3t} & & -\beta_{02}&-\beta_{12}X_{1t} &- \beta_{22}X_{2t} & &= &u_{t2}\\
+&-\gamma_{13}Y_{t1} &  &+ Y_{t3} & & -\beta_{03}&-\beta_{13}X_{1t} &-\beta_{23}X_{2t} & &= &u_{t3} \\
+&-\gamma_{14}Y_{t1}&-\gamma_{24}Y_{t2} &  &+Y_{t4}   &-\beta_{04} & & &-\beta_{34}X_{t3} &= &u_{t4}
+\end{alignedat}
+\end{cases}
+$$
+
+- If you focus only on estimating the third equation, we can use the **single equation method** , which the variables  $Y_2, Y_4, X_3$  were excluded from the estimation.
+
+- If you want to estimate all four equations **simultaneously**, you should use the **system method**, and it will take into account all the constraints on multiple equations in the system.
+
+::: {.notes}
+- 如果仅仅关注于估计第三个方程，采用**单方程法**将只考虑此方程，也即仅注意变量  $Y_2,Y_4,X_3$ 被排除在此方程之外。- 如果希望**同时**估计全部四个方程，采用**方程组法**将会对方程组中多个方程的全部约束都考虑进来。
+:::
+
+##
+
+### simultaneously method
+
+In order to use all information  of SEM, it is most desirable to apply **system method**, such as **full information maximum likelihood** (FIML).
+
+In practice, however, **systems method** are not commonly used for the following main reasons:
+
+1. The computational burden is too great.
+
+2. Systematic methods such as FIML often bring highly nonlinearity on parameters  , which are difficult to determine and caculate.
+
+3. If there is one or more **specification error** in SEM (eg. an incorrect functional form or missing variables), the error will be passed to the remaining equations. As a result, the system method becomes very sensitive to the specification errors.
+
+::: {.notes}
+为了保持联立方程模型的品质，最理想的应是使用**方程组法**，比如**完全信息极大似然法** (full information maximum likelihood, FIML) 。然而，实际上**方程组法**并不常用，主要原因包括：1. 计算上的负担太大。2. 像FIML这样的系统方法常常导致参数的高度非线性解，以致难以确定。3. 如果方程组中的一个或多个方程有**设定误差**(比如说，一个错误的函数形式或漏掉有关变量)，则误差将传递至其余方程。其结果是，方程组法变得对设定误差非常敏感。
+:::
+
+
+# 20.2 Least squares  approach (LS){#LS .monash-bg-blue .mcenter}
+
+
+## OLS Approarch for recursive model
+
+<!-- insert image here -->
+
+
+##
+
+### Recursive model
+
+**Recursive model** : also known as the **triangle model**  or **causality  model**.
+
+>The simultaneous disturbance terms in different equations are unrelated, and each equation exhibits a one-way causal dependence.
+
+Consider the following structural SEM:
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} =  & & & & +\beta_{01}& + \beta_{11}X_{t1} & + \beta_{21}X_{t2}  & & +u_{t1} \\
+Y_{t2} =  & + \gamma_{12}Y_{1t} & & &+\beta_{02} & + \beta_{12}X_{t1} & + \beta_{22}X_{t2} & & + u_{t2}\\
+Y_{t3} =  & + \gamma_{13}Y_{t1}& + \gamma_{23}Y_{t2}& &+\beta_{03} & + \beta_{13}X_{t1} & + \beta_{23}X_{t2} & & + u_{t3} \\
+\end{alignat}
+\end{cases}
+$$
+
+::: {.notes}
+递归模型(recursive model)：也称为三角形模型(triangular model)或因果性(causalmodel)模型。不同方程中的同期干扰项是不相关的，每个方程都展现一种单向的因果依赖关系。考虑下面的联立方程模型：
+:::
+
+##
+
+### Zero contemporaneous correlation
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} =  & & & & +\beta_{01}& + \beta_{11}X_{t1} & + \beta_{21}X_{t2}  & & +u_{t1} \\
+Y_{t2} =  & + \gamma_{12}Y_{1t} & & &+\beta_{02} & + \beta_{12}X_{t1} & + \beta_{22}X_{t2} & & + u_{t2}\\
+Y_{t3} =  & + \gamma_{13}Y_{t1}& + \gamma_{23}Y_{t2}& &+\beta_{03} & + \beta_{13}X_{t1} & + \beta_{23}X_{t2} & & + u_{t3} \\
+\end{alignat}
+\end{cases}
+$$
+
+It is easy to find that the contemporaneous disturbance terms in different equations are irrelevant (namely **zero contemporaneous correlation**) :
+
+
+$$
+cov(u_{t1},u_{t2})=cov(u_{t1},u_{t3})=cov(u_{t2},u_{t3})=0
+$$
+
+- Since the first equation' right-hand side only contains exogenous variables, and are not correlated with disturbance terms, so this equation satisfies the CLRM and OLS can be applied directly to  it.
+
+
+-  because  $cov(u_{t1},u_{t2})=0$ , and  $cov(Y_{t1},u_{t2})=0$ . Thus OLS can be applied directly to  it.
+
+- because  $cov(u_{t1},u_{t3})=0$ , and  $cov(Y_{t1},u_{t3})=0$ . Also  $cov(u_{t1},u_{t3})=0$ , and  $cov(Y_{t2},u_{t3})=0$ . Thus OLS can be applied directly to  it.
+
+::: {.notes}
+zero contemporaneous correlation我们很容易发现,不同方程中的同期干扰项是不相关的(或者说是零同期相关)：对于第一个方程。因为它的右边仅含有外生变量，假定外生变量与干扰项均不相关，所以此方程满足经典OLS解释变量与干扰项不相关的基本假定。因而OLS可直接应用于此方程的估计。
+:::
+
+
+##
+
+### visualize graphically
+
+We can also visualize it graphically:
+
+```{r}
+#| label: recursive-graph
+#| fig-cap: SEM in recursive form
+include_graphics("pic/chpt20-recursive-graph.png", dpi = 200)
+```
+
+
+##
+
+### wage-price model
+
+Let's look at the **wage-price model**:
+
+
+$$
+\begin{cases}
+\begin{align}
+P_t &= \beta_0+\beta_1UN_t+\beta_2R_t+\beta_3M_t+u_{t2}  &&\text{(price equation)}\\
+W_t &= \alpha_0+\alpha_1UN_t+\alpha_2P_t+u_{t1}   &&\text{(wage equation)}
+\end{align}
+\end{cases}
+$$
+
+Where:
+
+- W, the money wage rate;
+- UN, unemployment, %;
+- P, price rate;
+- R, the cost of capital rate;
+- M, import price change rate of raw materials.
+
+::: {.notes}
+- 价格方程假定当前价格变化率是资本和原料价格变化率、劳动生产率变化率以及前期工资变化率等的函数。- 工资方程则表示当前工资变化率取决于当前价格变化率和失业率。- 货币工资变化率W- 失业率UN，%- 价格变化率P- 资本成本变化率R- 进口原材料的价格变化率M
+:::
+
+
+# 20.3 Indirect least squares (ILS){#ILS .monash-bg-blue .mcenter}
+
+## ILS approach with Just Identification model
+
+<!-- insert image here -->
+
+##
+
+### indirect least squares estimates
+
+For a just or exactly identiﬁed structural equation, the method of obtaining the estimates of the structural coefﬁcients from the OLS estimates of the reduced-form coefﬁcients is known as the method of **Indirect Least Squares** (ILS), and the estimates thus obtained are known as the **indirect least squares estimates**.
+
+**ILS** involves the following three steps:
+
+- Step 1. We ﬁrst obtain the reduced-form SEM.
+
+- Step 2. We apply **OLS** to the reduced-form SEM individually.
+
+- Step 3. We obtain estimates of the original structural coefﬁcients from the estimated reduced-form coefﬁcients obtained in Step 2.
+> If an equation is **exactly identiﬁed**, there is one-to-one mapping between the structural and reduced coefficients.
+
+::: {.notes}
+> This operation is permissible since the explanatory variables in these equations are predetermined and hence uncorrelated with the stochastic disturbances. The estimates thus obtained are consistent.对一个恰好识别的结构方程，从**约简型系数**的OLS估计值获得**结构系数**估计值的方法叫做间接最小二乘法 (method of indirect least squares, ILS)，而如此得到的估计值称**间接最小二乘估计值**。间接最小二乘法(ILS方法)包含以下三个步骤:- step 1：先求约简型方程。从结构方程组解出约简型方程，使得在每个方程的因变量都成为唯一的内生变量，并且仅仅是前定变量(外生或滞后内生)和随机误差项的函数。- step 2：对约简型方程逐个应用OLS。因为这些方程中的解释变量是前定的并因而与随机干扰项不相关，所以这种做法是合适的，由此得到的估计值是一致的。- step 3: 从得到的约简型系数的估计值求原始结构系数的估计值 。若方程恰可识别，则结构与约简型系数之间有一一对应关系，就是说可以从后者导出前者的唯一估计值。
+:::
+
+
+## Case demo: US crop supply and demand
+
+<!-- insert image here -->
+
+##
+
+### variables
+
+The variables in the US crop supply and demand case are illustrated below
+
+```{r}
+#| label: agr-var
+agr_var<-tribble(
+~`vars`, ~`label`, ~`note`,
+"Q","Crop yield index","(1996=100)",
+"P", "Agricultural products purchasing prices index","(1990-1992=100)",
+"X", "Capital personal consumption expenditure","(In 2007 dollars)"
+)
+datatable(agr_var,
+options = list(pageLength =3, dom = 't'),
+caption = "variables in the model")
+```
+
+##
+
+### Data set
+
+The data for US crop supply and demand case show here:
+
+```{r}
+#| label: data-agr
+#truffles<-read.table("data/truffles.dat",header = F)
+us_agr<-as_tibble(read.xlsx("data/Table-20-1.xlsx"))
+n<-dim(us_agr)[1]
+datatable(us_agr,
+options = list(pageLength =7, dom = 'tip'),
+caption =str_c( "sample data (n=",
+n,")"))
+```
+
+
+##
+
+### Structural SEM
+
+So we can construct the following structural SEM:
+
+$$
+\begin{cases}
+\begin{align}
+Q &= \alpha_0+\alpha_1P_t+\alpha_2X_t+u_{t1}   &(\alpha_1<0,\alpha_2>0)  &&\text{(demand function)}\\
+Q &= \beta_0+\beta_1P_t+u_{t2}  &(\beta_1>0) &&\text{(supply function)}
+\end{align}
+\end{cases}
+$$
+
+>where：
+- $Q=$Crop yield index;
+- $P=$Agricultural products purchasing prices index;
+- $X=$Capital personal consumption expenditure.
+
+
+##
+
+### Reduced SEM
+
+Thus we can obtain the reduced SEM:
+
+$$
+\begin{cases}
+\begin{align}
+P_t &= \pi_{11}+ \pi_{21}X_t+w_t &&\text{(eq1)}\\
+Q_t &= \pi_{12}+\pi_{22}X_t+v_t &&\text{(eq2)} \\
+\end{align}
+\end{cases}
+$$
+
+and the relationship between structural and reduced coefficients is:
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{align}
+\pi_{11} &= \frac{\beta_0-\alpha_0}{\alpha_1-\beta_1} \\
+\pi_{21} &= - \frac{\alpha_2}{\alpha_1-\beta_1}\\
+w_t &= \frac{u_{2t}-u_{t1}}{\alpha_1-\beta_1}  \\
+\end{align}
+\end{cases}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{align}
+\pi_{12} &= \frac{\alpha_1\beta_0-\alpha_0\beta_1}{\alpha_1-\beta_1}  \\
+\pi_{22} &= - \frac{\alpha_2\beta_1}{\alpha_1-\beta_1}  \\
+v_t &= \frac{\alpha_1u_{t2}-\beta_1u_{1t}}{\alpha_1-\beta_1}
+\end{align}
+\end{cases}
+$$
+
+:::
+
+::::
+
+
+##
+
+### Reduced coefficients
+
+For the above reduced SEM, we can use OLS method to obtain the estimated coefficients:
+
+$$
+\begin{cases}
+\begin{align}
+\widehat{\pi}_{21} &=  \frac{\sum{p_t x_t}}{\sum{x^2_t}} &&\text{(slope of the reduced price  eq)} \\
+\widehat{\pi}_{11} &= \overline{P} - \widehat{\pi}_1 \cdot \overline{X} &&\text{(intercept of the  reduced price eq)} \\
+\widehat{\pi}_{22} &= \frac{\sum{q_t x_t}}{\sum{x^2_t}} &&\text{(slope of the reduced quantaty  eq)} \\
+\widehat{\pi}_{12} &= \overline{Q} - \widehat{\pi}_3 \cdot \overline{X} &&\text{(intercept of the reduced quantaty  eq)}
+\end{align}
+\end{cases}
+$$
+
+
+##
+
+### Structural coefficients
+
+Because we already know that **the supply equation** in the structural SEM is **Just identification** (please review the order and rank conditions) , hence the structural coefficients of the supply equation can be  calculated uniquely with the reduced coefficients.
+
+$$
+\begin{cases}
+\begin{align}
+\beta_0 &= \pi_{12}+ \beta_1 \pi_{11} \\
+\beta_1 &= \frac{\pi_{22}}{\pi_{21}} \\
+\end{align}
+\end{cases}
+$$
+
+which is:
+
+$$
+\begin{cases}
+\begin{align}
+\hat{\beta_0} &= \widehat{\pi}_{12}+ \hat{\beta_1} \widehat{\pi}_{11} \\
+\hat{\beta_1} &= \frac{\widehat{\pi}_{22}}{\widehat{\pi}_{21}} \\
+\end{align}
+\end{cases}
+$$
+
+::: {.notes}
+因为我们已经知道（请复习阶条件和秩条件）**供给方程**是**恰好可识别的**，因此供给方程的结构系数是可以由简约系数唯一地估计得到：
+:::
+
+
+##
+
+### OLS estimates for reduced equation
+
+Next, we carry out OLS regression for the reduced equation.
+
+$$
+\begin{cases}
+\begin{align}
+P_t &= \pi_{11}+ \pi_{21}X_t+w_t &&\text{(reduced eq1)}\\
+Q_t &= \pi_{12}+\pi_{22}X_t+v_t &&\text{(reduced eq2)} \\
+\end{align}
+\end{cases}
+$$
+
+```{r}
+#| label: models-agr
+#| results: asis
+#| eval: true
+models_agr<-list(mod.Q=Q~X, mod.P=P~X,mod.Q.OLS=Q~P)
+Q.red <- lm(models_agr$mod.Q, data=us_agr)
+P.red <- lm(models_agr$mod.P, data=us_agr)
+```
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+The regression result of the reduced price  equation is:
+
+```{r}
+#| label: P-agr
+#| results: asis
+fun_report_eq(models_agr$mod.P,lm.dt = us_agr)
+```
+
+:::
+
+
+::: {.column width="40%"}
+
+
+The regression result of the reduced quantity  equation is:
+
+```{r}
+#| label: Q-agr
+#| results: asis
+fun_report_eq(models_agr$mod.Q,lm.dt = us_agr)
+```
+:::
+
+::::
+
+
+##
+
+### Rscript: calculate values
+
+```{r}
+#| label: cal-value
+coef_pi1<-fun_lm_coef(models_agr$mod.P,lm.dt = us_agr)$coef[[2]]
+coef_pi0<-fun_lm_coef(models_agr$mod.P,lm.dt = us_agr)$coef[[1]]
+coef_pi3<-fun_lm_coef(models_agr$mod.Q,lm.dt = us_agr)$coef[[2]]
+coef_pi2<-fun_lm_coef(models_agr$mod.Q,lm.dt = us_agr)$coef[[1]]
+avr_P<- us_agr %>% summarise(avr_P=mean(P)) %>% unlist()
+avr_Q<- us_agr %>% summarise(avr_Q=mean(Q)) %>% unlist()
+avr_X<- us_agr %>% summarise(avr_X=mean(X)) %>% unlist()
+```
+
+
+##
+
+### Obtain structural coefficients
+
+we can obtain the **reduced coefficients**:
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+- $\widehat{\pi}_{21}=$
+`r formatC(coef_pi1,digits=5,format="f")`
+
+- $\widehat{\pi}_{11}=$
+`r formatC(coef_pi0,digits=5,format="f")`
+
+:::
+
+
+::: {.column width="40%"}
+
+- $\widehat{\pi}_{22}=$
+`r formatC(coef_pi3,digits=5,format="f")`
+
+- $\widehat{\pi}_{12}=$
+`r formatC(coef_pi2,digits=5,format="f")`
+:::
+
+::::
+
+Because **supply equation** in structural SEM is **Just identification**, so the structural coefficients of **supply equation** can be calculated by using the estimated reduced coefficients.
+
+
+  $\hat{\beta_1} = \frac{\widehat{\pi}_{22}}{\widehat{\pi}_{12}}$  =
+`r formatC(coef_pi3,digits=5,format="f")` /
+`r formatC(coef_pi1,digits=5,format="f")` =
+`r formatC(coef_pi3/coef_pi1,digits=5,format="f")`
+  $\hat{\beta_0} = \widehat{\pi}_{12}+ \hat{\beta_1} \widehat{\pi}_{11}$  =
+`r formatC(coef_pi2,digits=5,format="f")` -
+`r formatC(coef_pi3/coef_pi1,digits=5,format="f")` $\cdot$
+`r formatC(coef_pi0,digits=5,format="f")` =
+`r formatC(coef_pi2-coef_pi0*coef_pi3/coef_pi1,digits=5,format="f")`
+
+
+Therefore, the ILS estimators of **supply equation** parameters are:
+
+  $\hat{Q_t}=$ 
+`r formatC(coef_pi2-coef_pi0*coef_pi3/coef_pi1,digits=5,format="f")` +
+`r formatC(coef_pi3/coef_pi1,digits=5,format="f")`  $P_t$ 
+
+
+
+##
+
+### Result comparison
+
+As comparison, we will show a **"biased"** estimation method, which  use  OLS directly for both quantity and price equation.
+
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+- Estimation of the **supply equation** based on the ILS approach:
+  $\hat{Q_t}=$ 
+`r formatC(coef_pi2-coef_pi0*coef_pi3/coef_pi1,digits=5,format="f")` +
+`r formatC(coef_pi3/coef_pi1,digits=5,format="f")`  $P_t$ 
+
+:::
+
+::: {.column width="10"}
+
+:::
+
+::: {.column width="40%"}
+
+- Estimation of the **supply equation** based on the **biased** OLS approach:
+
+```{r}
+#| label: bias-OLS
+#| results: asis
+fun_report_eq(lm.mod = models_agr$mod.Q.OLS,
+lm.dt = us_agr)
+```
+
+:::
+
+::::
+
+
+# 20.4 Two-stage least square method (2SLS){#TSLS .monash-bg-blue .mcenter}
+
+## 2SLS with Overidentification model
+
+<!-- insert image here -->
+
+##
+
+### Structural SEM
+
+Consider the following structural SEM:
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} = & &+ \gamma_{21}Y_{2t} & & +\beta_{01}  & + \beta_{11}X_{t1} & + \beta_{21}X_{t2}  &  +u_{t1} & \text{   (income eq)} \\
+Y_{t2} =  & + \gamma_{12}Y_{t1} & &  &    +\beta_{02} & & & + u_{t2} & \text{   (monetary supply eq)}
+\end{alignat}
+\end{cases}
+$$
+
+where:  $Y_1=$ Income;  $Y_2=$ Monetary stock;  $X_1=$ Government expenditure;  $X_2=$ Government spending on goods and services
+
+Using **order condition rules** and **rank condition rules** (Review), we can know:
+
+- The **Income equation** is **underidentification**
+- if you don't change the model specification, then god can't help you!
+
+- The **monetary supply equation** is **overidentification**
+it's easy to prove that if we apply the ILS approach we will obtain two estimates on  $\gamma_{21}$ . Hence it is impossible to determin the exact value.
+
+::: {.notes}
+运用**阶条件识别规则**和**秩条件识别规则**（复习），可以知道：- **收入方程**是**不可识别的**- 如果不改变模型设定，那“神也帮不了你”！- **货币供给方程**是**过度识别的**- 容易证明，如果采用ILS估计方法，$\gamma_{21}$有两个ILS估计值。所以也没办法估计得到！
+:::
+
+
+##
+
+### Instrument variables
+
+Looking for **Instrument variables approach** to crack the **overidentification** problems:
+
+- In practice, people might want to use OLS to estimate the monetary supply equation, but it will get the biased estimators, because there exist correlationship between  $Y_1$  and  $u_2$ .
+
+> **Instrument Variable**: An agent variable which is highly correlated with  $Y_1$  but have no relationship with  $u_2$ .
+
+
+- if we can find an **instrument variable**, then we can apply  OLS approach directly to estimate the structural monetary supply eqution.
+
+But how does one obtain such an instrumental variable?
+
+One answer is provided by the **two-stageleast squares** (2SLS), developed independently by Henri Theil and Robert Basmann.
+
+::: {.notes}
+由瑟尔和巴斯曼 (Robert Basmann)各自独立发现的两阶段最小二乘 (two-stage least squares, 2SLS)成为寻找合适**工具变量**的重要方途径和方法。
+:::
+
+
+##
+
+### Stage 1 of 2SLS
+
+**2SLS method** involves two successive applications of OLS. The process is as follows:
+
+
+**Stage 1**. To get rid of the likely correlation between  $Y_1$  and  $u_2$ ,apply regresssion  $Y_1$  on all the predetermined variables in the whole system, not just that equation.
+
+$$
+\begin{align}
+Y_{t1} &= \widehat{\pi}_{01} + \widehat{\pi}_{11} X_{t1} +  \widehat{\pi}_{21} X_{t2} + \hat{v}_{t1} \\
+&= \hat{Y_{t1} } + \hat{v}_{t1} \\
+\hat{Y_{t1} }&= \widehat{\pi}_{01} + \widehat{\pi}_{11} X_{t1} +  \widehat{\pi}_{21} X_{t2}
+\end{align}
+$$
+
+Indicates that the random  $Y_1$  is composed of two parts:
+
+- a linear combination of the nonstochastic  $X$
+- random component  $\hat{u}_t$ 
+
+>according to OLS theory,  $\hat {Y}_{t1}$  is not related to  $\hat{v}_{t1}$  (Why?).
+
+
+
+::: {.notes}
+**stage 1: **为摆脱  $Y_1$  和  $u_2$  之间可能的相关性，先求  $Y_1$ 对整个方程组(不仅仅是所考虑的方程中)全部**前定变量**的回归。也即：表明随机的  $Y_1$ 是由两部分构成：- 随机X的一个线性组合而成的  $\hat{Y}_{t1}$  - 随机成分  $\hat{u}_t$  - 按照OLS理论，  $\hat{Y}_{t1}$  与  $\hat{v}_{t1}$ 是不相关的（Why？提问）。
+:::
+
+
+##
+
+### Stage 2 of 2SLS
+
+**stage 2**. Now retransform the **overidentification** supply equation as follow:
+
+$$
+\begin{align}
+Y_{t2} & = \beta_{02}  + \gamma_{12} Y_{t1} + u_{t2}  \\
+& = \beta_{02}  + \gamma_{12} (\hat{Y}_{t1}+\hat{v}_{t1}) + u_{t2} \\
+& = \beta_{02}  + \gamma_{12} \hat{Y}_{t1}+(\gamma_{12} \hat{v}_{t1} + u_{t2} ) \\
+& = \beta_{02}  + \gamma_{12} \hat{Y}_{t1}+ u_{t2}^{\ast}
+\end{align}
+$$
+
+We can prove that:
+
+- the variable  $Y_{t1}$  may be relative with the disturbance term  $u_{t2}$ , which will invalid the OLS approach.
+
+- Meanwhile,  $\hat{Y_{1t}}$ is uncorrelated with  $u_{t2}^{\ast}$  asymptotically, that is, in the large sample (or more accurately, as the sample size increases indeﬁnitely).
+
+> As a result, OLS can be applied to monetary Eq, which will give consistent estimates of the parameters of the monetary supply function.
+
+
+##
+
+### 2SLS Features (1/4)
+
+Note the following features of 2SLS:
+
+- It can be applied to an individual equation in the system without directly taking into account any other equation(s) in the system. Hence, for solving econometric models involving a large number of equations, 2SLS offers an economical method.
+
+- Unlike ILS, which provides multiple estimates of parameters in the overidentiﬁed equations, 2SLS provides only one estimate per parameter.
+
+- It is easy to apply because all one needs to know is the total number of exogenous or pre-determined variables in the system without knowing any other variables in the system.
+
+- Although specially designed to handle overidentiﬁed equations, the method can also be applied to exactly identiﬁed equations. But then ILS and 2SLS will give identical estimates. (Why?)
+
+
+::: {.notes}
+两阶段最小二乘法(2SLS方法)的特点：- 它可以应用于方程组中的某个方程而无需考虑方程组中的其他方程。因此，在求解涉及大量方程的计量经济模型时，2SLS提供了一个经济适用的方法。由于这一原因，此法在实际中被广泛应用。- 相对于ILS为过度识别的方程提供参数的多个估计值，而2SLS对每个参数只提供一个估计值。- 它只需知道方程组中一共有多少个外生或前定变量，而无需知道方程组中的任何其他变量，故易于应用。
+:::
+
+
+##
+
+### 2SLS Features (2/4)
+
+Note the following features of 2SLS (continue):
+
+- If the  $R^2$  values in the reduced-form regressions (that is, Stage 1 regressions) are very high, say, in excess of 0.8, the classical OLS estimates and 2SLS estimates will be very close.
+
+> But this result should not be surprising because if the  $R^2$  value in the first stage is very high, it means that the estimated values of the endogenous variables are very close to their actual values.
+
+> And hence the latter are less likely to be correlated with the stochastic disturbances in the original structural SEM. (Why?)
+
+
+::: {.notes}
+.large[两阶段最小二乘法(2SLS方法)的特点(续)：- 此法虽然专为过度识别的方程而设计，但同样适用于恰好识别的方程。但这时ILS和2SLS将给出相同的估计。(为什么?)- 如果约简型回归（即阶段1的回归）的F值很高，比如说高于0.8。则经典OLS估计和 2SLS估计将相差无几。- 在ILS方法的回归报告中，我们没有给出所估系数的**标准误**，但我们能对 2SLS估计值给出这些**标准误**。]
+:::
+
+
+##
+
+### 2SLS Features (3/4)
+
+Note the following features of 2SLS (continue):
+
+- Notice that in reporting the ILS regression we did not state the **standard errors** of the estimated coefﬁcients . But we can do this for the 2SLS estimates because the structural coefﬁcients are directly estimated from the second-stage (OLS) regressions.
+> The estimated standard errors in the second-stage regressions need to be modiﬁed because the error term  $u^{\ast}_t$  is, in fact, equal to  $u_{2t}+β_{21}\hat{u}_t$ .
+
+> Hence, the variance of  $u^{\ast}_t$  is not exactly equal to the variance of the original  $u_{2t}$ .
+
+
+##
+
+### 2SLS Features (4/4)
+
+Note the following features of 2SLS (continue):
+
+- Remarks from `Henri Theil`:
+
+>
+- The statistical justification of the 2SLS is of the large-sample type.
+
+>
+- When the equation system contains lagged endogenous variables, the consistency and large-sample normality of the 2SLS coefﬁcient estimators require an additional condition.
+
+>
+- Take cautions when lagged endogenous variables are not really predetermined.
+
+
+##
+
+### Standard error correction: why?
+
+In the regression report of ILS method, we do not give the **standard error** of the estimated coefficient, but we can give these **standard error** for the estimator of 2SLS.
+
+- Remind  $u^{\ast}_{t2}=u_{t2}+\gamma_{12}\hat{v}_{t1}$ 
+
+- It will imply  $u^{\ast}_{t2} \neq u_{t2}$ 
+, and then we need to calculate the "correct" standard error for the purpose of inference.
+
+> For the specific method of error correction, please refer to appendix 20a.2 of the textbook (Damodar Gujarati).
+
+- In the following cases illurtration, we will show the 2SLS estimates **without error correction** and the 2SLS estimates **with error correction** respectively.
+
+
+::: {.notes}
+在ILS方法的回归报告中，我们没有给出所估系数的**标准误**，但我们能对 2SLS估计值给出这些**标准误**。- 需要注意的是：  $u^{\ast}_{t2}=u_{t2}+\gamma_{12}\hat{v}_{t1}$ - 这意味着  $u^{\ast}_{t2} \neq u_{t2}$ ，因此需要进行**误差校正**- 误差矫正的具体办法，可以参考教材附录20A.2- 下面的案例展示中，我们将会分别展示**没有误差校正**的2SLS估计和**经过误差矫正**的2SLS估计。
+:::
+
+
+##
+
+### Standard error correction: focus stage 2
+
+The process for error correction show as below.
+
+- **stage 2:** The regression form of the supply equation is
+
+$$
+\begin{align}
+Y_{t2} & = \beta_{02}  + \gamma_{12} Y_{1t} + u_{2t}  \\
+& = \beta_{02}  + \gamma_{12} (\hat{Y_{1t}}+\hat{v}_{t1}) + u_{2t} \\
+& = \beta_{02}  + \gamma_{12} \hat{Y_{1t}}+(\gamma_{12} \hat{v}_{t1} + u_{t2} ) \\
+& = \beta_{02}  + \gamma_{12} \hat{Y_{1t}}+ u_{t2}^{\ast}
+\end{align}
+$$
+
+> Where:
+
+> $u^{\ast}_{t2}=u_{t2}+\gamma_{12}\hat{v}_{t1}$
+
+
+##
+
+### Standard error correction: focus stage 2
+
+- **stage 2:** the estimation for the parameter $\gamma_{12}$ is $\hat{\gamma}_{12}$, and its standard error  $s.e_{\hat{\gamma}_{12}}$ can be calculated as below.
+
+$$
+\begin{align}
+Y_{t2} & = \beta_{02}  + \gamma_{12} \hat{Y_{1t}}+ u_{t2}^{\ast}
+\end{align}
+$$
+
+$$
+\begin{align}
+s.e_{\hat{\gamma}_{21}} & = \frac{\hat{\sigma}^2_{u^{\ast}_{t2}}}{\sum{\hat{y}^2_{t1}}}\\
+\hat{\sigma}^2_{u^{\ast}_{t2}} & =\frac{ \sum{\left ( u^{\ast}_{t2} \right )^2} }{n-2} = \frac{ \sum{\left (Y_{t2}-\hat{\beta}_{02} -\hat{\gamma}_{12}\hat{Y}_{1t} \right )^2} }{n-2}
+\end{align}
+$$
+
+
+##
+
+### Standard error correction: results
+
+- In fact, we know  $u^{\ast}_{t2} \neq u_{t2}$  , which means  $\hat{\sigma}_{u^{\ast}_{t2}} \neq \hat{\sigma}_{u_{t2}}$ .
+
+- Thus we can obtain  $\hat{\sigma}_{u_{t2}}$ .
+
+
+$$
+\begin{align}
+\hat{u}_{t2} &= Y_{t2} - \hat{\beta}_{02} - \hat{\gamma}_{12}Y_{t1} \\
+\hat{\sigma}^2_{u_{2t}} & =\frac{ \sum{\left ( u_{2t} \right )^2} }{n-2} = \frac{ \sum{\left (Y_{t2}-\hat{\beta}_{02} -\hat{\gamma}_{12}Y_{1t} \right )^2} }{n-2}
+\end{align}
+$$
+
+
+##
+
+### Standard error correction: for coefficients
+
+Therefore, in order to correct the standard error of the coefficients estimated by **stage 2** regression, it is necessary to multiply the standard error of each coefficient by the following **error correction factor**.
+
+
+$$
+\begin{align}
+\eta &= \frac{ \hat{\sigma}^2_{u_{t2}} } {\hat{\sigma}^2_{u^{\ast}_{t2}} }
+\end{align}
+$$
+
+$$
+\begin{align}
+s.e^{\ast}_{\hat{\gamma}_{12}} & = s.e_{\hat{\gamma}_{12}} \cdot \eta = s.e_{\hat{\gamma}_{12}} \cdot \frac{ \hat{\sigma}^2_{u_{t2}} } {\hat{\sigma}^2_{u^{\ast}_{t2}} } \\
+s.e^{\ast}_{\hat{\beta}_{02}} & = s.e_{\hat{\beta}_{02}} \cdot \eta = s.e_{\hat{\beta}_{20}} \cdot \frac{ \hat{\sigma}^2_{u_{t2}} } {\hat{\sigma}^2_{u^{\ast}_{t2}} }
+\end{align}
+$$
+
+::: {.notes}
+- **误差矫正因子**：因此校正**stage 2** 回归所估计的系数的标准误，需要对每一个系数的标准误乘以如下的**误差矫正因子**
+:::
+
+
+## Case study and application for 2SLS approach
+
+<!-- insert image here -->
+
+##
+
+### variable description
+
+
+```{r}
+#| label: money-var
+agr_var<-tribble(
+~`vars`, ~`label`, ~`note`,
+"Y1","GDP:  gross domestic product","($1 billion in 2000)",
+"Y2", "M2:money supply","($1 billion)",
+"X1", "GDPI: Total private domestic investment ","($1 billion in 2000)",
+"X2", "FEDEXP: Federal expenditure ","($1 billion)",
+"Y1.l1","GDP_t-1: The gross domestic product of the previous period","($1 billion in 2000)",
+"Y2.l1", "M2_t-1: The money supply in the previous period","($1 billion)",
+"X3", "TB6: 6 month Treasury bond interest rate ","(%)"
+)
+datatable(agr_var,
+options = list(pageLength =7, dom = 't'),
+caption = "Variables description")
+```
+
+
+##
+
+### data set
+
+
+```{r}
+#| label: data-money
+#truffles<-read.table("data/truffles.dat",header = F)
+us_money<-as_tibble(read.xlsx("data/Table-20-2.xlsx")) %>%
+mutate(Y1.l1 = dplyr::lag(Y1),
+Y2.l1 = dplyr::lag(Y2)
+) %>%
+select(-X3)
+n<-dim(us_money)[1]
+```
+
+```{r}
+datatable(us_money,
+options = list(pageLength =8, dom = 'tip'),
+caption =str_c( "Sample data ( n=",
+n,")"))
+```
+
+
+
+##  Modeling scenario 1 and 2SLS without error correction
+
+Only the money supply equation is overidentifiable
+
+<!-- insert image here -->
+
+##
+
+### Structural SEM and identification problems
+
+Therefore, we can construct the following structural SEM:
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} = \beta_{01} & &+ \gamma_{21}Y_{t2} & & + \beta_{11}X_{t1} & + \beta_{21}X_{t2}  & & +u_{t1} && \text{   (income eq)} \\
+Y_{t2} = \beta_{02} & + \gamma_{12}Y_{1t} & &  &  &  & & + u_{t2} && \text{   (money supply eq)}
+\end{alignat}
+\end{cases}
+$$
+
+Where:
+
+- $Y_1=GDP$ (gross domestic product GDP);
+
+- $Y_2=M2$ (money supply);
+
+- $X_1=GDPI$ (Private domestic investment);
+
+- $X_2=FEDEXP$ (Federal expenditure)
+
+
+
+##
+
+### Stage 1 of 2SLS: fit the reduced equation 1
+
+```{r}
+#| label: models-money
+#| results: asis
+#| eval: true
+models_money<-list(mod.Y1=Y1~Y2+X1+X2,
+mod.Y2=Y2~Y1+X2,
+mod.instr=Y1~X1+X2,
+mod.stage2=Y2~Y1.hat,
+mod.ols=Y2~ Y1)
+```
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} &&= \beta_{01} && &&+ \gamma_{21}Y_{t2} && + \beta_{11}X_{t1} && + \beta_{21}X_{t2}  && +u_{t1} && \text{   (income eq)} \\
+Y_{t2} &&= \beta_{02} && + \gamma_{12}Y_{1t} &&  && && && + u_{t2} && \text{   (money supply eq)}
+\end{alignat}
+\end{cases}
+$$
+
+**stage 1: ** Estimate the regression of  $Y_1$  to all **predetermined variables** in the structural SEM (not only in the equation under consideration), and obtain  $\hat{Y}_{t1}; \hat {n} _ {t1}$ .
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+That is:
+
+$$
+\begin{align}
+Y_{1t} &= \widehat{\pi_0} + \widehat{\pi_1} X_{1t} +  \widehat{\pi_2} X_{2t} + \hat{v}_{t1} \\
+&= \hat{Y_{1t} } + \hat{v}_{t1}
+\end{align}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+Regression results of **stage 1**:
+
+```{r}
+#| label: stage1-reg
+money_out<-lm(models_money$mod.instr,data=us_money)
+
+us_money_new <- us_money %>%
+mutate(Y1.hat=round(money_out$fitted.values,4),
+v1.hat=round(money_out$residuals,4))
+
+```
+
+```{r}
+#| results: asis
+fun_report_eq(models_money$mod.instr,lm.dt = us_money)
+```
+
+:::
+
+::::
+
+
+::: {.notes}
+**stage 1: **先求$Y_1$对整个方程组(不仅仅是所考虑的方程中)全部**前定变量**的回归，并分别得到$\hat{Y }_{t1} ;\hat{v}_{t1}$。也即：
+:::
+
+
+##
+
+### stage 1 of 2SLS: fitted $\hat{Y}_1$ and $\hat{v}_1$
+
+At the same time, we can obtain  $\hat{Y }_{t1} ;\hat{v}_{t1}$ :
+
+```{r}
+#| label: money-new
+datatable(us_money_new,
+options = list(pageLength =6, dom = 'tip'),
+caption = "New variable Yt1.hat and vt1.hat after regression of stage 1 ")
+```
+
+##
+
+### Stage 2 of 2SLS: result of estimation for $Y_2$
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} &&= \beta_{01} && &&+ \gamma_{21}Y_{t2} && + \beta_{11}X_{t1} && + \beta_{21}X_{t2}  && +u_{t1} && \text{   (income eq)} \\
+Y_{t2} &&= \beta_{02} && + \gamma_{12}Y_{1t} &&  && && && + u_{t2} && \text{   (money supply eq)}
+\end{alignat}
+\end{cases}
+$$
+
+**stage 2:** Now transform the **overidentification** supply equation as follows:
+
+$$
+\begin{align}
+Y_{t2} & = \beta_{02}  + \gamma_{12} \hat{Y}_{1t}+ u_{t2}^{\ast}
+\end{align}
+$$
+
+>Using the new variables in **stage 1** results, and apply OLS estimation to obtain:
+
+
+```{r}
+#| label: stage2-reg
+#| results: asis
+fun_report_eq(models_money$mod.stage2,lm.dt = us_money_new)
+```
+
+
+##
+
+### Comparison (1/2): OLS approach directly
+
+As comparison, we give a **"biased"** estimation with OLS method directly to the money supply equation, and obtain following result:
+
+```{r}
+#| label: bias-OLS-money
+#| results: asis
+fun_report_eq(lm.mod = models_money$mod.ols,
+lm.dt = us_money_new)
+```
+
+::: {.notes}
+作为对比，我们给出一个**"有偏误"**的估计方法，也即直接对数量$Y2$对$Y1$采用OLS方法，将得到如下结果：
+:::
+
+##
+
+### Comparison (2/2): Raw R report
+
+The R raw report for the biased regression show as:
+
+```{r}
+#| label: tab-OLS-money
+ols_money<-lm(models_money$mod.ols, data = us_money_new)
+summary(ols_money)
+
+```
+
+
+## Modeling scenario 2
+
+both income equation and money supply equation are over-identifiable
+
+<!-- insert image here -->
+
+##
+
+### Improved structural SEM and identification problems
+
+Different from the former structural SEM, we can construct the improved one:
+
+$$
+\begin{cases}
+\begin{alignat}{6}
+Y_{t1} = \beta_{01} & &+ \gamma_{12}Y_{t2} & & + \beta_{11}X_{t1} & + \beta_{21}X_{t2} & & & +u_{t1} & \text{   (income eq)} \\
+Y_{t2} = \beta_{02} & + \gamma_{12}Y_{1t} & &  &  & &+ \beta_{12}Y_{1,t-1}  &+ \beta_{22}Y_{2,t-1} & + u_{t2} & \text{   (money supply eq)}
+\end{alignat}
+\end{cases}
+$$
+
+Next, we judge the identification problem according to **order condition rules 2** :
+
+- The number of predetermineed variables in the structural SEM is  $K=5$ .
+
+- The first equation: the number of predetermined variables is  $k=3$ , and  $(K-k)=2$ . Also the number of endogenous variables is  $m=2$ , and  $(m-1)=1$ . We will see  $(K-k)>(m-1)$ . So the first equation is **overidentification**. 
+
+-  The second equation: the number of predetermined variables is  $k=3$ , and  $(K-k)=2$ ; Also the number of endogenous variables is  $m=2$ , and  $(m-1)=1$ . We will see  $(K-k)>(m-1)$ . Thus it is also **overidentification**.
+
+
+::: {.notes}
+- Conclusion: both the income equation and the money supply equation are **overidentifiable**.
+:::
+
+##
+
+### Stage 1 of 2SLS: reduced equation 1 and 2
+
+```{r}
+#| label: models2-money
+#| results: asis
+#| eval: true
+models_money2<-list(mod2.Y1=Y1~Y2+X1+X2,
+mod2.Y2=Y2~Y1+Y1.l1+Y2.l1,
+mod2.instr.1=Y1~X1+X2+Y1.l1+Y2.l1,
+mod2.instr.2=Y2~X1+X2+Y1.l1+Y2.l1,
+mod2.stage2.1=Y1~Y2.hat+X1+X2,
+mod2.stage2.2=Y2~Y1.hat+Y1.l1+Y2.l1)
+
+money2_instr_out1<-lm(models_money2$mod2.instr.1,data=us_money)
+money2_instr_out2<-lm(models_money2$mod2.instr.2,data=us_money)
+
+us_money_new2<- us_money %>%
+mutate(Y1.hat=c(NA, money2_instr_out1$fitted.values),
+v1.hat=c(NA, money2_instr_out1$residuals),
+Y2.hat=c(NA, money2_instr_out2$fitted.values),
+v2.hat=c(NA, money2_instr_out2$residuals))
+```
+
+Now, we will use two-stage least squares (2SLS) to get **consistent  estimates** for both **income equation** and **money supply equation**.
+
+
+**Stage 1**:
+
+- Estimate the regression of  $Y_1$  to all **predetermined variables** in the structural SEM (not only in the equation under consideration), and obtain  $\hat{Y}_{t1} ;\hat{v}^{\ast}_{t1}$ .
+
+- [Meanwhile]{.red}, estimate the regression of  $Y_2$  to all **predetermined variables** in the structural SEM (not only in the equation under consideration), and obtain  $\hat{Y}_{t2} ;\hat{v}^{\ast}_{t2}$ ：
+
+$$
+\begin{align}
+Y_{t1} &= \widehat{\pi}_{01} + \widehat{\pi}_{11} X_{t1} +  \widehat{\pi}_{21} X_{t2} +  \widehat{\pi}_{31} Y_{t-1,1} +  \widehat{\pi}_{41} Y_{t-1,2}+ \hat{v}_{t1} \\
+&= \hat{Y}_{1t} +\hat{v}_{t1} \\
+Y_{t2} &= \widehat{\pi}_{02} + \widehat{\pi}_{12} X_{t1} +  \widehat{\pi}_{22} X_{t2} +  \widehat{\pi}_{32} Y_{t-1,1} +  \widehat{\pi}_{42} Y_{t-1,2}+ \hat{v}_{t2} \\
+&= \hat{Y}_{t2} +\hat{v}_{t2}
+\end{align}
+$$
+
+
+##
+
+### Stage 1 of 2SLS: fit the reduced equation 1
+
+- OLS regression results of **new income equation** at **stage 1**:
+
+```{r}
+#| label: mod2-stage1-instr1
+#| results: asis
+
+fun_report_eq(models_money2$mod2.instr.1,lm.dt = us_money)
+
+```
+
+
+##
+
+### Stage 1 of 2SLS: fit the reduced equation 2
+
+- OLS regression results of **new money supply equation** at **stage 1**:
+
+```{r}
+#| label: mod2-stage1-instr2
+#| results: asis
+
+fun_report_eq(models_money2$mod2.instr.2,lm.dt = us_money)
+
+```
+
+
+##
+
+### Stage 1 of 2SLS: fitted $\hat{Y}_i$ and $\hat{v}_i$
+
+Hence, we can obtain new variables from the two former regressions results respectively:  $\hat{Y}_{t1} ;\hat{v}_{t1}$ , and  $\hat{Y}_{t2} ;\hat{v}_{t2}$ .
+
+```{r}
+#| label: money-new2
+
+us_money_new2 %>%
+select(Y1, Y1.l1, Y1.hat, v1.hat,
+Y2, Y2.l1, Y2.hat, v2.hat) %>%
+datatable(.,
+options = list(pageLength =6, dom = 'tip'),
+caption = "New variables from regression of stage 1") %>%
+formatRound(columns = c(1:3,5:7),digits =1) %>%
+formatRound(columns = c(4,8),digits =4)
+
+```
+
+
+##
+
+### Stage 2 of 2SLS: estimate the structural equation 1 and 2
+
+**Stage 2:**
+
+- The re-transformed new income equation and the money supply equation are:
+
+$$
+\begin{align}
+Y_{t1} &= \beta_{01}  + \gamma_{21} \hat{Y}_{t2}  + \beta_{11}X_{t1}  + \beta_{21}X_{t2} +u^{\ast}_{t1}  \\
+Y_{t2} &= \beta_{20}  + \gamma_{12} \hat{Y}_{1t} + \beta_{12}Y_{t-1,1}  + \beta_{22}Y_{t-1,2}  + u^{\ast}_{t2}
+\end{align}
+$$
+
+- And then, we can conduct these new equations by using the former variables frome stage 1.
+
+
+##
+
+### Stage 2 of 2SLS: OLS estimation for the new income equation
+
+- OLS estimation results of **new** income equation in **stage 2**:
+
+```{r}
+#| label: stage2-reg-income
+#| results: asis
+fun_report_eq(models_money2$mod2.stage2.1,lm.dt = us_money_new2)
+```
+
+
+##
+
+### Stage 2 of 2SLS: OLS estimation for the new money supply equation
+
+- OLS estimation results of the **new** money supply equation in **stage 2**:
+
+```{r}
+#| label: stage2-reg-money
+#| results: asis
+fun_report_eq(models_money2$mod2.stage2.2,lm.dt = us_money_new2)
+```
+
+##
+
+### Stage 2 of 2SLS: Raw R report for the new income equation
+
+- The R raw report of OLS estimation for the  new income equation in **stage 2**:
+
+<!---.scroll-box-18[--->
+
+```{r}
+#| label: tab-stage2-income
+#| comment: ''
+tab_income_s2<-lm(models_money2$mod2.stage2.1, data=us_money_new2)
+summary(tab_income_s2)
+```
+
+<!---]--->
+
+##
+
+### Stage 2 of 2SLS: Raw R report for the new money supply equation
+
+- The R raw report of OLS estimation for the  new money supply equation in **stage 2**:
+
+<!---.scroll-box-18[--->
+
+```{r}
+#| label: tab-stage2-money2
+#| comment: ''
+tab_income_s2<-lm(models_money2$mod2.stage2.2, data=us_money_new2)
+summary(tab_income_s2)
+```
+
+<!---]--->
+
+##
+
+### Simultaneous 2SLS approach with error correction automatically (tidy report)
+
+By using R `systemfit` package, we can apply the two-stage least square method with **"error correction"**, and the report summarized as follows:
+
+
+```{r}
+#| label: 2SLS-model-money2
+require(systemfit)
+sys<-list(eq1=Y1~Y2+X1+X2,
+eq2=Y2~Y1+Y1.l1+Y2.l1)
+instr <- ~X1+X2+Y1.l1+Y2.l1
+money.sys <- systemfit(sys, inst=instr,
+method="2SLS", data=us_money)
+money.smry<-summary(money.sys)
+
+rnames<-rownames(money.smry$coefficients)
+cnames<-colnames(money.smry$coefficients)
+tab_smry<-as_tibble(money.smry$coefficients)
+names(tab_smry)<-cnames
+tab_smry$vars<-rnames
+tab_smry<-tab_smry %>%
+separate(vars,into=c("eq","vars"),sep="_")%>%
+select(eq,vars,everything())
+```
+
+```{r}
+datatable(tab_smry,
+options = list(pageLength =10, dom = 't'),
+caption = str_c("Result of 2SLS with error correction")) %>%
+formatRound(columns=c(4:6), digits=4) %>%
+formatRound(columns=c(3), digits=2)
+```
+
+
+
+
+##
+
+### Simultaneous 2SLS approach with error correction automatically (raw report)
+
+By using R `systemfit` package, we can apply the two-stage least square method with **"error correction"**, and the detail report show as follows:
+
+<!---.scroll-box-16[--->
+
+```{r}
+#| comment: ''
+money.smry
+```
+
+<!---]--->
+
+
+
+##
+
+### Comparison to OLS approach directly (biased estimation)
+
+- **"biased"** OLS estimation results of the income equation:
+
+```{r}
+#| label: bias-OLS-income2
+#| results: asis
+fun_report_eq(lm.mod = models_money2$mod2.Y1,
+lm.dt = us_money_new2)
+```
+
+- **"biased"** OLS estimates of the money supply equation:
+
+```{r}
+#| label: bias-OLS-money2
+#| results: asis
+fun_report_eq(lm.mod = models_money2$mod2.Y2,
+lm.dt = us_money_new2)
+```
+
+
+# 20.5 Truffle supply and demand{#truffle .monash-bg-blue .mcenter}
+
+## Case of Truffle supply and demand
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+```{r}
+include_graphics("pic/Truffle-pig.jpg")
+```
+
+```{r}
+include_graphics("pic/Truffle-pig2.jpg")
+```
+:::
+
+
+::: {.column width="40%"}
+
+```{r}
+include_graphics("pic/Truffle-pig4.jpg", dpi = 80)
+```
+:::
+
+::::
+
+
+##
+
+### Variables description
+
+
+```{r}
+#| label: show1-truffles-var
+truffles_var<-tibble::tribble(
+~`vars`, ~`label`, ~`measure`,
+"P","market price of trufﬂes","dollar/ounce",
+"Q", "market quantity of trufﬂes","ounce",
+"PS", "market price of substitute","dollar/ounce",
+"DI","disposable income", "dollar/person, monthly",
+"PF", "rental price of trufﬂe-pigs", "dollar/hour"
+)
+#kable(truffles_var,caption = "model variables")
+datatable(truffles_var, caption = "variables description",
+options = list(pageLength =6))
+
+```
+
+::: {.notes}
+case source: Hill, R. C., W. E. Griffiths and G. C. Lim. Principles of Econometrics 4th Edition  [M], Wiley, 2011. chpt 11refferenc: [PoE with R](https://bookdown.org/ccolonescu/RPoE4/simultaneous-equations-models.html)
+:::
+
+
+##
+
+### Data set
+
+```{r}
+#| label: data-truffles
+#truffles<-read.table("data/truffles.dat",header = F)
+load("data/truffles.rda")
+names(truffles)  %<>% toupper()
+
+datatable(truffles,
+options = list(pageLength =8, dom = 'tip'),
+caption = "Case data set (n=30)")
+
+```
+
+
+##
+
+### Scatter
+
+The scatter plot on truffle quantity Q and truffle market price P is given below:
+
+```{r}
+ggplot(truffles,aes(x=Q,y=P))+
+geom_point(color="blue") +
+geom_smooth(se=FALSE)+
+labs(x="Q",y="P")
+
+```
+
+
+##
+
+### The structural SEM
+
+Given the structural SEM:
+
+$$
+\begin{cases}
+\begin{align}
+Q_i &= \alpha_0+\alpha_1P_i+\alpha_2PS_i+\alpha_3DI_i+u_{i1}  &&\text{(demand function)}\\
+Q_i &= \beta_0+\beta_1P_i+\beta_2PF_i+u_{i2}    &&\text{(supply function)}
+\end{align}
+\end{cases}
+$$
+
+
+##
+
+### The reduced SEM
+
+We can get the reduced SEM:
+
+$$
+\begin{cases}
+\begin{align}
+P_i &= \pi_{01}+ \pi_{11}PS_i+\pi_{21}DI_i+\pi_{31}PF_i+v_{t1}\\
+Q_i &= \pi_{02}+\pi_{12}PS_t+\pi_{22}DI_i+\pi_{32}PF_i+v_{t2}
+\end{align}
+\end{cases}
+$$
+
+Also we obtain the relationship between structural and reduced coefficients:
+
+
+:::: {.columns .font-90}
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{align}
+& \pi_{01} = \frac{\beta_0-\alpha_0}{\alpha_1-\beta_1}  \\
+& \pi_{11} = - \frac{\alpha_2}{\alpha_1-\beta_1}  \\
+& \pi_{21} = - \frac{\alpha_3}{\alpha_1-\beta_1}  \\
+& \pi_{31} = \frac{\beta_2}{\alpha_1-\beta_1}  \\
+& v_{t1} = \frac{u_{2t}-u_{1t}}{\alpha_1-\beta_1} &&
+\end{align}
+\end{cases}
+$$
+
+:::
+
+
+::: {.column width="40%"}
+
+
+$$
+\begin{cases}
+\begin{align}
+& \pi_{02} = - \frac{\alpha_1\beta_0-\alpha_0\beta_1}{\alpha_1-\beta_1} \\
+& \pi_{12} = - \frac{\alpha_2\beta_1}{\alpha_1-\beta_1}  \\
+& \pi_{22} = - \frac{\alpha_3\beta_1}{\alpha_1-\beta_1}  \\
+& \pi_{32} =   \frac{\alpha_1\beta_2}{\alpha_1-\beta_1}  \\
+& v_{t2} = \frac{\alpha_1u_{2t}-\beta_1u_{1t}}{\alpha_1-\beta_1}
+\end{align}
+\end{cases}
+$$
+:::
+
+::::
+
+
+##
+
+### Simple OLS solution: tidy report
+
+We can  apply OLS method directly. Of course estimation results will be biased.
+
+- tidy results of **bias** OLS estimation  for the demand equation:
+
+```{r}
+#| results: asis
+fun_report_eq(lm.mod = eq.D,
+lm.dt = truffles)
+```
+
+- tidy results of **bias** OLS estimation for the supply equation:
+
+```{r}
+#| results: asis
+fun_report_eq(lm.mod = eq.S,
+lm.dt = truffles)
+```
+
+
+
+### Simple OLS solution: R code (`lm`)
+
+
+```{r}
+#| label: ols-truffle
+#| eval: false
+#| echo: true
+# set equation systems
+eq.D <- Q~P+PS+DI
+eq.S <- Q~P+PF
+
+# fit using direct `OLS` method
+ols.D <- lm(formula = eq.D, data = truffles)
+ols.S <- lm(formula = eq.S, data = truffles)
+# report
+smry.olsD <- summary(ols.D)
+smry.olsS <- summary(ols.S)
+```
+
+
+##
+
+### Simple OLS solution: R report for demand eqation
+
+
+```{r}
+smry.olsD
+```
+
+##
+
+### Simple OLS solution: R report for supply eqation
+
+
+```{r}
+smry.olsS
+```
+
+##
+
+### Simultaneous OLS solution: R code (`symtemfit`)
+
+```{r}
+#| label: system.ols-truffle
+#| eval: false
+#| echo: true
+
+# load pkg
+require(systemfit)
+# set equation systems
+eq.D <- Q~P+PS+DI
+eq.S <- Q~P+PF
+eq.sys <- list(eq.D, eq.S)
+# system fit using `OLS` method
+system.ols <-systemfit(
+formula = eq.sys,
+method="OLS",
+data=truffles)
+# report
+smry.ols <- summary(system.ols)
+```
+
+
+##
+
+### Simultaneous OLS solution: R report (`symtemfit`)
+
+<!---.scroll-box-18[--->
+
+```{r}
+smry.ols
+```
+
+<!---]--->
+
+##
+
+### IV 2SLS solution: R code (`symtemfit`)
+
+```{r}
+#| label: system.2sls-truffle
+#| eval: false
+#| echo: true
+# load pkg
+require(systemfit)
+# set equation systems
+eq.D <- Q~P+PS+DI
+eq.S <- Q~P+PF
+eq.sys <- list(eq.D, eq.S)
+# set instruments
+instr <- ~PS+DI+PF
+# system fit using `2SLS` method
+system.iv <-systemfit(
+formula = eq.sys, inst = instr,
+method="2SLS",
+data=truffles)
+# report
+smry.iv <- summary(system.iv)
+```
+
+##
+
+### IV-2SLS Solution:  R report (`symtemfit`)
+
+<!---.scroll-box-18[--->
+
+```{r}
+smry.iv
+```
+
+<!---]--->
+
+
+##
+
+### IV-2SLS Solution: tidy report (`symtemfit`)
+
+```{r}
+# Tidy `systemfit` fit results into tibble
+## my custom Helper function
+source("code/helper-tidy-systemfit.R")
+tbl_iv <- tidy_systemfit(fit.sys = smry.iv)
+```
+
+
+```{r}
+datatable(tbl_iv,
+options = list(pageLength =10, dom = 't'),
+caption = str_c("IV 2SLS result(using `systemfit::systemfit()`")) %>%
+formatRound(columns=c(4:6), digits=4) %>%
+formatRound(columns=c(3), digits=4)
+```
+
+
+##
+
+### Comparison: results of the reduced equations by OLS directly
+
+```{r}
+#| label: reduce-model
+#| results: asis
+#| eval: true
+models<-list(mod.Q=Q~PS+DI+PF, mod.P=P~PS+DI+PF)
+Q.red <- lm(models$mod.Q, data=truffles)
+P.red <- lm(models$mod.P, data=truffles)
+```
+
+The OLS regression results of **reduced price equation**:
+
+```{r}
+#| label: reduce-P
+#| results: asis
+fun_report_eq(models$mod.P,lm.dt = truffles)
+```
+
+The OLS regression results of **reduced quantity equation**:
+
+```{r}
+#| label: reduce-Q
+#| results: asis
+fun_report_eq(models$mod.Q,lm.dt = truffles)
+```
+
+
+##
+
+### Comparison: results of the structural equations by OLS directly
+
+We can  apply OLS method directly. Of course estimation results will be biased.
+
+- tidy results of **bias** OLS estimation  for the demand equation:
+
+```{r}
+#| results: asis
+fun_report_eq(lm.mod = eq.D,
+lm.dt = truffles)
+```
+
+- tidy results of **bias** OLS estimation for the supply equation:
+
+```{r}
+#| results: asis
+fun_report_eq(lm.mod = eq.S,
+lm.dt = truffles)
+```
+
+
+
+
+# 20.6 Cod supply and demand{#cod .monash-bg-blue .mcenter}
+
+
+## Cod supply and demand{.monash-bg-blue .mcenter .monash-bg-blue .mcenter}
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+```{r}
+include_graphics("pic/whiting-fishing.jpg")
+```
+
+```{r}
+include_graphics("pic/whiting-fishing2.jpg")
+```
+:::
+
+
+::: {.column width="40%"}
+
+```{r}
+include_graphics("pic/whiting-fishing4.jpg")
+```
+:::
+
+::::
+
+
+##
+
+### Variables description
+
+```{r}
+#| label: fish-var
+fish_var<-tribble(
+~`vars`, ~`label`, ~`note`,
+"lprice","the logarithmic market price of cod","continuous variable",
+"lquan", "the logarithmic quantity of cod","continuous variable",
+"mon", "monday","dummy variable 0/1",
+"tue","tuesday", "dummy variable 0/1",
+"wen", "wensday", "dummy variable 0/1",
+"thu", "thursday", "dummy variable 0/1",
+"stormy", "Stormy","dummy variable 0/1"
+)
+
+datatable(fish_var,
+options = list(pageLength =8, dom = 'tip'),
+caption = "Variables description of the cod case")
+```
+
+.footer-note[.tiny[
+source：Hill, R. C., W. E. Griffiths and G. C. Lim. Principles of Econometrics 4th Edition  [M], Wiley, 2011. chpt 11。reference：[PoE with R](https://bookdown.org/ccolonescu/RPoE4/simultaneous-equations-models.html)
+]
+]
+
+
+##
+
+### Sample data set
+
+```{r}
+#| label: data-fish
+#truffles<-read.table("data/truffles.dat",header = F)
+load("data/fultonfish.rda")
+fultonfish<-as_tibble(fultonfish) %>%
+mutate(date=str_c("19",date),
+date=ymd(date)) %>%
+select(date:stormy)
+n<-dim(fultonfish)[1]
+
+datatable(fultonfish,
+options = list(pageLength =7, dom = 'tip'),
+caption = str_c("Data set of cod case(obs. n=",n,")")) %>%
+formatRound(columns=c(2,4), digits=2) %>%
+formatRound(columns=c(3), digits=0)
+```
+
+
+##
+
+### Scatter
+
+```{r}
+ggplot(fultonfish,aes(x=lquan,y=lprice))+
+geom_point(color="blue") +
+geom_smooth(se=FALSE,color="red")+
+labs(x="lquan",y="lprice")
+
+```
+
+
+##
+
+### The structural and reduced SEM
+
+Given the structural SEM:
+
+$$
+\begin{cases}
+\begin{align}
+lquan_t &= \alpha_0+\alpha_1lprice_t+\alpha_2mon_t+\alpha_3tue_t+\alpha_4wen_t+\alpha_5thu_t+u_{1t}  &&\text{(demand eq)}\\
+lquan_t &= \beta_0+\beta_1lprice_t+\beta_3stormy_t+u_{2t}    &&\text{(supply eq)}
+\end{align}
+\end{cases}
+$$
+
+We can obtain the reduced SEM:
+
+$$
+\begin{cases}
+\begin{align}
+lquan_t &= \pi_0 + \pi_1mon_t+\pi_2tue_t+\pi_3wen_t+\pi_4thu_t
++\pi_5stormy_t+v_t &&\text{(reduced eq1)}\\
+lprice_t &= \pi_0 + \pi_1mon_t+\pi_2tue_t+\pi_3wen_t+\pi_4thu_t
++\pi_5stormy_t+v_t &&\text{(reduced eq2)}\\
+\end{align}
+\end{cases}
+$$
+
+::: {.notes}
+display
+:::
+
+
+##
+
+### OLS regression results of the reduced SEM
+
+```{r}
+#| label: fish-reduce-model
+models_fish<-list(mod.Q=lquan~mon+tue+wed+thu+stormy,
+mod.P=lprice~mon+tue+wed+thu+stormy)
+Q.fish <- lm(models_fish$mod.Q, data=fultonfish)
+P.rish <- lm(models_fish$mod.P, data=fultonfish)
+```
+
+The regression results of reduced **quantity** equation show as follows:
+
+$$
+\begin{alignedat}{999}
+&\widehat{lquan}=&&+8.81&&+0.10mon&&-0.48tue&&-0.55wed&&+0.05thu&&-0.39stormy\\
+&\text{(t)}&&(59.9225)&&(0.4891)&&(-2.4097)&&(-2.6875)&&(0.2671)&&(-2.6979)\\
+&\text{(se)}&&(0.1470)&&(0.2065)&&(0.2011)&&(0.2058)&&(0.2010)&&(0.1437)\\
+&\text{(fitness)}&& n=111;&& R^2=0.1934;&& \bar{R^2}=0.1550\\
+& && F^{\ast}=5.03;&& p=0.0004\\
+\end{alignedat}
+$$
+
+The regression results of reduced **price** equation show as follows:
+
+$$
+\begin{alignedat}{999}
+&\widehat{lprice}=&&-0.27&&-0.11mon&&-0.04tue&&-0.01wed&&+0.05thu&&+0.35stormy\\
+&\text{(t)}&&(-3.5569)&&(-1.0525)&&(-0.3937)&&(-0.1106)&&(0.4753)&&(4.6387)\\
+&\text{(se)}&&(0.0764)&&(0.1073)&&(0.1045)&&(0.1069)&&(0.1045)&&(0.0747)\\
+&\text{(fitness)}&& n=111;&& R^2=0.1789;&& \bar{R^2}=0.1398\\
+& && F^{\ast}=4.58;&& p=0.0008
+\end{alignedat}
+$$
+
+::: {.notes}
+why
+:::
+
+
+##
+
+### Two-stage least squares (2SLS) regression results
+
+```{r}
+#| label: fish-2SLS-model
+fish.D <- lquan~lprice+mon+tue+wed+thu
+fish.S <- lquan~lprice+stormy
+fish.eqs <- list(fish.D, fish.S)
+fish.ivs <- ~mon+tue+wed+thu+stormy
+fish.sys <- systemfit(fish.eqs, method="2SLS",
+inst=fish.ivs, data=fultonfish)
+fish.smry<-summary(fish.sys)
+
+rnames<-rownames(fish.smry$coefficients)
+cnames<-colnames(fish.smry$coefficients)
+tab_smry<-as_tibble(fish.smry$coefficients)
+names(tab_smry)<-cnames
+tab_smry$vars<-rnames
+tab_smry<-tab_smry %>%
+separate(vars,into=c("eq","vars"),sep="_")%>%
+select(eq,vars,everything())
+
+datatable(tab_smry,
+options = list(pageLength =10, dom = 't'),
+caption = str_c("Results of 2SLS with error corrrection")) %>%
+formatRound(columns=c(3:6), digits=4)
+
+#kable(tab_smry,digits = 4,caption = "两阶段最小二乘法（2SLS）回归结果")
+```
+
+
+##
+
+### Two-stage least squares (2SLS) regression results
+
+<!---.scroll-box-20[--->
+
+```{r}
+#| comment: ''
+fish.smry
+```
+
+<!---]--->
+
+
+##
+
+### Comparison: the biased OLS estimation
+
+- tidy results of **bias** OLS estimation  for the demand equation:
+
+```{r}
+#| results: asis
+fun_report_eq(lm.mod = fish.D,
+lm.dt = fultonfish)
+```
+
+- tidy results of **bias** OLS estimation  for the supply equation:
+
+```{r}
+#| results: asis
+fun_report_eq(lm.mod = fish.S,
+lm.dt = fultonfish)
+```
+
+
+##
+
+### Comparison: the biased OLS estimation
+
+- raw R summry of **bias** OLS estimation for the demand equation:
+
+<!---.scroll-box-18[--->
+
+```{r}
+#| comment: ''
+ols_fish_D<-lm(fish.D, data = fultonfish)
+summary(ols_fish_D)
+```
+
+<!---]--->
+
+
+##
+
+### Comparison: the biased OLS estimation
+
+- raw R summry of **bias** OLS estimation for the supply equation:
+
+```{r}
+#| comment: ''
+ols_fish_S<-lm(fish.S, data = fultonfish)
+summary(ols_fish_S)
+```
+
+
+
+# 20.7 Exercise and computation{#exercise .monash-bg-blue .mcenter}
+
+```{r}
+#| echo: false
+
+file_path <- "D://github/course-em-eng/02-homework/sem-wage-mroz/code-sem-mroz.R"
+source(file_path)
+
+```
+
+## Labor market of married Working Women
+
+<!-- insert image here -->
+
+##
+
+### Story background
+
+Let's consider the labor market for married women already in the workforce.
+
+We will use the data on working, married women in `wooldridge::mroz` to estimate the labor supply and wage demand equations by 2SLS.
+
+The full set of instruments includes `educ`, `age`, `kidslt6`, `nwifeinc`, `exper`, and `exper2`.
+
+::: {.aside}
+Please follow our accompany course repository at <https://github.com/huhuaping/course-emiii-accompany> or <https://gitee.com/kevinhhp/course-emiii-accompany>.
+:::
+
+
+##
+
+### Variables and definition
+
+We will focus on the following variables.
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+
+- `lwage`: log(wage)
+
+- `hours`: hours worked, 1975
+
+- `kidslt6`: kids less than  6 years
+
+- `age`: woman's age in yrs
+
+:::
+
+
+::: {.column width="40%"}
+
+
+- `educ`: years of schooling
+
+- `exper`: actual labor mkt exper
+
+- `expersq`: exper^2
+
+- `nwifeinc`: (faminc - wage*hours)/1000
+
+:::
+
+::::
+
+
+##
+
+### SEM setting: the structrual equations
+
+$$
+\begin{aligned}
+\text { hours } & =\alpha_1 \log ( wage)+\beta_{10}+\beta_{11} { educ }+\beta_{12} age+\beta_{13}  { kidslt6 } &&\\
+&+\beta_{14} { nwifeinc }+u_1  &&\text{(supply)}\\
+\log ({ wage }) &=\alpha_2 { hours }+\beta_{20}+\beta_{21} { educ }+\beta_{22} { exper }  +\beta_{23} { exper }^2+ u_2 && \quad \text{(demand)}
+\end{aligned}
+$$
+
+- In the demand function, we write the wage offer as a function of hours and the usual productivity variables.
+
+- All variables except `hours` and `log(wage)` are assumed to be exogenous.
+
+- `educ` might be correlated with omitted `ability` in either equation. Here, we just ignore the omitted ability problem.
+
+
+##
+
+### SEM setting: the reduced equations
+
+$$
+\begin{alignedat}{8}
+\text { hours } & =\pi_{10}+\pi_{11} { educ }+\pi_{12} age+\pi_{13}  { kidslt6 }  +\pi_{14} { nwifeinc }\\
+&+\pi_{15} { exper }  +\pi_{16} {exper}^2 +v_1  \\
+\log ({ wage }) &=\pi_{20}+\pi_{21} { educ }+\pi_{22} age+\pi_{23}  { kidslt6 }  +\pi_{24} { nwifeinc } \\
+&+\pi_{25} { exper }  +\pi_{26} {exper}^2+ v_2
+\end{alignedat}
+$$
+
+
+##
+
+### Exercise tasks 1/2: system fit with TSLS
+
+<!---.scroll-box-18[--->
+
+```{r}
+#| comment: ''
+mroz.smry
+```
+
+<!---]--->
+
+
+##
+
+### Exercise tasks 2/2: OLS estimator and several tests
+
+So we should conduct OLS estimation and several tests as we have learned.
+
+- Conduct OLS estimation directly for each structural equation.
+
+- Weak instrument test (Restricted F test or Cragg-donald test).
+
+- Instrument Exogeneity test (J-test).
+
+- Regressor Endogeneity test (Wu-Hausman test).
+
+Find these results and get the conclusion!
+
+
+## End Of This Chapter{.center-h background-color="aliceblue"  background-image="pic/thank-you-gif-funny-little-yellow.gif" background-size="600px"  background-position="center" background-opacity="0.8" style="font-size:75px !important"}
+
