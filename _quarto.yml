@@ -55,13 +55,13 @@ website:
         # navigation items
         - course-module.qmd
         - 01-class/text-book.qmd
-        - section: "Slides"
+        - section: "Slides(old)"
           contents:
             - 01-class/chpt17-iv.qmd
             - 01-class/chpt18-sem-why.qmd
             - 01-class/chpt19-sem-identification.qmd
             - 01-class/chpt20-sem-estimation.qmd
-        - section: "Lecture"
+        - section: "Slides(new)"
           contents:
             - href: lecture/lecture-17-endogeneity.qmd
               text: "Lecture 17: Endogeneity"
@@ -69,6 +69,8 @@ website:
               text: "Lecture 18: Why SEM"
             - href: lecture/lecture-19-sem-identification.qmd
               text: "Lecture 19: Identification"
+            - href: lecture/lecture-20-sem-estimation.qmd
+              text: "Lecture 20: Estimation"
         - 01-class/supplements-code.qmd
 
     - title: "Homework"

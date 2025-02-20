@@ -106,8 +106,9 @@ Chapter 19. What is the Identification Problem ?
 :::
 
 
+# Chapter 20. How to Estimate SEM?{#chpt20 .monash-bg-blue .mcenter}
 
-# Chapter 20. How to Estimate SEM ?{#chpt20 .monash-bg-blue .mcenter}
+::: {.font-110}
 
 [20.1 Approaches to Estimation](#approaches)
 
@@ -121,7 +122,9 @@ Chapter 19. What is the Identification Problem ?
 
 [20.6 Cod case](#cod)
 
+[20.7 Exercise and computation](#exercise)
 
+:::
 
 
 # 20.1 Approaches to Estimation{#approaches .monash-bg-blue .mcenter}
@@ -139,14 +142,14 @@ Chapter 19. What is the Identification Problem ?
 #| label: tools
 #| warning: false
 #| message: false
-#install.packages("systemfit")
-#install.packages("broom") #for `glance(`) and `tidy()`
-#install.packages("PoEdata") #for PoE4 dataset
+# install.packages("systemfit")
+# install.packages("broom") #for `glance(`) and `tidy()`
+# install.packages("PoEdata") #for PoE4 dataset
 require("systemfit")
-require("broom") #for `glance(`) and `tidy()`
-#library(PoEdata) #for PoE4 dataset
-#require(devtools)
-#install_git("https://github.com/ccolonescu/PoEdata")
+require("broom") # for `glance(`) and `tidy()`
+# library(PoEdata) #for PoE4 dataset
+# require(devtools)
+# install_git("https://github.com/ccolonescu/PoEdata")
 ```
 
 In order to estimate the structural SEM, two approaches can be adopted:
@@ -291,16 +294,19 @@ zero contemporaneous correlation我们很容易发现,不同方程中的同期�
 
 ##
 
-### visualize graphically
+### Visualize graphically
 
 We can also visualize it graphically:
 
 ```{r}
 #| label: recursive-graph
 #| fig-cap: SEM in recursive form
-include_graphics("pic/chpt20-recursive-graph.png", dpi = 200)
+# fig-width: "60%"
+include_graphics(("pic/chpt20-recursive-graph.png"), dpi = 150)
 ```
 
+
+<!-- ![](pic/chpt20-recursive-graph.png) {#fig-recursive-graph fig-cap="SEM in recursive form" .center width="60%"} -->
 
 ##
 
@@ -369,15 +375,10 @@ The variables in the US crop supply and demand case are illustrated below
 
 ```{r}
 #| label: agr-var
-agr_var<-tribble(
-~`vars`, ~`label`, ~`note`,
-"Q","Crop yield index","(1996=100)",
-"P", "Agricultural products purchasing prices index","(1990-1992=100)",
-"X", "Capital personal consumption expenditure","(In 2007 dollars)"
-)
 datatable(agr_var,
-options = list(pageLength =3, dom = 't'),
-caption = "variables in the model")
+  options = list(pageLength = 3, dom = "t"),
+  caption = "variables in the model"
+)
 ```
 
 ##
@@ -388,15 +389,14 @@ The data for US crop supply and demand case show here:
 
 ```{r}
 #| label: data-agr
-#truffles<-read.table("data/truffles.dat",header = F)
-us_agr<-as_tibble(read.xlsx("data/Table-20-1.xlsx"))
-n<-dim(us_agr)[1]
 datatable(us_agr,
-options = list(pageLength =7, dom = 'tip'),
-caption =str_c( "sample data (n=",
-n,")"))
+  options = list(pageLength = 7, dom = "tip"),
+  caption = str_c(
+    "sample data (n=",
+    n_agr, ")"
+  )
+)
 ```
-
 
 ##
 
@@ -540,9 +540,9 @@ $$
 #| label: models-agr
 #| results: asis
 #| eval: true
-models_agr<-list(mod.Q=Q~X, mod.P=P~X,mod.Q.OLS=Q~P)
-Q.red <- lm(models_agr$mod.Q, data=us_agr)
-P.red <- lm(models_agr$mod.P, data=us_agr)
+models_agr <- list(mod.Q = Q ~ X, mod.P = P ~ X, mod.Q.OLS = Q ~ P)
+Q.red <- lm(models_agr$mod.Q, data = us_agr)
+P.red <- lm(models_agr$mod.P, data = us_agr)
 ```
 
 :::: {.columns}
@@ -555,7 +555,10 @@ The regression result of the reduced price  equation is:
 ```{r}
 #| label: P-agr
 #| results: asis
-fun_report_eq(models_agr$mod.P,lm.dt = us_agr)
+qx.out <- xmerit::qx.est(
+  models_agr$mod.P, lm.dt = us_agr,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 :::
@@ -569,27 +572,14 @@ The regression result of the reduced quantity  equation is:
 ```{r}
 #| label: Q-agr
 #| results: asis
-fun_report_eq(models_agr$mod.Q,lm.dt = us_agr)
+qx.out <- xmerit::qx.est(
+  models_agr$mod.Q, lm.dt = us_agr,
+  inf = c("fit", "Ftest")
+  )
 ```
 :::
 
 ::::
-
-
-##
-
-### Rscript: calculate values
-
-```{r}
-#| label: cal-value
-coef_pi1<-fun_lm_coef(models_agr$mod.P,lm.dt = us_agr)$coef[[2]]
-coef_pi0<-fun_lm_coef(models_agr$mod.P,lm.dt = us_agr)$coef[[1]]
-coef_pi3<-fun_lm_coef(models_agr$mod.Q,lm.dt = us_agr)$coef[[2]]
-coef_pi2<-fun_lm_coef(models_agr$mod.Q,lm.dt = us_agr)$coef[[1]]
-avr_P<- us_agr %>% summarise(avr_P=mean(P)) %>% unlist()
-avr_Q<- us_agr %>% summarise(avr_Q=mean(Q)) %>% unlist()
-avr_X<- us_agr %>% summarise(avr_X=mean(X)) %>% unlist()
-```
 
 
 ##
@@ -674,8 +664,10 @@ As comparison, we will show a **"biased"** estimation method, which  use  OLS di
 ```{r}
 #| label: bias-OLS
 #| results: asis
-fun_report_eq(lm.mod = models_agr$mod.Q.OLS,
-lm.dt = us_agr)
+qx.out <- xmerit::qx.est(
+  models_agr$mod.Q.OLS, lm.dt = us_agr,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 :::
@@ -830,7 +822,7 @@ Note the following features of 2SLS (continue):
 
 
 ::: {.notes}
-.large[两阶段最小二乘法(2SLS方法)的特点(续)：- 此法虽然专为过度识别的方程而设计，但同样适用于恰好识别的方程。但这时ILS和2SLS将给出相同的估计。(为什么?)- 如果约简型回归（即阶段1的回归）的F值很高，比如说高于0.8。则经典OLS估计和 2SLS估计将相差无几。- 在ILS方法的回归报告中，我们没有给出所估系数的**标准误**，但我们能对 2SLS估计值给出这些**标准误**。]
+两阶段最小二乘法(2SLS方法)的特点(续)：- 此法虽然专为过度识别的方程而设计，但同样适用于恰好识别的方程。但这时ILS和2SLS将给出相同的估计。(为什么?)- 如果约简型回归（即阶段1的回归）的F值很高，比如说高于0.8。则经典OLS估计和 2SLS估计将相差无几。- 在ILS方法的回归报告中，我们没有给出所估系数的**标准误**，但我们能对 2SLS估计值给出这些**标准误**。
 :::
 
 
@@ -980,19 +972,11 @@ $$
 
 ```{r}
 #| label: money-var
-agr_var<-tribble(
-~`vars`, ~`label`, ~`note`,
-"Y1","GDP:  gross domestic product","($1 billion in 2000)",
-"Y2", "M2:money supply","($1 billion)",
-"X1", "GDPI: Total private domestic investment ","($1 billion in 2000)",
-"X2", "FEDEXP: Federal expenditure ","($1 billion)",
-"Y1.l1","GDP_t-1: The gross domestic product of the previous period","($1 billion in 2000)",
-"Y2.l1", "M2_t-1: The money supply in the previous period","($1 billion)",
-"X3", "TB6: 6 month Treasury bond interest rate ","(%)"
+
+datatable(var_income,
+  options = list(pageLength = 7, dom = "t"),
+  caption = "Variables description"
 )
-datatable(agr_var,
-options = list(pageLength =7, dom = 't'),
-caption = "Variables description")
 ```
 
 
@@ -1003,20 +987,13 @@ caption = "Variables description")
 
 ```{r}
 #| label: data-money
-#truffles<-read.table("data/truffles.dat",header = F)
-us_money<-as_tibble(read.xlsx("data/Table-20-2.xlsx")) %>%
-mutate(Y1.l1 = dplyr::lag(Y1),
-Y2.l1 = dplyr::lag(Y2)
-) %>%
-select(-X3)
-n<-dim(us_money)[1]
-```
-
-```{r}
 datatable(us_money,
-options = list(pageLength =8, dom = 'tip'),
-caption =str_c( "Sample data ( n=",
-n,")"))
+  options = list(pageLength = 8, dom = "tip"),
+  caption = str_c(
+    "Sample data ( n=",
+    n_money, ")"
+  )
+)
 ```
 
 
@@ -1058,16 +1035,6 @@ Where:
 
 ### Stage 1 of 2SLS: fit the reduced equation 1
 
-```{r}
-#| label: models-money
-#| results: asis
-#| eval: true
-models_money<-list(mod.Y1=Y1~Y2+X1+X2,
-mod.Y2=Y2~Y1+X2,
-mod.instr=Y1~X1+X2,
-mod.stage2=Y2~Y1.hat,
-mod.ols=Y2~ Y1)
-```
 
 $$
 \begin{cases}
@@ -1098,22 +1065,15 @@ $$
 
 ::: {.column width="40%"}
 
-
 Regression results of **stage 1**:
 
 ```{r}
 #| label: stage1-reg
-money_out<-lm(models_money$mod.instr,data=us_money)
-
-us_money_new <- us_money %>%
-mutate(Y1.hat=round(money_out$fitted.values,4),
-v1.hat=round(money_out$residuals,4))
-
-```
-
-```{r}
 #| results: asis
-fun_report_eq(models_money$mod.instr,lm.dt = us_money)
+qx.out <- xmerit::qx.est(
+  models_money$mod.instr, lm.dt = us_money,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 :::
@@ -1135,8 +1095,9 @@ At the same time, we can obtain  $\hat{Y }_{t1} ;\hat{v}_{t1}$ :
 ```{r}
 #| label: money-new
 datatable(us_money_new,
-options = list(pageLength =6, dom = 'tip'),
-caption = "New variable Yt1.hat and vt1.hat after regression of stage 1 ")
+  options = list(pageLength = 6, dom = "tip"),
+  caption = "New variable Yt1.hat and vt1.hat after regression of stage 1 "
+)
 ```
 
 ##
@@ -1160,13 +1121,17 @@ Y_{t2} & = \beta_{02}  + \gamma_{12} \hat{Y}_{1t}+ u_{t2}^{\ast}
 \end{align}
 $$
 
->Using the new variables in **stage 1** results, and apply OLS estimation to obtain:
+> Using the new variables in **stage 1** results, and apply OLS estimation to obtain:
 
 
 ```{r}
 #| label: stage2-reg
 #| results: asis
-fun_report_eq(models_money$mod.stage2,lm.dt = us_money_new)
+
+qx.out <- xmerit::qx.est(
+  models_money$mod.stage2, lm.dt = us_money_new,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
@@ -1179,8 +1144,10 @@ As comparison, we give a **"biased"** estimation with OLS method directly to the
 ```{r}
 #| label: bias-OLS-money
 #| results: asis
-fun_report_eq(lm.mod = models_money$mod.ols,
-lm.dt = us_money_new)
+qx.out <- xmerit::qx.est(
+  models_money$mod.ols, lm.dt = us_money_new,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 ::: {.notes}
@@ -1194,10 +1161,8 @@ lm.dt = us_money_new)
 The R raw report for the biased regression show as:
 
 ```{r}
-#| label: tab-OLS-money
-ols_money<-lm(models_money$mod.ols, data = us_money_new)
+#| label: smry-OLS-money
 summary(ols_money)
-
 ```
 
 
@@ -1239,26 +1204,6 @@ Next, we judge the identification problem according to **order condition rules 2
 
 ### Stage 1 of 2SLS: reduced equation 1 and 2
 
-```{r}
-#| label: models2-money
-#| results: asis
-#| eval: true
-models_money2<-list(mod2.Y1=Y1~Y2+X1+X2,
-mod2.Y2=Y2~Y1+Y1.l1+Y2.l1,
-mod2.instr.1=Y1~X1+X2+Y1.l1+Y2.l1,
-mod2.instr.2=Y2~X1+X2+Y1.l1+Y2.l1,
-mod2.stage2.1=Y1~Y2.hat+X1+X2,
-mod2.stage2.2=Y2~Y1.hat+Y1.l1+Y2.l1)
-
-money2_instr_out1<-lm(models_money2$mod2.instr.1,data=us_money)
-money2_instr_out2<-lm(models_money2$mod2.instr.2,data=us_money)
-
-us_money_new2<- us_money %>%
-mutate(Y1.hat=c(NA, money2_instr_out1$fitted.values),
-v1.hat=c(NA, money2_instr_out1$residuals),
-Y2.hat=c(NA, money2_instr_out2$fitted.values),
-v2.hat=c(NA, money2_instr_out2$residuals))
-```
 
 Now, we will use two-stage least squares (2SLS) to get **consistent  estimates** for both **income equation** and **money supply equation**.
 
@@ -1288,9 +1233,10 @@ $$
 ```{r}
 #| label: mod2-stage1-instr1
 #| results: asis
-
-fun_report_eq(models_money2$mod2.instr.1,lm.dt = us_money)
-
+qx.out <- xmerit::qx.est(
+  lm.mod = models_money2$mod2.instr.1, lm.dt = us_money,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
@@ -1303,9 +1249,10 @@ fun_report_eq(models_money2$mod2.instr.1,lm.dt = us_money)
 ```{r}
 #| label: mod2-stage1-instr2
 #| results: asis
-
-fun_report_eq(models_money2$mod2.instr.2,lm.dt = us_money)
-
+qx.out <- xmerit::qx.est(
+  lm.mod = models_money2$mod2.instr.2, lm.dt = us_money,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
@@ -1319,14 +1266,16 @@ Hence, we can obtain new variables from the two former regressions results respe
 #| label: money-new2
 
 us_money_new2 %>%
-select(Y1, Y1.l1, Y1.hat, v1.hat,
-Y2, Y2.l1, Y2.hat, v2.hat) %>%
-datatable(.,
-options = list(pageLength =6, dom = 'tip'),
-caption = "New variables from regression of stage 1") %>%
-formatRound(columns = c(1:3,5:7),digits =1) %>%
-formatRound(columns = c(4,8),digits =4)
-
+  select(
+    Y1, Y1.l1, Y1.hat, v1.hat,
+    Y2, Y2.l1, Y2.hat, v2.hat
+  ) %>%
+  datatable(.,
+    options = list(pageLength = 6, dom = "tip"),
+    caption = "New variables from regression of stage 1"
+  ) %>%
+  formatRound(columns = c(1:3, 5:7), digits = 1) %>%
+  formatRound(columns = c(4, 8), digits = 4)
 ```
 
 
@@ -1357,7 +1306,10 @@ $$
 ```{r}
 #| label: stage2-reg-income
 #| results: asis
-fun_report_eq(models_money2$mod2.stage2.1,lm.dt = us_money_new2)
+qx.out <- xmerit::qx.est(
+  lm.mod = models_money2$mod2.stage2.1, lm.dt = us_money_new2,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
@@ -1370,7 +1322,10 @@ fun_report_eq(models_money2$mod2.stage2.1,lm.dt = us_money_new2)
 ```{r}
 #| label: stage2-reg-money
 #| results: asis
-fun_report_eq(models_money2$mod2.stage2.2,lm.dt = us_money_new2)
+qx.out <- xmerit::qx.est(
+  lm.mod = models_money2$mod2.stage2.2, lm.dt = us_money_new2,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 ##
@@ -1379,16 +1334,13 @@ fun_report_eq(models_money2$mod2.stage2.2,lm.dt = us_money_new2)
 
 - The R raw report of OLS estimation for the  new income equation in **stage 2**:
 
-<!---.scroll-box-18[--->
 
 ```{r}
 #| label: tab-stage2-income
 #| comment: ''
-tab_income_s2<-lm(models_money2$mod2.stage2.1, data=us_money_new2)
 summary(tab_income_s2)
 ```
 
-<!---]--->
 
 ##
 
@@ -1396,16 +1348,13 @@ summary(tab_income_s2)
 
 - The R raw report of OLS estimation for the  new money supply equation in **stage 2**:
 
-<!---.scroll-box-18[--->
 
 ```{r}
 #| label: tab-stage2-money2
 #| comment: ''
-tab_income_s2<-lm(models_money2$mod2.stage2.2, data=us_money_new2)
 summary(tab_income_s2)
 ```
 
-<!---]--->
 
 ##
 
@@ -1415,34 +1364,13 @@ By using R `systemfit` package, we can apply the two-stage least square method w
 
 
 ```{r}
-#| label: 2SLS-model-money2
-require(systemfit)
-sys<-list(eq1=Y1~Y2+X1+X2,
-eq2=Y2~Y1+Y1.l1+Y2.l1)
-instr <- ~X1+X2+Y1.l1+Y2.l1
-money.sys <- systemfit(sys, inst=instr,
-method="2SLS", data=us_money)
-money.smry<-summary(money.sys)
-
-rnames<-rownames(money.smry$coefficients)
-cnames<-colnames(money.smry$coefficients)
-tab_smry<-as_tibble(money.smry$coefficients)
-names(tab_smry)<-cnames
-tab_smry$vars<-rnames
-tab_smry<-tab_smry %>%
-separate(vars,into=c("eq","vars"),sep="_")%>%
-select(eq,vars,everything())
-```
-
-```{r}
 datatable(tab_smry,
-options = list(pageLength =10, dom = 't'),
-caption = str_c("Result of 2SLS with error correction")) %>%
-formatRound(columns=c(4:6), digits=4) %>%
-formatRound(columns=c(3), digits=2)
+  options = list(pageLength = 10, dom = "t"),
+  caption = str_c("Result of 2SLS with error correction")
+) %>%
+  formatRound(columns = c(4:6), digits = 4) %>%
+  formatRound(columns = c(3), digits = 2)
 ```
-
-
 
 
 ##
@@ -1451,14 +1379,11 @@ formatRound(columns=c(3), digits=2)
 
 By using R `systemfit` package, we can apply the two-stage least square method with **"error correction"**, and the detail report show as follows:
 
-<!---.scroll-box-16[--->
 
 ```{r}
 #| comment: ''
 money.smry
 ```
-
-<!---]--->
 
 
 
@@ -1471,8 +1396,11 @@ money.smry
 ```{r}
 #| label: bias-OLS-income2
 #| results: asis
-fun_report_eq(lm.mod = models_money2$mod2.Y1,
-lm.dt = us_money_new2)
+qx.out <- xmerit::qx.est(
+  lm.mod = models_money2$mod2.Y1,
+  lm.dt = us_money_new2,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 - **"biased"** OLS estimates of the money supply equation:
@@ -1480,8 +1408,11 @@ lm.dt = us_money_new2)
 ```{r}
 #| label: bias-OLS-money2
 #| results: asis
-fun_report_eq(lm.mod = models_money2$mod2.Y2,
-lm.dt = us_money_new2)
+qx.out <- xmerit::qx.est(
+  lm.mod = models_money2$mod2.Y2,
+  lm.dt = us_money_new2,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
@@ -1521,18 +1452,11 @@ include_graphics("pic/Truffle-pig4.jpg", dpi = 80)
 
 ```{r}
 #| label: show1-truffles-var
-truffles_var<-tibble::tribble(
-~`vars`, ~`label`, ~`measure`,
-"P","market price of trufﬂes","dollar/ounce",
-"Q", "market quantity of trufﬂes","ounce",
-"PS", "market price of substitute","dollar/ounce",
-"DI","disposable income", "dollar/person, monthly",
-"PF", "rental price of trufﬂe-pigs", "dollar/hour"
+# kable(truffles_var,caption = "model variables")
+datatable(truffles_var,
+  caption = "variables description",
+  options = list(pageLength = 6)
 )
-#kable(truffles_var,caption = "model variables")
-datatable(truffles_var, caption = "variables description",
-options = list(pageLength =6))
-
 ```
 
 ::: {.notes}
@@ -1546,14 +1470,11 @@ case source: Hill, R. C., W. E. Griffiths and G. C. Lim. Principles of Econometr
 
 ```{r}
 #| label: data-truffles
-#truffles<-read.table("data/truffles.dat",header = F)
-load("data/truffles.rda")
-names(truffles)  %<>% toupper()
 
 datatable(truffles,
-options = list(pageLength =8, dom = 'tip'),
-caption = "Case data set (n=30)")
-
+  options = list(pageLength = 8, dom = "tip"),
+  caption = "Case data set (n=30)"
+)
 ```
 
 
@@ -1564,11 +1485,7 @@ caption = "Case data set (n=30)")
 The scatter plot on truffle quantity Q and truffle market price P is given below:
 
 ```{r}
-ggplot(truffles,aes(x=Q,y=P))+
-geom_point(color="blue") +
-geom_smooth(se=FALSE)+
-labs(x="Q",y="P")
-
+p_sct
 ```
 
 
@@ -1647,24 +1564,31 @@ $$
 
 ##
 
-### Simple OLS solution: tidy report
+### Simple OLS solution: stylized report
 
 We can  apply OLS method directly. Of course estimation results will be biased.
 
-- tidy results of **bias** OLS estimation  for the demand equation:
+- stylized results of **bias** OLS estimation  for the demand equation:
 
 ```{r}
 #| results: asis
-fun_report_eq(lm.mod = eq.D,
-lm.dt = truffles)
+
+qx.out <- xmerit::qx.est(
+  lm.mod = eq.D,
+  lm.dt = truffles,
+  inf = c("fit", "Ftest")
+  )
 ```
 
-- tidy results of **bias** OLS estimation for the supply equation:
+- stylized results of **bias** OLS estimation for the supply equation:
 
 ```{r}
 #| results: asis
-fun_report_eq(lm.mod = eq.S,
-lm.dt = truffles)
+qx.out <- xmerit::qx.est(
+  lm.mod = eq.S,
+  lm.dt = truffles,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
@@ -1677,13 +1601,13 @@ lm.dt = truffles)
 #| eval: false
 #| echo: true
 # set equation systems
-eq.D <- Q~P+PS+DI
-eq.S <- Q~P+PF
+eq.D <-formula( Q~P + PS + DI)
+eq.S <-formula( Q~P + PF)
 
 # fit using direct `OLS` method
 ols.D <- lm(formula = eq.D, data = truffles)
 ols.S <- lm(formula = eq.S, data = truffles)
-# report
+# estimation summary
 smry.olsD <- summary(ols.D)
 smry.olsS <- summary(ols.S)
 ```
@@ -1719,15 +1643,16 @@ smry.olsS
 # load pkg
 require(systemfit)
 # set equation systems
-eq.D <- Q~P+PS+DI
-eq.S <- Q~P+PF
+eq.D <- Q~P + PS + DI
+eq.S <- Q~P + PF
 eq.sys <- list(eq.D, eq.S)
 # system fit using `OLS` method
-system.ols <-systemfit(
-formula = eq.sys,
-method="OLS",
-data=truffles)
-# report
+system.ols <- systemfit(
+  formula = eq.sys,
+  method = "OLS",
+  data = truffles
+)
+# estimation summary
 smry.ols <- summary(system.ols)
 ```
 
@@ -1736,13 +1661,10 @@ smry.ols <- summary(system.ols)
 
 ### Simultaneous OLS solution: R report (`symtemfit`)
 
-<!---.scroll-box-18[--->
-
 ```{r}
 smry.ols
 ```
 
-<!---]--->
 
 ##
 
@@ -1755,17 +1677,18 @@ smry.ols
 # load pkg
 require(systemfit)
 # set equation systems
-eq.D <- Q~P+PS+DI
-eq.S <- Q~P+PF
+eq.D <- Q~P + PS + DI
+eq.S <- Q~P + PF
 eq.sys <- list(eq.D, eq.S)
 # set instruments
-instr <- ~PS+DI+PF
+instr <- ~ PS + DI + PF
 # system fit using `2SLS` method
-system.iv <-systemfit(
-formula = eq.sys, inst = instr,
-method="2SLS",
-data=truffles)
-# report
+system.iv <- systemfit(
+  formula = eq.sys, inst = instr,
+  method = "2SLS",
+  data = truffles
+)
+# estimation summary
 smry.iv <- summary(system.iv)
 ```
 
@@ -1773,88 +1696,88 @@ smry.iv <- summary(system.iv)
 
 ### IV-2SLS Solution:  R report (`symtemfit`)
 
-<!---.scroll-box-18[--->
 
 ```{r}
 smry.iv
 ```
 
-<!---]--->
-
-
 ##
 
 ### IV-2SLS Solution: tidy report (`symtemfit`)
 
-```{r}
-# Tidy `systemfit` fit results into tibble
-## my custom Helper function
-source("code/helper-tidy-systemfit.R")
-tbl_iv <- tidy_systemfit(fit.sys = smry.iv)
-```
 
 
 ```{r}
 datatable(tbl_iv,
-options = list(pageLength =10, dom = 't'),
-caption = str_c("IV 2SLS result(using `systemfit::systemfit()`")) %>%
-formatRound(columns=c(4:6), digits=4) %>%
-formatRound(columns=c(3), digits=4)
+  options = list(pageLength = 10, dom = "t"),
+  caption = str_c("IV 2SLS result(using `systemfit::systemfit()`")
+) %>%
+  formatRound(columns = c(4:6), digits = 4) %>%
+  formatRound(columns = c(3), digits = 4)
 ```
 
 
 ##
 
-### Comparison: results of the reduced equations by OLS directly
+### Comparison (1/2): results of the reduced equations by OLS directly
 
-```{r}
-#| label: reduce-model
-#| results: asis
-#| eval: true
-models<-list(mod.Q=Q~PS+DI+PF, mod.P=P~PS+DI+PF)
-Q.red <- lm(models$mod.Q, data=truffles)
-P.red <- lm(models$mod.P, data=truffles)
-```
 
 The OLS regression results of **reduced price equation**:
 
 ```{r}
-#| label: reduce-P
+#| label: reduced-P
 #| results: asis
-fun_report_eq(models$mod.P,lm.dt = truffles)
+
+qx.out <- xmerit::qx.est(
+  lm.mod = models$mod.P,
+  lm.dt = truffles,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 The OLS regression results of **reduced quantity equation**:
 
 ```{r}
-#| label: reduce-Q
+#| label: reduced-Q
 #| results: asis
-fun_report_eq(models$mod.Q,lm.dt = truffles)
+qx.out <- xmerit::qx.est(
+  lm.mod = models$mod.Q,
+  lm.dt = truffles,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
 ##
 
-### Comparison: results of the structural equations by OLS directly
+### Comparison (2/2): results of the structural equations by OLS directly
 
 We can  apply OLS method directly. Of course estimation results will be biased.
 
 - tidy results of **bias** OLS estimation  for the demand equation:
 
 ```{r}
+#| label: structural-D
 #| results: asis
-fun_report_eq(lm.mod = eq.D,
-lm.dt = truffles)
+
+qx.out <- xmerit::qx.est(
+  lm.mod = eq.D,
+  lm.dt = truffles,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 - tidy results of **bias** OLS estimation for the supply equation:
 
 ```{r}
+#| label: structural-S
 #| results: asis
-fun_report_eq(lm.mod = eq.S,
-lm.dt = truffles)
+qx.out <- xmerit::qx.est(
+  lm.mod = eq.S,
+  lm.dt = truffles,
+  inf = c("fit", "Ftest")
+  )
 ```
-
 
 
 
@@ -1894,26 +1817,18 @@ include_graphics("pic/whiting-fishing4.jpg")
 
 ```{r}
 #| label: fish-var
-fish_var<-tribble(
-~`vars`, ~`label`, ~`note`,
-"lprice","the logarithmic market price of cod","continuous variable",
-"lquan", "the logarithmic quantity of cod","continuous variable",
-"mon", "monday","dummy variable 0/1",
-"tue","tuesday", "dummy variable 0/1",
-"wen", "wensday", "dummy variable 0/1",
-"thu", "thursday", "dummy variable 0/1",
-"stormy", "Stormy","dummy variable 0/1"
-)
 
 datatable(fish_var,
-options = list(pageLength =8, dom = 'tip'),
-caption = "Variables description of the cod case")
+  options = list(pageLength = 8, dom = "tip"),
+  caption = "Variables description of the cod case"
+)
 ```
 
-.footer-note[.tiny[
+::: {.notes}
+
 source：Hill, R. C., W. E. Griffiths and G. C. Lim. Principles of Econometrics 4th Edition  [M], Wiley, 2011. chpt 11。reference：[PoE with R](https://bookdown.org/ccolonescu/RPoE4/simultaneous-equations-models.html)
-]
-]
+
+:::
 
 
 ##
@@ -1922,19 +1837,14 @@ source：Hill, R. C., W. E. Griffiths and G. C. Lim. Principles of Econometrics 
 
 ```{r}
 #| label: data-fish
-#truffles<-read.table("data/truffles.dat",header = F)
-load("data/fultonfish.rda")
-fultonfish<-as_tibble(fultonfish) %>%
-mutate(date=str_c("19",date),
-date=ymd(date)) %>%
-select(date:stormy)
-n<-dim(fultonfish)[1]
+# truffles<-read.table("data/truffles.dat",header = F)
 
 datatable(fultonfish,
-options = list(pageLength =7, dom = 'tip'),
-caption = str_c("Data set of cod case(obs. n=",n,")")) %>%
-formatRound(columns=c(2,4), digits=2) %>%
-formatRound(columns=c(3), digits=0)
+  options = list(pageLength = 7, dom = "tip"),
+  caption = str_c("Data set of cod case(obs. n=", n_fish, ")")
+) %>%
+  formatRound(columns = c(2, 4), digits = 2) %>%
+  formatRound(columns = c(3), digits = 0)
 ```
 
 
@@ -1943,11 +1853,7 @@ formatRound(columns=c(3), digits=0)
 ### Scatter
 
 ```{r}
-ggplot(fultonfish,aes(x=lquan,y=lprice))+
-geom_point(color="blue") +
-geom_smooth(se=FALSE,color="red")+
-labs(x="lquan",y="lprice")
-
+p_sct_fish
 ```
 
 
@@ -1988,13 +1894,6 @@ display
 
 ### OLS regression results of the reduced SEM
 
-```{r}
-#| label: fish-reduce-model
-models_fish<-list(mod.Q=lquan~mon+tue+wed+thu+stormy,
-mod.P=lprice~mon+tue+wed+thu+stormy)
-Q.fish <- lm(models_fish$mod.Q, data=fultonfish)
-P.rish <- lm(models_fish$mod.P, data=fultonfish)
-```
 
 The regression results of reduced **quantity** equation show as follows:
 
@@ -2024,89 +1923,115 @@ $$
 why
 :::
 
-
 ##
 
-### Two-stage least squares (2SLS) regression results
+### IV-2SLS regression results: R code
 
 ```{r}
-#| label: fish-2SLS-model
-fish.D <- lquan~lprice+mon+tue+wed+thu
-fish.S <- lquan~lprice+stormy
+#| label: fish-2SLS-model-code
+#| eval: false
+#| echo: true
+
+# set equation systems
+fish.D <- formula(lquan ~ lprice + mon + tue + wed + thu)
+fish.S <- formula(lprice ~ lquan + stormy)
 fish.eqs <- list(fish.D, fish.S)
-fish.ivs <- ~mon+tue+wed+thu+stormy
-fish.sys <- systemfit(fish.eqs, method="2SLS",
-inst=fish.ivs, data=fultonfish)
-fish.smry<-summary(fish.sys)
-
-rnames<-rownames(fish.smry$coefficients)
-cnames<-colnames(fish.smry$coefficients)
-tab_smry<-as_tibble(fish.smry$coefficients)
-names(tab_smry)<-cnames
-tab_smry$vars<-rnames
-tab_smry<-tab_smry %>%
-separate(vars,into=c("eq","vars"),sep="_")%>%
-select(eq,vars,everything())
-
-datatable(tab_smry,
-options = list(pageLength =10, dom = 't'),
-caption = str_c("Results of 2SLS with error corrrection")) %>%
-formatRound(columns=c(3:6), digits=4)
-
-#kable(tab_smry,digits = 4,caption = "两阶段最小二乘法（2SLS）回归结果")
+# set instruments
+fish.ivs <- ~ mon + tue + wed + thu + stormy
+# system fit using `2SLS` method
+fish.sys <- systemfit(fish.eqs,
+  method = "2SLS",
+  inst = fish.ivs, data = fultonfish
+)
+# estimation summary
+fish.smry <- summary(fish.sys)
 ```
-
 
 ##
 
-### Two-stage least squares (2SLS) regression results
-
-<!---.scroll-box-20[--->
+### IV-2SLS regression results: raw report
 
 ```{r}
 #| comment: ''
 fish.smry
 ```
 
-<!---]--->
+
+##
+
+### IV-2SLS regression results: tidy report
+
+```{r}
+#| label: fish-2SLS-model-tidy
+
+datatable(fish.smry.tidy,
+  options = list(pageLength = 10, dom = "t"),
+  caption = str_c("Results of 2SLS with error corrrection")
+) %>%
+  formatRound(columns = c(3:6), digits = 4)
+
+```
 
 
 ##
 
-### Comparison: the biased OLS estimation
+### Comparison with the biased OLS estimation: R code
+
+
+```{r}
+#| label: fish-ols-model-biased
+#| eval: false
+#| echo: true
+# demand equation
+fish.D <- formula(lquan ~ lprice + mon + tue + wed + thu)
+ols_fish_D <- lm(fish.D, data = fultonfish)
+
+# supply equation
+fish.S <- formula(lprice ~ lquan + stormy)
+ols_fish_S <- lm(fish.S, data = fultonfish)
+```
+
+##
+
+### Comparison with the biased OLS estimation: raw report
+
+- raw R summry of **bias** OLS estimation for the demand equation:
+
+
+```{r}
+#| comment: ''
+summary(ols_fish_D)
+```
+
+##
+
+### Comparison with the biased OLS estimation: stylized results
 
 - tidy results of **bias** OLS estimation  for the demand equation:
 
 ```{r}
 #| results: asis
-fun_report_eq(lm.mod = fish.D,
-lm.dt = fultonfish)
+
+qx.out <- xmerit::qx.est(
+  lm.mod = fish.D,
+  lm.dt = fultonfish,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 - tidy results of **bias** OLS estimation  for the supply equation:
 
 ```{r}
 #| results: asis
-fun_report_eq(lm.mod = fish.S,
-lm.dt = fultonfish)
+
+qx.out <- xmerit::qx.est(
+  lm.mod = fish.S,
+  lm.dt = fultonfish,
+  inf = c("fit", "Ftest")
+  )
 ```
 
 
-##
-
-### Comparison: the biased OLS estimation
-
-- raw R summry of **bias** OLS estimation for the demand equation:
-
-<!---.scroll-box-18[--->
-
-```{r}
-#| comment: ''
-ols_fish_D<-lm(fish.D, data = fultonfish)
-summary(ols_fish_D)
-```
-
-<!---]--->
 
 
 ##
@@ -2117,7 +2042,6 @@ summary(ols_fish_D)
 
 ```{r}
 #| comment: ''
-ols_fish_S<-lm(fish.S, data = fultonfish)
 summary(ols_fish_S)
 ```
 
@@ -2127,10 +2051,10 @@ summary(ols_fish_S)
 
 ```{r}
 #| echo: false
-
+## load the code of the labor market of married Working Women
+## should be run seperately here, not in the code of the accompany chapter R code script
 file_path <- "D://github/course-em-eng/02-homework/sem-wage-mroz/code-sem-mroz.R"
 source(file_path)
-
 ```
 
 ## Labor market of married Working Women
@@ -2158,10 +2082,6 @@ Please follow our accompany course repository at <https://github.com/huhuaping/c
 
 We will focus on the following variables.
 
-:::: {.columns}
-
-::: {.column width="40%"}
-
 
 - `lwage`: log(wage)
 
@@ -2171,12 +2091,6 @@ We will focus on the following variables.
 
 - `age`: woman's age in yrs
 
-:::
-
-
-::: {.column width="40%"}
-
-
 - `educ`: years of schooling
 
 - `exper`: actual labor mkt exper
@@ -2185,9 +2099,7 @@ We will focus on the following variables.
 
 - `nwifeinc`: (faminc - wage*hours)/1000
 
-:::
 
-::::
 
 
 ##
@@ -2227,14 +2139,11 @@ $$
 
 ### Exercise tasks 1/2: system fit with TSLS
 
-<!---.scroll-box-18[--->
 
 ```{r}
 #| comment: ''
 mroz.smry
 ```
-
-<!---]--->
 
 
 ##
