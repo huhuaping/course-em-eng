@@ -64,13 +64,18 @@ p_scatter_matrix <- GGally::ggpairs(truffles,
   title = "Truffles Scatter Matrix",
   lower = list(continuous = "smooth"),
   upper = list(continuous = "cor"),
-  axisLabels = "none"#,
+  axisLabels = "none" # ,
   # no text "Corr:" before the coefficient in upper panels
-  #upper = list(continuous = "cor", params = list(prefix = ""))
+  # upper = list(continuous = "cor", params = list(prefix = ""))
 )
+# 计算相关系数矩阵
+cor_matrix <- cor(truffles[, c("P", "Q", "DI", "PS", "PF")], use = "complete.obs")
+library(Hmisc)
+# 计算相关系数矩阵及其检验结果
+cor_test_results <- rcorr(as.matrix(truffles[, c("P", "Q", "DI", "PS", "PF")]))
+
 
 ## simple-model ====
-
 mod_simple <- list(
   mod.Q = formula(Q ~ P),
   mod.P = formula(P ~ Q)
@@ -136,7 +141,7 @@ pp_scatter_monte <- ggplot(monte, aes(x = Y, y = C)) +
 mod_monte <- list(mod.C = C ~ Y)
 # fun_report_eq(mod_monte$mod.C,lm.dt = monte)
 out_monte <- lm(mod_monte$mod.C, data = monte)
-#summary(out_monte)
+# summary(out_monte)
 
 ## sample regression line (SRL)====
 
